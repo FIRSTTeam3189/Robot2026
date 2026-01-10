@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.65,
+        "y": 5.15
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.5066058909122386,
+        "y": 5.354788011072248
+      },
+      "isLocked": false,
+      "linkedName": "Pathfinding Branch 5"
+    },
+    {
+      "anchor": {
+        "x": 3.55,
+        "y": 5.3
+      },
+      "prevControl": {
+        "x": 3.6933941090877616,
+        "y": 5.095211988927752
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Pathfinding Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -59.99999999999999
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,112 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.995623671732938,
+        "y": 2.8064443215035477
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.104602397007284,
+        "y": 2.050001023497364
+      },
+      "isLocked": false,
+      "linkedName": "Branch 10 L2"
+    },
+    {
+      "anchor": {
+        "x": 3.111371926427204,
+        "y": 1.8189905582959602
+      },
+      "prevControl": {
+        "x": 3.5193926560587934,
+        "y": 2.05404467468818
+      },
+      "nextControl": {
+        "x": 2.699274343907466,
+        "y": 1.58158783315989
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.146346679010814,
+        "y": 1.0224803529833377
+      },
+      "prevControl": {
+        "x": 1.9073457529222342,
+        "y": 1.0881850769102528
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Bottom Blue Station"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 54.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Intake",
+      "minWaypointRelativePos": 1.5,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "CoralMechanismDefault",
+      "waypointRelativePos": 0.3506431651701322,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "CoralMechanismDefault"
+        }
+      }
+    },
+    {
+      "name": "CoralMechanismIntakeCoralStation",
+      "waypointRelativePos": 1.5725259185964096,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "CoralMechanismIntakeCoralStation"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 54.0
+  },
+  "reversed": false,
+  "folder": "Score 2",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

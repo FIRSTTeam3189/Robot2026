@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 1 - Mid Branch 12"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 1 - Branch 12 Safe Backup"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Score 1",
+  "choreoAuto": false
+}

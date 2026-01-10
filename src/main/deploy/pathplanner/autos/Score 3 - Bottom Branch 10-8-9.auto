@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 1 - Bottom Branch 10"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 2 - Branch 10-Bottom Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForStationIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 2 - Bottom Station-Branch 8"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 3 - Branch 8-Bottom Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WaitForStationIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 3 - Bottom Station-Branch 9"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 3 - Branch 9 Safe Backup"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Score 3",
+  "choreoAuto": false
+}
