@@ -74,8 +74,7 @@ void PoseEstimatorHelper::AddVisionMeasurement(frc::Pose2d pose, units::second_t
 }
 
 void PoseEstimatorHelper::Periodic() {
-    frc2::Pose2d m_estimatedPose = m_poseEstimator->GetRobotPose(); 
-    m_estimatedPose->SetRobotPose(GetEstimatedPose());
+    m_estimatedPose.SetRobotPose(GetEstimatedPose());
 
 
     frc::SmartDashboard::PutData("Estimated pose", &m_estimatedPose);

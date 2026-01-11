@@ -53,21 +53,22 @@ namespace VisionConstants {
     //! END VERSION THAT WE DID JANKILY //////
 
 
-    const std::string kPhotonIntakeCameraName {"Camera_Intake"};
+
+    const std::string kPhotonCamera1 {"Vision 1"};
     constexpr units::meter_t kPhotonIntakeCameraXOffset {-0.18519_m}; 
     constexpr units::meter_t kPhotonIntakeCameraYOffset {-0.3_m}; 
     constexpr units::meter_t kPhotonIntakeCameraZOffset {0.0_m};
     constexpr units::degree_t kPhotonIntakeCameraPitchOffset {0.0_deg}; 
     constexpr units::degree_t kPhotonIntakeCameraYawOffset {180.0_deg}; 
 
-    const std::string kPhotonReefCameraName {"Camera_Reef"};
+    const std::string kPhotonCamera2 {"Vision 2"};
     constexpr units::meter_t kPhotonReefCameraXOffset {-0.18519_m}; 
     constexpr units::meter_t kPhotonReefCameraYOffset {0.2032_m}; 
     constexpr units::meter_t kPhotonReefCameraZOffset {0.0_m}; // don't care
     constexpr units::degree_t kPhotonReefCameraPitchOffset {0.0_deg};  // don't care
     constexpr units::degree_t kPhotonReefCameraYawOffset {0.0_deg};
 
-    const std::string kPhotonReefCenterCameraName {"Camera_Reef_Center"};
+    const std::string kPhotonCamera3 {"Vision 3"};
     constexpr units::meter_t kPhotonReefCenterCameraXOffset {-0.29_m}; 
     constexpr units::meter_t kPhotonReefCenterCameraYOffset {0.0_m}; 
     constexpr units::meter_t kPhotonReefCenterCameraZOffset {0.0_m};

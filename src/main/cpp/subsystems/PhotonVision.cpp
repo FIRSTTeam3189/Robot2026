@@ -75,10 +75,10 @@ void PhotonVision::Periodic() {
         // Add offset to timestamp to set to rust vision's epoch
         if (ambiguity < VisionConstants::kMaxAmbiguity && tagDistance < VisionConstants::kMaxDistance.value()) {
             if (visionEstimatedDistance < VisionConstants::kUseVisionMeasurementThreshold){
-                if (m_cameraName == VisionConstants::kPhotonReefCameraName) {
-                    m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonReef);
-                } else if (m_cameraName == VisionConstants::kPhotonReefCenterCameraName) {
-                    m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonReefCenter);     
+                if (m_cameraName == VisionConstants::kPhotonCamera2) {
+                    m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonVision1);
+                } else if (m_cameraName == VisionConstants::kPhotonCamera3) {
+                    m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonVision2);     
                 }
             
             } else {

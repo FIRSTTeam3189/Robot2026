@@ -57,7 +57,12 @@ void RobotContainer::ConfigureDriverBindings() {
     }
   },{m_swerveDrive}).ToPtr());
 
-
+  frc2::Trigger runAutoAlign ([this](){return m_bill.GetL1Button(); });
+  runAutoAlign.OnTrue(frc2::cmd::RunOnce([this](){
+    frc2::CommandScheduler::GetInstance().Schedule(
+    AutoAlign::autoAlignToPose(m_swerveDrive->GetEstimatedPose(), m_constraints)
+   );
+  }));
 
 }
 
@@ -142,4 +147,3 @@ void RobotContainer::ConfigureTestBindings() {
 }
 
 // no matter how nice ethan might seem, when you least expect it he will slap you with a piece of chicken and eat you in a bucket
-

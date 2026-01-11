@@ -19,7 +19,8 @@
 #include <frc2/command/WaitCommand.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
-#include "commands/Drive.h"
+#include "commands/mainCommands/Drive.h"
+#include "util/AutoAlignBasic.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
 // #include "subsystems/Limelight.h"
@@ -69,7 +70,11 @@ class RobotContainer {
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
   
-  
+    // old m_constraints
+  pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
+    0.85_mps, 1.5_mps_sq,
+    270_deg_per_s, 360_deg_per_s_sq);
+
 
   frc::SendableChooser<frc2::Command*> m_chooser;
 

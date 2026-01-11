@@ -34,6 +34,8 @@ class PoseEstimatorHelper : public frc2::SubsystemBase {
 
   private:
   frc::SwerveDrivePoseEstimator<4> *m_poseEstimator;
+  frc::Field2d m_estimatedPose;
+
   frc::Field2d m_photonVision1;
   frc::Field2d m_photonVision1Pose;
 
