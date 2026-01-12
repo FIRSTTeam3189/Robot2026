@@ -142,8 +142,23 @@ void RobotContainer::PrintActiveCommands() {
 }
 
 void RobotContainer::ConfigureTestBindings() {
+  frc2::Trigger runIntakeRollerTest([this](){ return m_test.GetR1Button(); });
+  runIntakeRollerTest.OnTrue(
+    SetIntakeMotorPower(m_intake, 0.2).ToPtr()
+  );
 
-  
+  runIntakeRollerTest.OnFalse(
+    SetIntakeMotorPower(m_intake, 0.0).ToPtr()
+  );
+
+  frc2::Trigger runIntakeRollerTest2([this](){ return m_test.GetL1Button(); });
+  runIntakeRollerTest2.OnTrue(
+    SetIntakeMotorPower(m_intake, -0.2).ToPtr()
+  );
+
+  runIntakeRollerTest2.OnFalse(
+    SetIntakeMotorPower(m_intake, 0.0).ToPtr()
+  );
 }
 
 // no matter how nice ethan might seem, when you least expect it he will slap you with a piece of chicken and eat you in a bucket

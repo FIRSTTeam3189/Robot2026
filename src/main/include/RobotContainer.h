@@ -20,9 +20,11 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "commands/mainCommands/Drive.h"
+#include "commands/utilCommands/SetIntakeMotorPower.h"
 #include "util/AutoAlignBasic.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
+#include "subsystems/Intake.h"
 // #include "subsystems/Limelight.h"
 
 #include "Constants/OperatorConstants.h"
@@ -64,11 +66,11 @@ class RobotContainer {
  
 
   // frc::GenericHID m_buttonBoard{OperatorConstants::kButtonBoardPort}; 
-
-
   // The robot's subsystems are defined here..p.
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
+  Intake *m_intake = new Intake();  
+
   
     // old m_constraints
   pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
