@@ -4,19 +4,23 @@
 
 #include "commands/utilCommands/SetShooterLoaderPower.h"
 
-SetShooterLoaderPower::SetShooterLoaderPower(Shooter* shooter, double power)
-  : m_shooter(shooter),
+SetShooterLoaderPower::SetShooterLoaderPower(Loader* loader, double power)
+  : m_loader(loader),
     m_power(power)
 {
-    AddRequirements(shooter);
+    AddRequirements(loader);
+}
+
+void SetShooterLoaderPower::Initialize() {
+    
 }
 
 void SetShooterLoaderPower::Execute() {
-    m_shooter->SetShooterLoaderMotorPower(m_power);
+    m_loader->SetShooterLoaderMotorPower(m_power);
 }
 
 void SetShooterLoaderPower::End(bool interrupted) {
-    m_shooter->SetShooterLoaderMotorPower(0.0);
+    m_loader->SetShooterLoaderMotorPower(0.0);
 }
 
 bool SetShooterLoaderPower::IsFinished() {

@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include "subsystems/Shooter.h"
 
 class SetShooterRotationPower : public frc2::CommandHelper<frc2::Command, SetShooterRotationPower> {
  public:
@@ -21,5 +22,6 @@ class SetShooterRotationPower : public frc2::CommandHelper<frc2::Command, SetSho
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-
+  Shooter *m_shooter;
+  double m_power;
 };

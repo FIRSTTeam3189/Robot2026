@@ -7,8 +7,9 @@
 
 Shooter::Shooter()
   : m_shooterTurretMotor(ShooterConstants::kShooterRotationID, "Swerve"),
-    m_loaderMotor(ShooterConstants::kShooterRotationID, "Swerve"),
-    m_shooterConfig()
+    m_shooterFlywheelMotor(ShooterConstants::kShooterFlywheelID, "Swerve"),
+    m_shooterConfig(),
+    m_flywheelConfig()
 
     // drive motor (loader), fkywheel, turretrotationmotor
 {
@@ -33,8 +34,12 @@ void Shooter::ConfigShooter() {
 
     m_shooterConfig.MotorOutput.Inverted = ShooterConstants::kExtensionMotorInverted;
     m_shooterConfig.MotorOutput.NeutralMode = ShooterConstants::kExtensionNeutralMode;
+
+    m_flywheelConfig.MotorOutput.Inverted = ShooterConstants::kExtensionMotorInverted;
+    m_flywheelConfig.MotorOutput.NeutralMode = ShooterConstants::kExtensionNeutralMode;
     
     m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+    m_shooterFlywheelMotor.GetConfigurator().Apply(m_flywheelConfig);
     // m_shooterTurretMotor.SetPosition(0.0_tr);
 
   
@@ -55,6 +60,9 @@ void Shooter::SetShooterRotationMotorPower(double power) {
     m_shooterTurretMotor.Set(power);
 }
 
+void Shooter::SetShooterFlywheelMotorPower(double power) {
+    m_shooterFlywheelMotor.Set(power);
+}
 
 
 

@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/ShooterLoader.h"
-#include "utilCommands/SetShooterLoaderPower.h"
+
 
 
 Loader::Loader() :
@@ -31,7 +31,7 @@ void Loader::ConfigLoaderMotor() {
     m_ShooterLoaderMotor.SetPosition(0.0_tr);
 }
 
-void Loader::SetShooterShooterLoaderMotorPower(double power) {
+void Loader::SetShooterLoaderMotorPower(double power) {
     m_ShooterLoaderMotor.Set(power);
 }
 

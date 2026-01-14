@@ -21,13 +21,16 @@ class Shooter : public frc2::SubsystemBase {
 
   void Periodic() override;
 
+  void SetShooterFlywheelMotorPower(double power);
+
  private:
   // HARDWARE (subsystem owns motors)
   ctre::phoenix6::hardware::TalonFX m_shooterTurretMotor;
-  ctre::phoenix6::hardware::TalonFX m_loaderMotor;
+  ctre::phoenix6::hardware::TalonFX m_shooterFlywheelMotor;
 
   // CONFIG
   ctre::phoenix6::configs::TalonFXConfiguration m_shooterConfig {};
+  ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
 
 
   void ConfigShooter();

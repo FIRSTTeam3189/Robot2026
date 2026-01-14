@@ -11,6 +11,7 @@
 class Loader : public frc2::SubsystemBase {
  public:
   Loader();
+  void SetShooterLoaderMotorPower(double power);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
