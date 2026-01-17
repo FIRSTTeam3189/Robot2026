@@ -1,3 +1,5 @@
+#pragma once 
+
 #include <string>
 
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -12,7 +14,7 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
-
+#include "util/Vector2d.h"
 
 /*
 
@@ -24,13 +26,12 @@ TODO: REV UP MOTOR
 Flow: Hold trigger -> aligns + ramps up (the shooter motor command internally should check RPM and run loader command when ready)
 
 */
-
-
-
 namespace AutoAlign {
 
-    frc::Pose2d getClosestRobotPose(double robotX, double robotY);
+    frc::Pose2d GetClosestRobotPose(double robotX, double robotY);
 
-    frc2::CommandPtr autoAlignToPose(frc::Pose2d robotPose, pathplanner::PathConstraints constraints);
-  
-};
+    frc2::CommandPtr AutoAlignToPose(frc::Pose2d robotPose, pathplanner::PathConstraints constraints);
+
+    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose); 
+
+}; 

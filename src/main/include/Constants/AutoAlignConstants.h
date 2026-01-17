@@ -1,4 +1,5 @@
 #pragma once
+#include <frc/geometry/Pose2d.h>
 
 namespace AutoAlignConstants{
 
@@ -25,4 +26,6 @@ namespace AutoAlignConstants{
         frc::Pose2d (5.145_m, 2.884_m, frc::Rotation2d(120.0_deg))
     };
 
+    constexpr frc::Pose2d HubAngle {6.7_m, 6.7_m, frc::Rotation2d(0.0_deg)};
+    constexpr frc::Pose2d FerryAngle {6.9_m, 6.9_m, frc::Rotation2d(0.0_deg)};
 }

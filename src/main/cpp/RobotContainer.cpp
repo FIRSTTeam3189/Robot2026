@@ -57,12 +57,12 @@ void RobotContainer::ConfigureDriverBindings() {
     }
   },{m_swerveDrive}).ToPtr());
 
-  frc2::Trigger runAutoAlign ([this](){return m_bill.GetL1Button(); });
-  runAutoAlign.OnTrue(frc2::cmd::RunOnce([this](){
-    frc2::CommandScheduler::GetInstance().Schedule(
-    AutoAlign::autoAlignToPose(m_swerveDrive->GetEstimatedPose(), m_constraints)
-   );
-  }));
+  // frc2::Trigger runAutoAlign ([this](){return m_bill.GetL1Button(); });
+  // runAutoAlign.OnTrue(frc2::cmd::RunOnce([this](){
+  //   frc2::CommandScheduler::GetInstance().Schedule(
+  //   AutoAlign::AutoAlignToPose(m_swerveDrive->GetEstimatedPose(), m_constraints)
+  //  );
+  // }));
 
 }
 
