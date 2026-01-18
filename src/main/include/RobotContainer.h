@@ -20,14 +20,24 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "commands/mainCommands/Drive.h"
+#include "commands/utilCommands/SetFlywheelMotorPower.h"
+#include "commands/utilCommands/SetShooterLoaderPower.h"
+#include "commands/utilCommands/SetShooterRotationPower.h"
+#include "commands/utilCommands/SetTurretAngle.h"
+
+
 #include "util/AutoAlignBasic.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
+#include "subsystems/Shooter.h"
+
 // #include "subsystems/Limelight.h"
 
 #include "Constants/OperatorConstants.h"
 #include "Constants/AutoConstants.h"
 #include "Constants/SwerveDriveConstants.h"
+#include "Constants/ShooterConstants.h"
+
 
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
@@ -69,11 +79,12 @@ class RobotContainer {
   // The robot's subsystems are defined here..p.
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
+  Shooter *m_shooter = new Shooter(m_swerveDrive);
   
     // old m_constraints
-  pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
-    0.85_mps, 1.5_mps_sq,
-    270_deg_per_s, 360_deg_per_s_sq);
+  // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
+  //   0.85_mps, 1.5_mps_sq,
+  //   270_deg_per_s, 360_deg_per_s_sq);
 
 
   frc::SendableChooser<frc2::Command*> m_chooser;

@@ -17,15 +17,15 @@ void Loader::ConfigLoaderMotor() {
     m_ShooterLoaderMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
 
     m_shooterLoaderConfig.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::RotorSensor;
-    m_shooterLoaderConfig.Feedback.FeedbackRotorOffset = ShooterConstants::kExtensionOffset;
+    m_shooterLoaderConfig.Feedback.FeedbackRotorOffset = ShooterConstants::kRotationOffset;
 
-    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLowerLimit = ShooterConstants::kExtensionContinuousCurrentLimit;
-    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLimit = ShooterConstants::kExtensionPeakCurrentLimit;
-    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLowerTime = ShooterConstants::kExtensionPeakCurrentDuration;
-    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLimitEnable = ShooterConstants::kExtensionEnableCurrentLimit;
+    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLowerLimit = ShooterConstants::kRotationContinuousCurrentLimit;
+    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLimit = ShooterConstants::kRotationPeakCurrentLimit;
+    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLowerTime = ShooterConstants::kRotationPeakCurrentDuration;
+    m_shooterLoaderConfig.CurrentLimits.SupplyCurrentLimitEnable = ShooterConstants::kRotationEnableCurrentLimit;
 
-    m_shooterLoaderConfig.MotorOutput.Inverted = ShooterConstants::kExtensionMotorInverted;
-    m_shooterLoaderConfig.MotorOutput.NeutralMode = ShooterConstants::kExtensionNeutralMode;
+    m_shooterLoaderConfig.MotorOutput.Inverted = ShooterConstants::kRotationMotorInverted;
+    m_shooterLoaderConfig.MotorOutput.NeutralMode = ShooterConstants::kRotationNeutralMode;
 
     m_ShooterLoaderMotor.GetConfigurator().Apply(m_shooterLoaderConfig);
     m_ShooterLoaderMotor.SetPosition(0.0_tr);

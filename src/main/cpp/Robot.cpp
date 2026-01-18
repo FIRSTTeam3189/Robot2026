@@ -19,7 +19,7 @@ void Robot::RobotInit() {
   camera.SetFPS(20);
   // Default to first USB flash drive or home/lvuser/logs/ if none available
   ctre::phoenix6::SignalLogger::SetPath("");
-  // ctre::phoenix6::SignalLogger::Start();
+  ctre::phoenix6::SignalLogger::Start();
 }
 
 /**

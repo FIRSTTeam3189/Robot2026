@@ -3,25 +3,33 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-#include <frc2/command/SubsystemBase.h>
-#include <ctre/phoenix6/TalonFX.hpp>
-#include "Constants/ShooterConstants.h"
-#include <ctre/phoenix6/controls/VoltageOut.hpp>
-#include <frc2/command/sysid/SysIdRoutine.h>
+
 #include <frc/Preferences.h>
-#include <ctre/phoenix6/SignalLogger.hpp>
-#include "Constants/AutoAlignConstants.h"
-#include <ctre/phoenix6/StatusSignal.hpp>
-#include "util/Vector2d.h"
-#include <frc/system/plant/LinearSystemId.h>
+
+#include <frc2/command/SubsystemBase.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
+
 #include <frc/estimator/KalmanFilter.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/LinearQuadraticRegulator.h>
 #include <frc/system/LinearSystemLoop.h>
+#include <frc/system/plant/LinearSystemId.h>
+
+#include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/controls/VoltageOut.hpp>
+#include <ctre/phoenix6/SignalLogger.hpp>
+#include <ctre/phoenix6/StatusSignal.hpp>
+
+#include "subsystems/SwerveDrive.h"
+
+#include "Constants/ShooterConstants.h"
+#include "Constants/AutoAlignConstants.h"
+
+#include <algorithm>
 
 class Shooter : public frc2::SubsystemBase {
  public:
-  Shooter();
+  Shooter(SwerveDrive* swerveDrive);
 
   // SysId helpers (return commands that run the SysId routines)
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
@@ -42,6 +50,8 @@ class Shooter : public frc2::SubsystemBase {
   void UpdatePreferences();
 
   void ConfigPID();
+
+  units::degree_t GetCurrentTargetAngle();
 
   void SetTurretAngle(units::degree_t angle);
   
@@ -65,6 +75,8 @@ class Shooter : public frc2::SubsystemBase {
   frc::LinearQuadraticRegulator<1, 1> m_controller;
   frc::LinearSystemLoop<1, 1, 1> m_loop;
 
+  SwerveDrive *m_swerveDrive = nullptr;
+
   //PID/FF/Motion Magic
   std::string m_rotationPKey;
   std::string m_rotationIKey;
@@ -80,10 +92,12 @@ class Shooter : public frc2::SubsystemBase {
 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_shooterTurretMotor.GetVelocity();
+  std::vector<ctre::phoenix6::BaseStatusSignal*> m_allSignals;
 
   //SYSID (super cool PID finder)
   frc2::sysid::SysIdRoutine m_sysIdRoutine;
   ctre::phoenix6::controls::VoltageOut m_voltReq;
+  frc2::sysid::ramp_rate_t m_rampRate;
 
   void ConfigShooter();
 };

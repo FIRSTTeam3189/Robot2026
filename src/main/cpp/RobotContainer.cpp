@@ -47,7 +47,7 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureDriverBindings() {
   // Bill controls
 
-  frc2::Trigger resetPoseButton([this](){ return m_bill.GetPSButton(); });
+  frc2::Trigger resetPoseButton([this](){ return m_bill.GetTouchpadButton(); });
   resetPoseButton.OnTrue(frc2::InstantCommand([this]{
     if (frc::DriverStation::GetAlliance()) {
       if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
@@ -57,12 +57,53 @@ void RobotContainer::ConfigureDriverBindings() {
     }
   },{m_swerveDrive}).ToPtr());
 
-  // frc2::Trigger runAutoAlign ([this](){return m_bill.GetL1Button(); });
-  // runAutoAlign.OnTrue(frc2::cmd::RunOnce([this](){
-  //   frc2::CommandScheduler::GetInstance().Schedule(
-  //   AutoAlign::AutoAlignToPose(m_swerveDrive->GetEstimatedPose(), m_constraints)
-  //  );
-  // }));
+  frc2::Trigger applyTurretPowerForward([this](){ return m_bill.GetR1Button(); });
+  applyTurretPowerForward.OnTrue(SetShooterRotationPower(m_shooter, 0.2).ToPtr());
+  applyTurretPowerForward.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
+
+  // frc2::Trigger applyTurretPowerReverse([this](){ return m_bill.GetL1Button(); });
+  // applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_shooter, -0.2).ToPtr());
+  // applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
+
+  frc2::Trigger alignToHubButton([this](){ return m_bill.GetL2Button(); });
+  alignToHubButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::AlignHub).ToPtr());
+  // alignToHubButton.OnFalse(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
+
+  frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
+  pointStraightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
+  pointStraightButton.OnFalse(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
+
+  
+
+
+  // SYSID
+
+ frc2::Trigger Quasistaticstuff([this](){ return m_bill.GetCrossButton(); });
+  Quasistaticstuff.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
+
+
+  frc2::Trigger Quasistaticforward([this](){ return m_bill.GetCircleButton(); });
+  Quasistaticforward.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+
+
+  
+  frc2::Trigger DynamicStuff([this](){ return m_bill.GetTriangleButton(); });
+  DynamicStuff.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kForward));
+
+
+  frc2::Trigger Dynamicforward([this](){ return m_bill.GetSquareButton(); });
+  Dynamicforward.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
+
+//[this]{
+  //     m_algaeIntake->SetRollerPower(AlgaeIntakeConstants::kRollerIntakePower);
+  //   }, {m_algaeIntake}),
+
+  // frc2::Trigger runIntakeAlign ([this](){return m_bill.GetL1Button(); });
+  // runIntakeAlign.OnTrue(frc2::InstantCommand([this]{
+  //   m_intake->SetRollerPower(0.8);
+  // },(m_intake)).ToPtr());
+
+ // runIntakeAlign.OnFalse(frc2::InstantCommand(m_intake->SetRollerPower(0.0)).ToPtr());
 
 }
 

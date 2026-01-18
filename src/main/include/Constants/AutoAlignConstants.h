@@ -1,7 +1,16 @@
 #pragma once
 #include <frc/geometry/Pose2d.h>
+#include "util/Vector2d.h" 
+#include <units/time.h>
+#include <units/frequency.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
+#include <units/current.h>
+#include <units/acceleration.h>
+#include <units/angular_acceleration.h>
+#include <units/angular_velocity.h>
 
-namespace AutoAlignConstants{
+namespace AutoAlignConstants {
 
     // These setponts should be manually tuned for shooter angle and power
     constexpr int kNumSetpoints {6};
@@ -26,6 +35,13 @@ namespace AutoAlignConstants{
         frc::Pose2d (5.145_m, 2.884_m, frc::Rotation2d(120.0_deg))
     };
 
-    constexpr frc::Pose2d HubAngle {6.7_m, 6.7_m, frc::Rotation2d(0.0_deg)};
-    constexpr frc::Pose2d FerryAngle {6.9_m, 6.9_m, frc::Rotation2d(0.0_deg)};
+    constexpr frc::Pose2d kHubPose {4.624_m, 4.023_m, frc::Rotation2d(0.0_deg)};
+    constexpr frc::Pose2d kFerryLeftPose {3.07_m, 2.33_m, frc::Rotation2d(0.0_deg)};
+    constexpr frc::Pose2d kFerryRightPose {3.07_m, 6.397_m, frc::Rotation2d(0.0_deg)};
+
+    constexpr units::degree_t FerryAngleLeft {45_deg};
+    constexpr units::degree_t FerryAngleRight {135_deg};
+
+    const Vector2d kTurretOffset(0.0, 0.0); 
+
 }

@@ -7,6 +7,8 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/Shooter.h"
+#include "Constants/ShooterConstants.h"
+
 
 /**
  * An example command.
@@ -21,7 +23,7 @@ class SetTurretAngle
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  SetTurretAngle(Shooter* shooter);
+  SetTurretAngle(Shooter* shooter, TurretTarget state);
 
   void Initialize() override;
 
@@ -33,4 +35,5 @@ class SetTurretAngle
 
   private:
     Shooter *m_shooter;
+    TurretTarget m_state;
 };

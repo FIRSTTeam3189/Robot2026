@@ -4,10 +4,10 @@
 
 #include "subsystems/Shooter.h"
 
-Shooter::Shooter()
+Shooter::Shooter(SwerveDrive* swerveDrive)
   : m_shooterTurretMotor(ShooterConstants::kShooterRotationID, "Swerve"),
     m_shooterFlywheelMotor(ShooterConstants::kShooterFlywheelID, "Swerve"),
-    m_state(TurretTarget::DefaultAngle),
+    m_state(TurretTarget::PointStraight),
     m_shooterConfig(),
     m_flywheelConfig(),
     m_flywheelPlant(frc::LinearSystemId::IdentifyVelocitySystem<units::radian>(ShooterConstants::kFlywheelKv, ShooterConstants::kFlywheelKa)),
@@ -20,7 +20,7 @@ Shooter::Shooter()
     m_voltReq(0_V),
     m_sysIdRoutine(
         frc2::sysid::Config{
-            std::nullopt,  // !!! Use default ramp rate (1 V/s) !!! LOWER THE RAMP RATE FOR THE TURRET OR ELSE THE TURRETS GONNA EXPLODE
+            m_rampRate,  // !!! Use default ramp rate (1 V/s) !!! LOWER THE RAMP RATE FOR THE TURRET OR ELSE THE TURRETS GONNA EXPLODE
             4_V,           // Reduce dynamic step voltage to 4 to prevent brownout
             std::nullopt,  // Use default timeout (10 s)
                             // Log state with Phoenix SignalLogger class
@@ -34,173 +34,15 @@ Shooter::Shooter()
             [](auto) {},
             this
         }
-    )
+    ),
+    m_swerveDrive(swerveDrive)
    // drive motor (loader), flywheel, turret rotation motor
 {
     ConfigShooter();
-}
+    ConfigPID();
 
-frc2::CommandPtr Shooter::SysIdQuasistatic(frc2::sysid::Direction direction)
-{
-    return m_sysIdRoutine.Quasistatic(direction);
-}
-
-frc2::CommandPtr Shooter::SysIdDynamic(frc2::sysid::Direction direction)
-{
-    return m_sysIdRoutine.Dynamic(direction);
-}
-
-void Shooter::ConfigShooter() {
-    m_shooterTurretMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
-
-    m_shooterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = ShooterConstants::kSoftLimitEnabledForward;
-    m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = ShooterConstants::kSoftLimitEnabledReverse;
-    m_shooterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ShooterConstants::kTopSoftLimit;
-    m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ShooterConstants::kBottomSoftLimit;
-
-    m_shooterConfig.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::RotorSensor;
-    m_shooterConfig.Feedback.FeedbackRotorOffset = ShooterConstants::kExtensionOffset;
-
-    m_shooterConfig.CurrentLimits.SupplyCurrentLowerLimit = ShooterConstants::kExtensionContinuousCurrentLimit;
-    m_shooterConfig.CurrentLimits.SupplyCurrentLimit = ShooterConstants::kExtensionPeakCurrentLimit;
-    m_shooterConfig.CurrentLimits.SupplyCurrentLowerTime = ShooterConstants::kExtensionPeakCurrentDuration;
-    m_shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = ShooterConstants::kExtensionEnableCurrentLimit;
-
-    m_shooterConfig.MotorOutput.Inverted = ShooterConstants::kExtensionMotorInverted;
-    m_shooterConfig.MotorOutput.NeutralMode = ShooterConstants::kExtensionNeutralMode;
-
-    m_shooterConfig.Slot0.kS = ShooterConstants::kSExtension; 
-    m_shooterConfig.Slot0.kV = ShooterConstants::kVExtension;
-    m_shooterConfig.Slot0.kA = ShooterConstants::kAExtension;
-    m_shooterConfig.Slot0.kP = ShooterConstants::kPExtension;
-    m_shooterConfig.Slot0.kI = ShooterConstants::kIExtension;
-    m_shooterConfig.Slot0.kD = ShooterConstants::kDExtension;
-
-    m_shooterConfig.MotionMagic.MotionMagicCruiseVelocity = ShooterConstants::kMotionMagicMaxVelocity;
-    m_shooterConfig.MotionMagic.MotionMagicAcceleration = ShooterConstants::kMotionMagicMaxAcceleration;
-    m_shooterConfig.MotionMagic.MotionMagicJerk = ShooterConstants::kMotionMagicMaxJerk;
-
-    m_flywheelConfig.MotorOutput.Inverted = ShooterConstants::kExtensionMotorInverted;
-    m_flywheelConfig.MotorOutput.NeutralMode = ShooterConstants::kExtensionNeutralMode;
-    
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
-    m_shooterFlywheelMotor.GetConfigurator().Apply(m_flywheelConfig);
-    // m_shooterTurretMotor.SetPosition(0.0_tr);
-}
-
-void Shooter::ConfigPID() {
-    m_rotationPKey = "Shooter Rotation P";
-    m_rotationIKey = "Shooter Rotation I";
-    m_rotationDKey = "Shooter Rotation D";
-    m_rotationGKey = "Shooter Rotation G";
-    m_rotationSKey = "Shooter Rotation S";
-    m_rotationVKey = "Shooter Rotation V";
-    m_rotationAKey = "Shooter Rotation A";
-    m_rotationTargetKey = "Shooter Rotation Target Angle";
-    //keys for PID and FF 
-
-    frc::Preferences::SetDouble(m_rotationPKey, ShooterConstants::kPExtension);
-    frc::Preferences::SetDouble(m_rotationIKey, ShooterConstants::kIExtension);
-    frc::Preferences::SetDouble(m_rotationDKey, ShooterConstants::kDExtension);
-    frc::Preferences::SetDouble(m_rotationSKey, ShooterConstants::kSExtension);
-    frc::Preferences::SetDouble(m_rotationVKey, ShooterConstants::kVExtension);
-    frc::Preferences::SetDouble(m_rotationAKey, ShooterConstants::kAExtension);
-    frc::Preferences::SetDouble(m_rotationTargetKey, m_targetRotationAngle.value());
-}
-
-void Shooter::UpdatePreferences() {
-    m_shooterConfig.Slot0.kS = frc::Preferences::GetDouble(m_rotationSKey, ShooterConstants::kSExtension);
-    m_shooterConfig.Slot0.kV = frc::Preferences::GetDouble(m_rotationVKey, ShooterConstants::kVExtension);
-    m_shooterConfig.Slot0.kA = frc::Preferences::GetDouble(m_rotationAKey, ShooterConstants::kAExtension);
-    m_shooterConfig.Slot0.kP = frc::Preferences::GetDouble(m_rotationPKey, ShooterConstants::kPExtension);
-    m_shooterConfig.Slot0.kI = frc::Preferences::GetDouble(m_rotationIKey, ShooterConstants::kIExtension);
-    m_shooterConfig.Slot0.kD = frc::Preferences::GetDouble(m_rotationDKey, ShooterConstants::kDExtension);
-    m_targetRotationAngle = units::degree_t{frc::Preferences::GetDouble(m_rotationTargetKey, m_targetRotationAngle.value())};
-
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
-}
-
-void Shooter::OverrideSoftLimits(bool isEnabled) {
-    m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = isEnabled;
-    frc::SmartDashboard::PutBoolean("Shooter soft limit enabled: ", isEnabled);
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
-}
-
-
-void Shooter::SetState(TurretTarget state) {
-    m_state = state;
-    // Figure out target angle then set rotation to this angle
-    //Uncomment ts out once the turret align algorithm is done
-    switch (state) {
-        case (TurretTarget::AlignHub):
-//            m_targetRotationAngle = AutoAlignConstants::Hub;
-            break;
-        case (TurretTarget::AlignFerry):
- //           m_targetRotationAngle = AutoAlignConstants::Ferry;
-            break;
-    }
-    // Extension will be set periodicially
-}
-
-
-void Shooter::SetTurretAngle(units::degree_t angle) {
-    ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
-
-
-    if ((m_state == TurretTarget::DefaultAngle) && ((m_currentRotationAngle.value() < 90.05) && (m_currentRotationAngle.value() > 89.95))) {
-        m_shooterTurretMotor.Set(0);
-    } else {
-    m_shooterTurretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / ShooterConstants::kRotationConversionRotationsToDegrees}));
-}
-}
-
-units::degree_t Shooter::GetTurretAngle() {
-    return units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
-}
-
-void Shooter::SetShooterRotationMotorPower(double power) {
-    m_shooterTurretMotor.Set(power);
-}
-
-void Shooter::SetShooterFlywheelMotorPower(double power) {
-    m_shooterFlywheelMotor.Set(power);
-}
-
-
-
-void Shooter::SetRotationBrakeMode(Shooter::BrakeMode mode) {
-    switch (mode) {
-        case Shooter::BrakeMode::Brake:
-            m_shooterConfig.MotorOutput.NeutralMode =
-                ctre::phoenix6::signals::NeutralModeValue::Brake;
-            break;
-
-        case Shooter::BrakeMode::Coast:
-            m_shooterConfig.MotorOutput.NeutralMode =
-                ctre::phoenix6::signals::NeutralModeValue::Coast;
-            break;
-
-        case Shooter::BrakeMode::Default:
-            m_shooterConfig.MotorOutput.NeutralMode =
-                ShooterConstants::kExtensionNeutralMode;
-            break;
-    }
-
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
-}
-
- double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
-        double robotAngle = robotPose.Rotation().Degrees().value(); // Get robot angle
-        Vector2d robotVec(robotPose); // Get robot's heading 
-        robotVec = robotVec.Rotate(-robotAngle); // Rotate robot's heading to align with normal 
-
-        Vector2d turretVec = robotVec + turretOffset; // Calculate turret's vector based on robot vector and offset
-        Vector2d targetVec(targetPose); // Get target's position as a vector for calculation 
-
-        Vector2d turretToTarget = (targetVec - turretVec).Normalize(); // Get vector from turret to target
-
-        // Get the angle 
-        return -turretToTarget.Angle() + 90; // + 90 Adjust from -90-90 to 0-180 
+    m_allSignals.emplace_back(&m_rotationAngle);
+    m_allSignals.emplace_back(&m_rotationVelocity);
 }
 
 // This method will be called once per scheduler run
@@ -218,3 +60,192 @@ void Shooter::Periodic() {
 
     SetTurretAngle(m_targetRotationAngle);
 }
+
+
+frc2::CommandPtr Shooter::SysIdQuasistatic(frc2::sysid::Direction direction)
+{
+    return m_sysIdRoutine.Quasistatic(direction);
+}
+
+frc2::CommandPtr Shooter::SysIdDynamic(frc2::sysid::Direction direction)
+{
+    return m_sysIdRoutine.Dynamic(direction);
+}
+
+units::degree_t Shooter::GetCurrentTargetAngle() {
+    return m_targetRotationAngle;
+}
+
+
+void Shooter::ConfigShooter() {
+    m_shooterTurretMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
+
+    m_shooterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = ShooterConstants::kSoftLimitEnabledForward;
+    m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = ShooterConstants::kSoftLimitEnabledReverse;
+    m_shooterConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ShooterConstants::kTopSoftLimit;
+    m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ShooterConstants::kBottomSoftLimit;
+
+    m_shooterConfig.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::RotorSensor;
+    m_shooterConfig.Feedback.FeedbackRotorOffset = ShooterConstants::kRotationOffset;
+
+    m_shooterConfig.CurrentLimits.SupplyCurrentLowerLimit = ShooterConstants::kRotationContinuousCurrentLimit;
+    m_shooterConfig.CurrentLimits.SupplyCurrentLimit = ShooterConstants::kRotationPeakCurrentLimit;
+    m_shooterConfig.CurrentLimits.SupplyCurrentLowerTime = ShooterConstants::kRotationPeakCurrentDuration;
+    m_shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = ShooterConstants::kRotationEnableCurrentLimit;
+
+    m_shooterConfig.MotorOutput.Inverted = ShooterConstants::kRotationMotorInverted;
+    m_shooterConfig.MotorOutput.NeutralMode = ShooterConstants::kRotationNeutralMode;
+
+    m_shooterConfig.Slot0.kS = ShooterConstants::kSRotation; 
+    m_shooterConfig.Slot0.kV = ShooterConstants::kVRotation;
+    m_shooterConfig.Slot0.kA = ShooterConstants::kARotation;
+    m_shooterConfig.Slot0.kP = ShooterConstants::kPRotation;
+    m_shooterConfig.Slot0.kI = ShooterConstants::kIRotation;
+    m_shooterConfig.Slot0.kD = ShooterConstants::kDRotation;
+
+    m_shooterConfig.MotionMagic.MotionMagicCruiseVelocity = ShooterConstants::kMotionMagicMaxVelocity;
+    m_shooterConfig.MotionMagic.MotionMagicAcceleration = ShooterConstants::kMotionMagicMaxAcceleration;
+    m_shooterConfig.MotionMagic.MotionMagicJerk = ShooterConstants::kMotionMagicMaxJerk;
+
+    m_flywheelConfig.MotorOutput.Inverted = ShooterConstants::kRotationMotorInverted;
+    m_flywheelConfig.MotorOutput.NeutralMode = ShooterConstants::kRotationNeutralMode;
+    
+    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+    m_shooterFlywheelMotor.GetConfigurator().Apply(m_flywheelConfig);
+    // m_shooterTurretMotor.SetPosition(0.0_tr);
+}
+
+void Shooter::ConfigPID() {
+    m_rotationPKey = "Shooter Rotation P";
+    m_rotationIKey = "Shooter Rotation I";
+    m_rotationDKey = "Shooter Rotation D";
+    m_rotationGKey = "Shooter Rotation G";
+    m_rotationSKey = "Shooter Rotation S";
+    m_rotationVKey = "Shooter Rotation V";
+    m_rotationAKey = "Shooter Rotation A";
+    m_rotationTargetKey = "Shooter Rotation Target Angle";
+    //keys for PID and FF 
+
+    frc::Preferences::SetDouble(m_rotationPKey, ShooterConstants::kPRotation);
+    frc::Preferences::SetDouble(m_rotationIKey, ShooterConstants::kIRotation);
+    frc::Preferences::SetDouble(m_rotationDKey, ShooterConstants::kDRotation);
+    frc::Preferences::SetDouble(m_rotationSKey, ShooterConstants::kSRotation);
+    frc::Preferences::SetDouble(m_rotationVKey, ShooterConstants::kVRotation);
+    frc::Preferences::SetDouble(m_rotationAKey, ShooterConstants::kARotation);
+    // frc::Preferences::SetDouble("ramprate", m_rampRate.value());
+    frc::Preferences::SetDouble(m_rotationTargetKey, m_targetRotationAngle.value());
+}
+
+void Shooter::UpdatePreferences() {
+    m_shooterConfig.Slot0.kS = frc::Preferences::GetDouble(m_rotationSKey, ShooterConstants::kSRotation);
+    m_shooterConfig.Slot0.kV = frc::Preferences::GetDouble(m_rotationVKey, ShooterConstants::kVRotation);
+    m_shooterConfig.Slot0.kA = frc::Preferences::GetDouble(m_rotationAKey, ShooterConstants::kARotation);
+    m_shooterConfig.Slot0.kP = frc::Preferences::GetDouble(m_rotationPKey, ShooterConstants::kPRotation);
+    m_shooterConfig.Slot0.kI = frc::Preferences::GetDouble(m_rotationIKey, ShooterConstants::kIRotation);
+    m_shooterConfig.Slot0.kD = frc::Preferences::GetDouble(m_rotationDKey, ShooterConstants::kDRotation);
+    // m_rampRate = frc2::sysid::ramp_rate_t{frc::Preferences::GetDouble("ramprate", frc2::sysid::ramp_rate_t{0.0})};
+    m_targetRotationAngle = units::degree_t{frc::Preferences::GetDouble(m_rotationTargetKey, m_targetRotationAngle.value())};
+
+    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+}
+
+void Shooter::OverrideSoftLimits(bool isEnabled) {
+    m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = isEnabled;
+    frc::SmartDashboard::PutBoolean("Shooter soft limit enabled: ", isEnabled);
+    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+}
+
+
+
+void Shooter::SetState(TurretTarget state) {
+    m_state = state;
+    // Figure out target angle then set rotation to this angle
+    //Uncomment ts out once the turret align algorithm is done
+
+    switch (state) {
+        case (TurretTarget::AlignHub): {
+
+            m_targetRotationAngle = units::degree_t{this->GetTargetAngle(m_swerveDrive->GetEstimatedPose(), 
+                AutoAlignConstants::kHubPose, AutoAlignConstants::kTurretOffset)};
+            break;
+        }
+        case (TurretTarget::PointStraight): {
+            m_targetRotationAngle = 90.0_deg;
+            break;
+        }
+        case (TurretTarget::PointFerryLeft): {
+            m_targetRotationAngle = AutoAlignConstants::FerryAngleLeft;
+            break;  
+        }     
+        case (TurretTarget::PointFerryRight): {
+            m_targetRotationAngle = AutoAlignConstants::FerryAngleRight;
+            break;
+        }   
+        default:
+            m_targetRotationAngle = 90.0_deg;
+            break;  
+    }
+    // Rotation will be set periodicially
+}
+
+
+void Shooter::SetTurretAngle(units::degree_t angle) {
+    ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
+
+    if ((m_state == TurretTarget::PointStraight) && ((m_currentRotationAngle.value() < 90.05) && (m_currentRotationAngle.value() > 89.95))) {
+        m_shooterTurretMotor.Set(0);
+    } else {
+        m_shooterTurretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / ShooterConstants::kRotationConversionRotationsToDegrees}));
+    }
+}
+
+units::degree_t Shooter::GetTurretAngle() {
+    return units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
+}
+
+void Shooter::SetShooterRotationMotorPower(double power) {
+    m_shooterTurretMotor.Set(power);
+}
+
+void Shooter::SetShooterFlywheelMotorPower(double power) {
+    m_shooterFlywheelMotor.Set(power);
+}
+
+
+void Shooter::SetRotationBrakeMode(Shooter::BrakeMode mode) {
+    switch (mode) {
+        case Shooter::BrakeMode::Brake:
+            m_shooterConfig.MotorOutput.NeutralMode =
+                ctre::phoenix6::signals::NeutralModeValue::Brake;
+            break;
+
+        case Shooter::BrakeMode::Coast:
+            m_shooterConfig.MotorOutput.NeutralMode =
+                ctre::phoenix6::signals::NeutralModeValue::Coast;
+            break;
+
+        case Shooter::BrakeMode::Default:
+            m_shooterConfig.MotorOutput.NeutralMode =
+                ShooterConstants::kRotationNeutralMode;
+            break;
+    }
+
+    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+}
+
+// returns angle from 180-0
+double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
+
+    Vector2d robotHeading(robotPose.Rotation().Degrees().value()); // assuming robotHeading = turretHeading 
+
+    // Get the poses as vectors 
+    Vector2d turretVec = Vector2d(robotPose) + turretOffset; 
+    Vector2d targetVec(targetPose); 
+
+    Vector2d turretToTarget = (targetVec - turretVec).Normalize(); 
+
+    double errorAngle = turretToTarget.SignedAngle(turretVec); 
+
+    return std::clamp(90 - errorAngle, 0.0, 180.0); // where 90 is the turret's default position  
+}
+
