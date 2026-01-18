@@ -62,7 +62,7 @@ namespace ShooterConstants{
     constexpr bool kRotationEnableCurrentLimit = true;
 
     constexpr bool kRotationMotorInverted {true};
-    constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Coast};
+    constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 
     constexpr double kShooterRotationalGearRatio {0.0};
 }

@@ -61,9 +61,9 @@ void RobotContainer::ConfigureDriverBindings() {
   applyTurretPowerForward.OnTrue(SetShooterRotationPower(m_shooter, 0.2).ToPtr());
   applyTurretPowerForward.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
 
-  // frc2::Trigger applyTurretPowerReverse([this](){ return m_bill.GetL1Button(); });
-  // applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_shooter, -0.2).ToPtr());
-  // applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
+  frc2::Trigger applyTurretPowerReverse([this](){ return m_bill.GetL1Button(); });
+  applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_shooter, -0.2).ToPtr());
+  applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
 
   frc2::Trigger alignToHubButton([this](){ return m_bill.GetL2Button(); });
   alignToHubButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::AlignHub).ToPtr());
@@ -71,28 +71,34 @@ void RobotContainer::ConfigureDriverBindings() {
 
   frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
   pointStraightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
-  pointStraightButton.OnFalse(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
 
+  frc2::Trigger pointLeftButton([this](){ return m_bill.GetCircleButton(); });
+  pointLeftButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryLeft).ToPtr());
+
+  frc2::Trigger pointRightButton([this](){ return m_bill.GetCrossButton(); });
+  pointRightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryRight).ToPtr());
+
+  
   
 
 
   // SYSID
 
- frc2::Trigger Quasistaticstuff([this](){ return m_bill.GetCrossButton(); });
-  Quasistaticstuff.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
+//  frc2::Trigger Quasistaticstuff([this](){ return m_bill.GetCrossButton(); });
+//   Quasistaticstuff.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
 
 
-  frc2::Trigger Quasistaticforward([this](){ return m_bill.GetCircleButton(); });
-  Quasistaticforward.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+//   frc2::Trigger Quasistaticforward([this](){ return m_bill.GetCircleButton(); });
+//   Quasistaticforward.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
 
   
-  frc2::Trigger DynamicStuff([this](){ return m_bill.GetTriangleButton(); });
-  DynamicStuff.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kForward));
+//   frc2::Trigger DynamicStuff([this](){ return m_bill.GetTriangleButton(); });
+//   DynamicStuff.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kForward));
 
 
-  frc2::Trigger Dynamicforward([this](){ return m_bill.GetSquareButton(); });
-  Dynamicforward.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
+//   frc2::Trigger Dynamicforward([this](){ return m_bill.GetSquareButton(); });
+//   Dynamicforward.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
 
 //[this]{
   //     m_algaeIntake->SetRollerPower(AlgaeIntakeConstants::kRollerIntakePower);

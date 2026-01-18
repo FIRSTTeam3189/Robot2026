@@ -170,7 +170,7 @@ void Shooter::SetState(TurretTarget state) {
             break;
         }
         case (TurretTarget::PointStraight): {
-            m_targetRotationAngle = 90.0_deg;
+            m_targetRotationAngle = 0.0_deg;
             break;
         }
         case (TurretTarget::PointFerryLeft): {
