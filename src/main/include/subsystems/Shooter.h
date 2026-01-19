@@ -25,12 +25,14 @@
 #include "Constants/ShooterConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
+#include "util/PowerInterpolator.h"
+
 #include <algorithm>
 #include <cmath> 
 
 class Shooter : public frc2::SubsystemBase {
  public:
-  Shooter(SwerveDrive* swerveDrive);
+  Shooter(SwerveDrive* swerveDrive, PowerInterpolator* powerInterpolator);
 
   // SysId helpers (return commands that run the SysId routines)
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
@@ -41,6 +43,8 @@ class Shooter : public frc2::SubsystemBase {
 
   enum class BrakeMode { Brake, Coast, Default };
   void SetRotationBrakeMode(BrakeMode mode);
+
+  frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose);
 
   void OverrideSoftLimits(bool isEnabled);
 
@@ -62,8 +66,12 @@ class Shooter : public frc2::SubsystemBase {
 
   void SetState(TurretTarget state);
 
-  double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset);
+  void SetFlyWheelTargetPower(double power); 
 
+  void SetFlyWheelPowerTest(double power); 
+
+  double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset);
+  
   private:
   // HARDWARE (subsystem owns motors)
   ctre::phoenix6::hardware::TalonFX m_shooterTurretMotor;
@@ -87,8 +95,12 @@ class Shooter : public frc2::SubsystemBase {
   std::string m_rotationVKey;
   std::string m_rotationAKey;
   std::string m_rotationTargetKey;
+
   units::degree_t m_targetRotationAngle;
   units::degree_t m_currentRotationAngle;
+
+  double m_targetPower;
+  PowerInterpolator *m_powerInterpolator; 
   
 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();

@@ -9,6 +9,7 @@
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
+#include <vector> 
 
 namespace AutoAlignConstants {
 
@@ -35,13 +36,22 @@ namespace AutoAlignConstants {
         frc::Pose2d (5.145_m, 2.884_m, frc::Rotation2d(120.0_deg))
     };
 
-    constexpr frc::Pose2d kHubPose {4.624_m, 4.023_m, frc::Rotation2d(0.0_deg)};
+    constexpr frc::Pose2d kBlueHubPose {4.624_m, 4.036_m, frc::Rotation2d(0.0_deg)};
+    constexpr frc::Pose2d kRedHubPose {11.909_m, 4.036_m, frc::Rotation2d(0.0_deg)};
+
     constexpr frc::Pose2d kFerryLeftPose {3.07_m, 2.33_m, frc::Rotation2d(0.0_deg)};
     constexpr frc::Pose2d kFerryRightPose {3.07_m, 6.397_m, frc::Rotation2d(0.0_deg)};
+
+    constexpr units::meter_t kMidpointOnFieldBlue {2.397_m};
+    constexpr units::meter_t kMidpointOnFieldRed {14.381_m};
 
     constexpr units::degree_t FerryAngleLeft {45_deg};
     constexpr units::degree_t FerryAngleRight {135_deg};
 
     const Vector2d kTurretOffset(0.0, 0.0); 
+
+    const std::vector<units::meter_t> kPowerInterpolatorDistances = {1.1_m, 2.4_m, 3.6_m}; 
+    const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.65}; 
+
 
 }

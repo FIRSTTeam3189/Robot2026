@@ -13,11 +13,15 @@
 #include <vector>
 #include <algorithm>  
 
+#include "util/Vector2d.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
-class PowerInterpolater {
+
+
+class PowerInterpolator {
     public: 
-        PowerInterpolater(std::vector<units::meter_t> distances, std::vector<double> powers);
-        double GetPower(units::meter_t radius);
+        PowerInterpolator(std::vector<units::meter_t> distances, std::vector<double> powers);
+        double GetPower(frc::Pose2d robotPose, frc::Pose2d targetPose); 
     private:    
         std::vector<units::meter_t> m_distances; 
         std::vector<double> m_powers; 

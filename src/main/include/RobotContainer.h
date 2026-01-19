@@ -27,6 +27,7 @@
 
 
 #include "util/AutoAlignBasic.h"
+#include "util/PowerInterpolator.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/Shooter.h"
@@ -85,7 +86,8 @@ class RobotContainer {
   // The robot's subsystems are defined here..p.
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
-  Shooter *m_shooter = new Shooter(m_swerveDrive);
+  PowerInterpolator *m_powerInterpolator = new PowerInterpolator(AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers); 
+  Shooter *m_shooter = new Shooter(m_swerveDrive, m_powerInterpolator);
   // PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
   //   VisionConstants::kPhotonCamera3, 
   //   VisionConstants::kPhotonTurretCameraXOffset, 

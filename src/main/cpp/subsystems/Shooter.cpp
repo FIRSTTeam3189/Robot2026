@@ -4,7 +4,7 @@
 
 #include "subsystems/Shooter.h"
 
-Shooter::Shooter(SwerveDrive* swerveDrive)
+Shooter::Shooter(SwerveDrive* swerveDrive, PowerInterpolator* powerInterpolator)
   : 
     m_shooterTurretMotor(ShooterConstants::kShooterRotationID, "Swerve"),
     m_shooterFlywheelMotor(ShooterConstants::kShooterFlywheelID, "Swerve"),
@@ -13,7 +13,8 @@ Shooter::Shooter(SwerveDrive* swerveDrive)
     m_swerveDrive(swerveDrive),
     m_state(TurretTarget::PointStraight),
     m_turretField(),
-    m_targetField()
+    m_targetField(),
+    m_powerInterpolator(powerInterpolator)
 {
     ConfigShooter();
     ConfigPID();
@@ -36,12 +37,14 @@ void Shooter::Periodic() {
     }
 
     SetTurretAngle(m_targetRotationAngle);
+    SetFlyWheelPowerTest(m_targetPower);
 }
 
 
 units::degree_t Shooter::GetCurrentTargetAngle() {
     return m_targetRotationAngle;
 }
+
 
 
 void Shooter::RefreshAllSignals() {
@@ -133,35 +136,47 @@ void Shooter::OverrideSoftLimits(bool isEnabled) {
 void Shooter::SetState(TurretTarget state) {
     m_state = state;
     // Figure out target angle then set rotation to this angle
-    //Uncomment ts out once the turret align algorithm is done
-    frc::SmartDashboard::PutNumber("State yarrrr", 0); 
 
     switch (state) {
         case (TurretTarget::AlignHub): {
+            frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
+            frc::Pose2d targetPose = CalculateTargetPose(currentPose);
 
-            m_targetRotationAngle = units::degree_t{this->GetTargetAngle(m_swerveDrive->GetEstimatedPose(), 
-                AutoAlignConstants::kHubPose, AutoAlignConstants::kTurretOffset)};
+            m_targetRotationAngle = units::degree_t{this->GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset)};
+            m_targetPower = m_powerInterpolator->GetPower(currentPose, targetPose); 
             break;
         }
         case (TurretTarget::PointStraight): {
             m_targetRotationAngle = 90.0_deg;
+            m_targetPower = 0.0;
             break;
         }
         case (TurretTarget::PointFerryLeft): {
             m_targetRotationAngle = AutoAlignConstants::FerryAngleLeft;
+            m_targetPower = 0.0;
             break;  
         }     
         case (TurretTarget::PointFerryRight): {
             m_targetRotationAngle = AutoAlignConstants::FerryAngleRight;
+            m_targetPower = 0.0;
             break;
         }   
         default:
             m_targetRotationAngle = 90.0_deg;
+            m_targetPower = 0.0;
             break;  
     }
     // Rotation will be set periodicially
 }
 
+void Shooter::SetFlyWheelTargetPower(double power) {
+    m_targetPower = power; 
+}
+
+
+void Shooter::SetFlyWheelPowerTest(double power) {
+    frc::SmartDashboard::PutNumber("FLY WHEEL POWER: ", power); 
+}
 
 void Shooter::SetTurretAngle(units::degree_t angle) {
     ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
@@ -177,19 +192,12 @@ void Shooter::SetTurretAngle(units::degree_t angle) {
 units::degree_t Shooter::GetTurretAngle() {
     units::degree_t encoderValue = units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees 
         * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
-    // units::degree_t encoderValueRaw = units::degree_t{ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
-
-    // units::degree_t encoderValue = units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
-    frc::SmartDashboard::PutNumber("Afer factoe", encoderValue.value());
-    
-    // int ticks = m_shooterTurretMotor.GetRotorPosition();
-    // frc::SmartDashboard::PutNumber("Ticks?", ticks); 
     
     double encoderValueDouble = encoderValue.value();
     while (encoderValueDouble >= 360) {
         encoderValueDouble -= 360; 
     } 
-    frc::SmartDashboard::PutNumber("wrapped rotation john", encoderValueDouble);
+
     return units::degree_t{encoderValueDouble};
 }
 
@@ -223,16 +231,35 @@ void Shooter::SetRotationBrakeMode(Shooter::BrakeMode mode) {
     m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
 }
 
+frc::Pose2d Shooter::CalculateTargetPose(frc::Pose2d robotPose){
+    frc::Pose2d targetPose(0.0_m, 0.0_m, frc::Rotation2d(0.0_deg));
+    if (frc::DriverStation::GetAlliance()) {
+        if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
+
+            if (robotPose.X() < AutoAlignConstants::kBlueHubPose.X()){
+                targetPose = AutoAlignConstants::kBlueHubPose;
+            } else {
+                targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldBlue, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
+            }
+
+        } else {
+            if (robotPose.X() > AutoAlignConstants::kRedHubPose.X()){
+                targetPose = AutoAlignConstants::kRedHubPose;
+            } else {
+                targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldRed, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
+            }
+        }
+    }
+
+    return targetPose;
+    
+}
+
 // returns angle from 180-0
 double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
 
-    frc::SmartDashboard::PutNumber("ROBOT ALIGN POSEESE X: ", robotPose.X().value()); 
-    frc::SmartDashboard::PutNumber("ROBOT ALIGN POSEESE Y: ", robotPose.Y().value()); 
-
     double robotRotation = robotPose.Rotation().Degrees().value(); 
     Vector2d robotHeading(robotRotation); // assuming robot Heading = turret default Heading 
-
-    frc::SmartDashboard::PutNumber("ROBOT HEADINGGGGG: ", robotRotation); 
 
     // Get the poses as vectors 
     Vector2d turretVec = Vector2d(robotPose) + turretOffset; 
@@ -240,10 +267,7 @@ double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Ve
 
     Vector2d turretToTarget = targetVec - turretVec; 
 
-    frc::SmartDashboard::PutNumber("TURRET TO TARGET X: ", turretToTarget.x);
-    frc::SmartDashboard::PutNumber("TURRET TO TARGET Y: ", turretToTarget.y); 
     double errorAngle = turretToTarget.SignedAngle(robotHeading);
-    frc::SmartDashboard::PutNumber("ERROR ANGLE: ", errorAngle); 
 
     double targetAngle = std::clamp(errorAngle + 90, 0.0, 180.0);
 
@@ -260,8 +284,7 @@ double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Ve
     
     frc::SmartDashboard::PutData("Turret Pose", &m_turretField);
 
-    frc::SmartDashboard::PutNumber("Auto align turret angle: ", targetAngle);
-
     return targetAngle; // where 90 is the turret's default position  
 }
+
 

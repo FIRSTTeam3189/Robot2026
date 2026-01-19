@@ -40,17 +40,17 @@ namespace ShooterConstants{
     constexpr double kFlywheelRelms = 12.0; // relms. Control effort (voltage) tolerance. Decrease this to more heavily penalize control effort, or make the controller less aggressive. 12 is a good starting point because that is the (approximate) maximum voltage of a battery.
 
     constexpr double kShooterGearRatio {1.0};
-    // constexpr double kRotationConversionRotationsToDegrees {0.3571428571};
-    constexpr double kRotationConversionRotationsToDegrees {4.0};
+    constexpr double kRotationConversionRotationsToDegrees {1.0/0.3571428571 * 2};
+    // constexpr double kRotationConversionRotationsToDegrees {4.0};
 
     // constexpr double kRotationConversionDegreesToRotations {1.0 / kRotationConversionRotationsToDegrees};
     constexpr double kShooterPower {1.0};
     constexpr double kResetShooterPower {-1.0};
 
-    constexpr double kSRotation {0.05}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.075}; // Volts applied per meter per second
+    constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
+    constexpr double kVRotation {0.065}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {0.35}; // Volts applied per meter error    
+    constexpr double kPRotation {0.48}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 

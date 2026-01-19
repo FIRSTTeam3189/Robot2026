@@ -51,9 +51,9 @@ void RobotContainer::ConfigureDriverBindings() {
   resetPoseButton.OnTrue(frc2::InstantCommand([this]{
     if (frc::DriverStation::GetAlliance()) {
       if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
-        m_swerveDrive->SetAutoPose(SwerveDriveConstants::kBlueResetPose, false);
+        m_swerveDrive->SetAutoPose(AutoAlignConstants::kBlueHubPose, false);
       else
-        m_swerveDrive->SetAutoPose(SwerveDriveConstants::kRedResetPose, false);
+        m_swerveDrive->SetAutoPose(AutoAlignConstants::kRedHubPose, false);
     }
   },{m_swerveDrive}).ToPtr());
 
