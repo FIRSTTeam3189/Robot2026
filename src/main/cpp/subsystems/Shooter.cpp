@@ -5,49 +5,26 @@
 #include "subsystems/Shooter.h"
 
 Shooter::Shooter(SwerveDrive* swerveDrive)
-  : m_shooterTurretMotor(ShooterConstants::kShooterRotationID, "Swerve"),
+  : 
+    m_shooterTurretMotor(ShooterConstants::kShooterRotationID, "Swerve"),
     m_shooterFlywheelMotor(ShooterConstants::kShooterFlywheelID, "Swerve"),
-    m_state(TurretTarget::PointStraight),
     m_shooterConfig(),
     m_flywheelConfig(),
-    m_flywheelPlant(frc::LinearSystemId::IdentifyVelocitySystem<units::radian>(ShooterConstants::kFlywheelKv, ShooterConstants::kFlywheelKa)),
-    m_observer(m_flywheelPlant,
-      {3.0},   // How accurate we think our model is
-      {0.01},  // How accurate we think our encoder data is
-      20_ms),
-    m_controller(m_flywheelPlant, {ShooterConstants::kFlywheelQelms}, {ShooterConstants::kFlywheelRelms}, 20_ms),
-    m_loop(m_flywheelPlant, m_controller, m_observer, 12_V, 20_ms),
-    m_voltReq(0_V),
-    m_sysIdRoutine(
-        frc2::sysid::Config{
-            m_rampRate,  // !!! Use default ramp rate (1 V/s) !!! LOWER THE RAMP RATE FOR THE TURRET OR ELSE THE TURRETS GONNA EXPLODE
-            4_V,           // Reduce dynamic step voltage to 4 to prevent brownout
-            std::nullopt,  // Use default timeout (10 s)
-                            // Log state with Phoenix SignalLogger class
-            [](frc::sysid::State state)
-            {
-                ctre::phoenix6::SignalLogger::WriteString("state", frc::sysid::SysIdRoutineLog::StateEnumToString(state));
-            }
-        },
-        frc2::sysid::Mechanism{
-            [this](units::volt_t volts) { m_shooterTurretMotor.SetControl(m_voltReq.WithOutput(volts)); },
-            [](auto) {},
-            this
-        }
-    ),
-    m_swerveDrive(swerveDrive)
-   // drive motor (loader), flywheel, turret rotation motor
+    m_swerveDrive(swerveDrive),
+    m_state(TurretTarget::PointStraight),
+    m_turretField(),
+    m_targetField()
 {
     ConfigShooter();
     ConfigPID();
-
+    
     m_allSignals.emplace_back(&m_rotationAngle);
     m_allSignals.emplace_back(&m_rotationVelocity);
 }
 
 // This method will be called once per scheduler run
 void Shooter::Periodic() {
-    // RefreshAllSignals(); signals not implemented yet
+    RefreshAllSignals(); 
     m_currentRotationAngle = GetTurretAngle();
 
     // frc::SmartDashboard::PutNumber("Coral elevator enum state", static_cast<int>(m_state));
@@ -62,19 +39,15 @@ void Shooter::Periodic() {
 }
 
 
-frc2::CommandPtr Shooter::SysIdQuasistatic(frc2::sysid::Direction direction)
-{
-    return m_sysIdRoutine.Quasistatic(direction);
-}
-
-frc2::CommandPtr Shooter::SysIdDynamic(frc2::sysid::Direction direction)
-{
-    return m_sysIdRoutine.Dynamic(direction);
-}
-
 units::degree_t Shooter::GetCurrentTargetAngle() {
     return m_targetRotationAngle;
 }
+
+
+void Shooter::RefreshAllSignals() {
+    frc::SmartDashboard::PutString("Turret signal status", ctre::phoenix6::BaseStatusSignal::WaitForAll(0.02_s, m_allSignals).GetName());
+}
+
 
 
 void Shooter::ConfigShooter() {
@@ -161,6 +134,7 @@ void Shooter::SetState(TurretTarget state) {
     m_state = state;
     // Figure out target angle then set rotation to this angle
     //Uncomment ts out once the turret align algorithm is done
+    frc::SmartDashboard::PutNumber("State yarrrr", 0); 
 
     switch (state) {
         case (TurretTarget::AlignHub): {
@@ -170,7 +144,7 @@ void Shooter::SetState(TurretTarget state) {
             break;
         }
         case (TurretTarget::PointStraight): {
-            m_targetRotationAngle = 0.0_deg;
+            m_targetRotationAngle = 90.0_deg;
             break;
         }
         case (TurretTarget::PointFerryLeft): {
@@ -195,12 +169,28 @@ void Shooter::SetTurretAngle(units::degree_t angle) {
     if ((m_state == TurretTarget::PointStraight) && ((m_currentRotationAngle.value() < 90.05) && (m_currentRotationAngle.value() > 89.95))) {
         m_shooterTurretMotor.Set(0);
     } else {
-        m_shooterTurretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / ShooterConstants::kRotationConversionRotationsToDegrees}));
+        m_shooterTurretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
+            ShooterConstants::kRotationConversionRotationsToDegrees}));
     }
 }
 
 units::degree_t Shooter::GetTurretAngle() {
-    return units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
+    units::degree_t encoderValue = units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees 
+        * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
+    // units::degree_t encoderValueRaw = units::degree_t{ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
+
+    // units::degree_t encoderValue = units::degree_t{ShooterConstants::kRotationConversionRotationsToDegrees * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
+    frc::SmartDashboard::PutNumber("Afer factoe", encoderValue.value());
+    
+    // int ticks = m_shooterTurretMotor.GetRotorPosition();
+    // frc::SmartDashboard::PutNumber("Ticks?", ticks); 
+    
+    double encoderValueDouble = encoderValue.value();
+    while (encoderValueDouble >= 360) {
+        encoderValueDouble -= 360; 
+    } 
+    frc::SmartDashboard::PutNumber("wrapped rotation john", encoderValueDouble);
+    return units::degree_t{encoderValueDouble};
 }
 
 void Shooter::SetShooterRotationMotorPower(double power) {
@@ -236,16 +226,42 @@ void Shooter::SetRotationBrakeMode(Shooter::BrakeMode mode) {
 // returns angle from 180-0
 double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
 
-    Vector2d robotHeading(robotPose.Rotation().Degrees().value()); // assuming robotHeading = turretHeading 
+    frc::SmartDashboard::PutNumber("ROBOT ALIGN POSEESE X: ", robotPose.X().value()); 
+    frc::SmartDashboard::PutNumber("ROBOT ALIGN POSEESE Y: ", robotPose.Y().value()); 
+
+    double robotRotation = robotPose.Rotation().Degrees().value(); 
+    Vector2d robotHeading(robotRotation); // assuming robot Heading = turret default Heading 
+
+    frc::SmartDashboard::PutNumber("ROBOT HEADINGGGGG: ", robotRotation); 
 
     // Get the poses as vectors 
     Vector2d turretVec = Vector2d(robotPose) + turretOffset; 
     Vector2d targetVec(targetPose); 
 
-    Vector2d turretToTarget = (targetVec - turretVec).Normalize(); 
+    Vector2d turretToTarget = targetVec - turretVec; 
 
-    double errorAngle = turretToTarget.SignedAngle(turretVec); 
+    frc::SmartDashboard::PutNumber("TURRET TO TARGET X: ", turretToTarget.x);
+    frc::SmartDashboard::PutNumber("TURRET TO TARGET Y: ", turretToTarget.y); 
+    double errorAngle = turretToTarget.SignedAngle(robotHeading);
+    frc::SmartDashboard::PutNumber("ERROR ANGLE: ", errorAngle); 
 
-    return std::clamp(90 - errorAngle, 0.0, 180.0); // where 90 is the turret's default position  
+    double targetAngle = std::clamp(errorAngle + 90, 0.0, 180.0);
+
+    frc::Pose2d endTargetPose = frc::Pose2d{units::meter_t{turretToTarget.x} + robotPose.X(), units::meter_t{turretToTarget.y} + robotPose.Y(), 
+        frc::Rotation2d(0.0_deg)};
+
+
+    m_targetField.SetRobotPose(endTargetPose); 
+
+    frc::SmartDashboard::PutData("End target pose rarrrwrwrwrrw", &m_targetField); 
+
+    frc::Pose2d turretPoseForViz = frc::Pose2d{robotPose.X(), robotPose.Y(), frc::Rotation2d(units::degree_t(-targetAngle + 90 + robotRotation))};
+    m_turretField.SetRobotPose(turretPoseForViz);
+    
+    frc::SmartDashboard::PutData("Turret Pose", &m_turretField);
+
+    frc::SmartDashboard::PutNumber("Auto align turret angle: ", targetAngle);
+
+    return targetAngle; // where 90 is the turret's default position  
 }
 

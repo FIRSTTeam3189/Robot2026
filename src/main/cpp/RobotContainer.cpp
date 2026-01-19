@@ -80,6 +80,7 @@ void RobotContainer::ConfigureDriverBindings() {
 
   
   
+  
 
 
   // SYSID
@@ -192,5 +193,10 @@ void RobotContainer::ConfigureTestBindings() {
 
   
 }
+
+Shooter* RobotContainer::GetShooterSubsystem() {
+  return m_shooter; 
+}
+
 
 // no matter how nice ethan might seem, when you least expect it he will slap you with a piece of chicken and eat you in a bucket

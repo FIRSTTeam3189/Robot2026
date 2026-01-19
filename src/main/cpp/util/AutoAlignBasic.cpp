@@ -38,20 +38,20 @@ namespace AutoAlign {
     }  
 
 
-    // Returns angle from 0 to 180 
-    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
-        double robotAngle = robotPose.Rotation().Degrees().value(); // Get robot angle
-        Vector2d robotVec(robotPose); // Get robot's heading 
-        robotVec = robotVec.Rotate(-robotAngle); // Rotate robot's heading to align with normal 
+    // // Returns angle from 0 to 180 
+    // double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
+    //     double robotAngle = robotPose.Rotation().Degrees().value(); // Get robot angle
+    //     Vector2d robotVec(robotPose); // Get robot's heading 
+    //     robotVec = robotVec.Rotate(-robotAngle); // Rotate robot's heading to align with normal 
 
-        Vector2d turretVec = robotVec + turretOffset; // Calculate turret's vector based on robot vector and offset
-        Vector2d targetVec(targetPose); // Get target's position as a vector for calculation 
+    //     Vector2d turretVec = robotVec + turretOffset; // Calculate turret's vector based on robot vector and offset
+    //     Vector2d targetVec(targetPose); // Get target's position as a vector for calculation 
 
-        Vector2d turretToTarget = (targetVec - turretVec).Normalize(); // Get vector from turret to target
+    //     Vector2d turretToTarget = (targetVec - turretVec).Normalize(); // Get vector from turret to target
 
-        // Get the angle 
-        return -turretToTarget.Angle() + 90; // + 90 Adjust from -90-90 to 0-180 
-    }
+    //     // Get the angle 
+    //     return -turretToTarget.Angle() + 90; // + 90 Adjust from -90-90 to 0-180 
+    // }
 
 
 

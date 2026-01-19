@@ -11,11 +11,13 @@ SetTurretAngle::SetTurretAngle(Shooter* shooter, TurretTarget state) : m_shooter
 
 // Called when the command is initially scheduled.
 void SetTurretAngle::Initialize() {
-  m_shooter->SetState(m_state);
+  // m_shooter->SetState(m_state);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void SetTurretAngle::Execute() {
+  m_shooter->SetState(m_state);
+
 }
 
 // Called once the command ends or is interrupted.

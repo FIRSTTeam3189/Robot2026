@@ -26,6 +26,7 @@
 #include "Constants/AutoAlignConstants.h"
 
 #include <algorithm>
+#include <cmath> 
 
 class Shooter : public frc2::SubsystemBase {
  public:
@@ -53,6 +54,8 @@ class Shooter : public frc2::SubsystemBase {
 
   units::degree_t GetCurrentTargetAngle();
 
+  void RefreshAllSignals();
+
   void SetTurretAngle(units::degree_t angle);
   
   units::degree_t GetTurretAngle();
@@ -61,22 +64,20 @@ class Shooter : public frc2::SubsystemBase {
 
   double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset);
 
- private:
+  private:
   // HARDWARE (subsystem owns motors)
   ctre::phoenix6::hardware::TalonFX m_shooterTurretMotor;
   ctre::phoenix6::hardware::TalonFX m_shooterFlywheelMotor;
-
+  
   // CONFIG
   ctre::phoenix6::configs::TalonFXConfiguration m_shooterConfig {};
   ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
-
-  frc::LinearSystem<1, 1, 1> m_flywheelPlant;
-  frc::KalmanFilter<1, 1, 1> m_observer;
-  frc::LinearQuadraticRegulator<1, 1> m_controller;
-  frc::LinearSystemLoop<1, 1, 1> m_loop;
-
-  SwerveDrive *m_swerveDrive = nullptr;
-
+  
+  SwerveDrive *m_swerveDrive;
+  TurretTarget m_state;
+  frc::Field2d m_turretField;
+  frc::Field2d m_targetField;
+  
   //PID/FF/Motion Magic
   std::string m_rotationPKey;
   std::string m_rotationIKey;
@@ -88,16 +89,11 @@ class Shooter : public frc2::SubsystemBase {
   std::string m_rotationTargetKey;
   units::degree_t m_targetRotationAngle;
   units::degree_t m_currentRotationAngle;
-  TurretTarget m_state;
+  
 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_shooterTurretMotor.GetVelocity();
   std::vector<ctre::phoenix6::BaseStatusSignal*> m_allSignals;
-
-  //SYSID (super cool PID finder)
-  frc2::sysid::SysIdRoutine m_sysIdRoutine;
-  ctre::phoenix6::controls::VoltageOut m_voltReq;
-  frc2::sysid::ramp_rate_t m_rampRate;
 
   void ConfigShooter();
 };

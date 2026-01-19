@@ -30,6 +30,8 @@
 
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/Shooter.h"
+#include "subsystems/PhotonVision.h"
+
 
 // #include "subsystems/Limelight.h"
 
@@ -37,6 +39,8 @@
 #include "Constants/AutoConstants.h"
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/ShooterConstants.h"
+#include "Constants/VisionConstants.h"
+
 
 
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -67,6 +71,8 @@ class RobotContainer {
   void SetAllNormalBrakeMode();
   void PrintActiveCommands();
 
+  Shooter* GetShooterSubsystem(); 
+
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc::PS5Controller m_bill{OperatorConstants::kDriverControllerPort};
@@ -80,6 +86,11 @@ class RobotContainer {
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
   Shooter *m_shooter = new Shooter(m_swerveDrive);
+  // PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
+  //   VisionConstants::kPhotonCamera3, 
+  //   VisionConstants::kPhotonTurretCameraXOffset, 
+  //   VisionConstants::kPhotonTurretCameraYOffset, 
+  //   frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
   
     // old m_constraints
   // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
