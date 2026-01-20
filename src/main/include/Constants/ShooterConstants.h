@@ -48,9 +48,9 @@ namespace ShooterConstants{
     constexpr double kResetShooterPower {-1.0};
 
     constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.065}; // Volts applied per meter per second
+    constexpr double kVRotation {0.15}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {0.48}; // Volts applied per meter error    
+    constexpr double kPRotation {0.7}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 

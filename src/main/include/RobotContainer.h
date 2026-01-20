@@ -88,11 +88,11 @@ class RobotContainer {
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
   PowerInterpolator *m_powerInterpolator = new PowerInterpolator(AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers); 
   Shooter *m_shooter = new Shooter(m_swerveDrive, m_powerInterpolator);
-  // PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
-  //   VisionConstants::kPhotonCamera3, 
-  //   VisionConstants::kPhotonTurretCameraXOffset, 
-  //   VisionConstants::kPhotonTurretCameraYOffset, 
-  //   frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
+  PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
+    VisionConstants::kPhotonCamera3, 
+    VisionConstants::kPhotonTurretCameraXOffset, 
+    VisionConstants::kPhotonTurretCameraYOffset, 
+    frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
   
     // old m_constraints
   // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(

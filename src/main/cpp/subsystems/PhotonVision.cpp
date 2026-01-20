@@ -1,89 +1,89 @@
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// #include "subsystems/PhotonVision.h"
+#include "subsystems/PhotonVision.h"
 
-// PhotonVision::PhotonVision(PoseEstimatorHelper *helper, std::string camera_name, units::meter_t xOffset, units::meter_t yOffset, frc::Rotation2d yawOffset) :
-//     m_poseEstimator(helper),
-//     m_camera(camera_name),
-//     m_aprilTagFieldLayout(frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2026RebuiltWelded)),
-//     m_cameraToRobotTransform(xOffset, yOffset, yawOffset),
-//     m_timestampOffset(0.0_s),
-//     m_cameraName(camera_name) {
-//     (void)VisionConstants::kSyncBytes[0];
-//     m_folderName = "Photonvision/" + camera_name + "/";
-// }
+PhotonVision::PhotonVision(PoseEstimatorHelper *helper, std::string camera_name, units::meter_t xOffset, units::meter_t yOffset, frc::Rotation2d yawOffset) :
+    m_poseEstimator(helper),
+    m_camera(camera_name),
+    m_aprilTagFieldLayout(frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2026RebuiltWelded)),
+    m_cameraToRobotTransform(xOffset, yOffset, yawOffset),
+    m_timestampOffset(0.0_s),
+    m_cameraName(camera_name) {
+    (void)VisionConstants::kSyncBytes[0];
+    m_folderName = "Photonvision/" + camera_name + "/";
+}
 
-// void PhotonVision::SetTimestampOffset(units::second_t offset) {
-//     m_timestampOffset = offset;
-// }
+void PhotonVision::SetTimestampOffset(units::second_t offset) {
+    m_timestampOffset = offset;
+}
 
-// // This method will be called once per scheduler run
-// void PhotonVision::Periodic() {
-//     // Query the latest result from PhotonVision
-//     photon::PhotonPipelineResult result = m_camera.GetLatestResult();
+// This method will be called once per scheduler run
+void PhotonVision::Periodic() {
+    // Query the latest result from PhotonVision
+    photon::PhotonPipelineResult result = m_camera.GetLatestResult();
 
-//     // frc::SmartDashboard::PutNumber("Vision/timestampstamp", result.GetTimestamp().value());
+    // frc::SmartDashboard::PutNumber("Vision/timestampstamp", result.GetTimestamp().value());
 
-//     // Get the current best target.
-//     photon::PhotonTrackedTarget target = result.GetBestTarget();
+    // Get the current best target.
+    photon::PhotonTrackedTarget target = result.GetBestTarget();
 
-//     // Calculate robot's field relative pose
-//     if (m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).has_value()) {
-//         frc::SmartDashboard::PutBoolean(m_folderName + "Detected", true);
-//         frc::Transform3d transform3d = target.GetBestCameraToTarget();
-//         frc::Transform2d transform2d = frc::Transform2d{transform3d.X(), transform3d.Y(), transform3d.Rotation().ToRotation2d()};
-//         frc::Pose2d tagPose = m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d();
-//         // frc::Pose2d cameraPose = photon::PhotonUtils::EstimateFieldToCamera(transform2d, m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d());
-//         // frc::Pose2d visionEstimatedRobotPose = cameraPose.TransformBy(m_cameraToRobotTransform);
-//         frc::Pose2d visionEstimatedRobotPose = photon::PhotonUtils::EstimateFieldToRobot(transform2d, m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), m_cameraToRobotTransform);
+    // Calculate robot's field relative pose
+    if (m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).has_value()) {
+        frc::SmartDashboard::PutBoolean(m_folderName + "Detected", true);
+        frc::Transform3d transform3d = target.GetBestCameraToTarget();
+        frc::Transform2d transform2d = frc::Transform2d{transform3d.X(), transform3d.Y(), transform3d.Rotation().ToRotation2d()};
+        frc::Pose2d tagPose = m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d();
+        // frc::Pose2d cameraPose = photon::PhotonUtils::EstimateFieldToCamera(transform2d, m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d());
+        // frc::Pose2d visionEstimatedRobotPose = cameraPose.TransformBy(m_cameraToRobotTransform);
+        frc::Pose2d visionEstimatedRobotPose = photon::PhotonUtils::EstimateFieldToRobot(transform2d, m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), m_cameraToRobotTransform);
         
-//         double xDistance = transform2d.X().value();
-//         double yDistance = transform2d.Y().value();
+        double xDistance = transform2d.X().value();
+        double yDistance = transform2d.Y().value();
 
-//         units::second_t timestamp = result.GetTimestamp();
-//         frc::SmartDashboard::PutNumber(m_folderName + "cameraToTarget x", xDistance);
-//         frc::SmartDashboard::PutNumber(m_folderName + "cameraToTarget y", yDistance);
-//         frc::SmartDashboard::PutNumber(m_folderName + "robot x", visionEstimatedRobotPose.X().value());
-//         frc::SmartDashboard::PutNumber(m_folderName + "robot y", visionEstimatedRobotPose.Y().value());
-//         frc::SmartDashboard::PutNumber(m_folderName + "timestamp", timestamp.value());
-//         frc::SmartDashboard::PutNumber(m_folderName + "Tag ID", target.GetFiducialId());
-//         frc::SmartDashboard::PutNumber(m_folderName + "tag x", tagPose.X().value());
-//         frc::SmartDashboard::PutNumber(m_folderName + "tag y", tagPose.Y().value());
+        units::second_t timestamp = result.GetTimestamp();
+        frc::SmartDashboard::PutNumber(m_folderName + "cameraToTarget x", xDistance);
+        frc::SmartDashboard::PutNumber(m_folderName + "cameraToTarget y", yDistance);
+        frc::SmartDashboard::PutNumber(m_folderName + "robot x", visionEstimatedRobotPose.X().value());
+        frc::SmartDashboard::PutNumber(m_folderName + "robot y", visionEstimatedRobotPose.Y().value());
+        frc::SmartDashboard::PutNumber(m_folderName + "timestamp", timestamp.value());
+        frc::SmartDashboard::PutNumber(m_folderName + "Tag ID", target.GetFiducialId());
+        frc::SmartDashboard::PutNumber(m_folderName + "tag x", tagPose.X().value());
+        frc::SmartDashboard::PutNumber(m_folderName + "tag y", tagPose.Y().value());
         
-//         double tagDistance = sqrt(pow(xDistance, 2.0) + pow(yDistance, 2.0));
-//         // Calculate vision std devs based on tag distance
-//         double stdDevDistanceCompensation = tagDistance * VisionConstants::kPhotonVisionStdDevPerMeter;
-//         wpi::array<double, 3U> baseVisionStdDevs = VisionConstants::kPhotonVisionTrustCoefficients;
-//         wpi::array<double, 3U> distanceCompensatedStdDevs = wpi::array<double, 3>{
-//             baseVisionStdDevs[0] + stdDevDistanceCompensation,
-//             baseVisionStdDevs[1] + stdDevDistanceCompensation,
-//             baseVisionStdDevs[2] + stdDevDistanceCompensation};
+        double tagDistance = sqrt(pow(xDistance, 2.0) + pow(yDistance, 2.0));
+        // Calculate vision std devs based on tag distance
+        double stdDevDistanceCompensation = tagDistance * VisionConstants::kPhotonVisionStdDevPerMeter;
+        wpi::array<double, 3U> baseVisionStdDevs = VisionConstants::kPhotonVisionTrustCoefficients;
+        wpi::array<double, 3U> distanceCompensatedStdDevs = wpi::array<double, 3>{
+            baseVisionStdDevs[0] + stdDevDistanceCompensation,
+            baseVisionStdDevs[1] + stdDevDistanceCompensation,
+            baseVisionStdDevs[2] + stdDevDistanceCompensation};
 
-//         // frc::SmartDashboard::PutNumber("Vision/trust x", distanceCompensatedStdDevs.at(0));
-//         // frc::SmartDashboard::PutNumber("Vision/trust y", distanceCompensatedStdDevs.at(1));
+        // frc::SmartDashboard::PutNumber("Vision/trust x", distanceCompensatedStdDevs.at(0));
+        // frc::SmartDashboard::PutNumber("Vision/trust y", distanceCompensatedStdDevs.at(1));
 
-//         // Only add measurements if the ambiguity is low and tag is closer than max dist (about 3 meters)
-//         double ambiguity = target.poseAmbiguity;
-//         auto currentPose = m_poseEstimator->GetEstimatedPose();
+        // Only add measurements if the ambiguity is low and tag is closer than max dist (about 3 meters)
+        double ambiguity = target.poseAmbiguity;
+        auto currentPose = m_poseEstimator->GetEstimatedPose();
 
-//         // The distance between the current pose and the vision estimated pose
-//         double visionEstimatedDistance = sqrt(pow((currentPose.X().value() - visionEstimatedRobotPose.X().value()), 2.0) + pow(((currentPose.Y().value() - visionEstimatedRobotPose.Y().value())), 2.0));
+        // The distance between the current pose and the vision estimated pose
+        double visionEstimatedDistance = sqrt(pow((currentPose.X().value() - visionEstimatedRobotPose.X().value()), 2.0) + pow(((currentPose.Y().value() - visionEstimatedRobotPose.Y().value())), 2.0));
         
-//         // ? 3 if statements oooooooOOOOoooh
-//         // Add offset to timestamp to set to rust vision's epoch
-//         if (ambiguity < VisionConstants::kMaxAmbiguity && tagDistance < VisionConstants::kMaxDistance.value()) {
-//             if (visionEstimatedDistance < VisionConstants::kUseVisionMeasurementThreshold){
-//                 if (m_cameraName == VisionConstants::kPhotonCamera2) {
-//                     m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonVision1);
-//                 } else if (m_cameraName == VisionConstants::kPhotonCamera3) {
-//                     m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonVision2);     
-//                 }
+        // ? 3 if statements oooooooOOOOoooh
+        // Add offset to timestamp to set to rust vision's epoch
+        if (ambiguity < VisionConstants::kMaxAmbiguity && tagDistance < VisionConstants::kMaxDistance.value()) {
+            if (visionEstimatedDistance < VisionConstants::kUseVisionMeasurementThreshold){
+                if (m_cameraName == VisionConstants::kPhotonCamera2) {
+                    m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonVision1);
+                } else if (m_cameraName == VisionConstants::kPhotonCamera3) {
+                    m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp + m_timestampOffset, distanceCompensatedStdDevs, VisionCamera::PhotonVision2);     
+                }
             
-//             } else {
-//                 frc::SmartDashboard::PutBoolean(m_folderName + "Detected", false);
-//             }
-//         }
-//     }
-// }
+            } else {
+                frc::SmartDashboard::PutBoolean(m_folderName + "Detected", false);
+            }
+        }
+    }
+}

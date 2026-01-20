@@ -94,6 +94,10 @@ struct Vector2d {
         return ToAngle(radians); 
     }
 
+    frc::Pose2d ToPose2d() const {
+        return {units::meter_t{x}, units::meter_t{y}, frc::Rotation2d(units::degree_t{Angle()})}; 
+    }
+
     static double ToRadians(double angle) {
         return angle * M_PI / 180; 
     } 

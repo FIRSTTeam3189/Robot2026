@@ -44,6 +44,8 @@ class Shooter : public frc2::SubsystemBase {
   enum class BrakeMode { Brake, Coast, Default };
   void SetRotationBrakeMode(BrakeMode mode);
 
+  frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d currentPose);
+
   frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose);
 
   void OverrideSoftLimits(bool isEnabled);
@@ -71,6 +73,8 @@ class Shooter : public frc2::SubsystemBase {
   void SetFlyWheelPowerTest(double power); 
 
   double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset);
+
+  Vector2d GetRobotSpeed(); 
   
   private:
   // HARDWARE (subsystem owns motors)
@@ -101,7 +105,6 @@ class Shooter : public frc2::SubsystemBase {
 
   double m_targetPower;
   PowerInterpolator *m_powerInterpolator; 
-  
 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_shooterTurretMotor.GetVelocity();

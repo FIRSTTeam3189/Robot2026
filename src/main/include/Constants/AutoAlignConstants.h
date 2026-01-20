@@ -9,7 +9,7 @@
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
-#include <vector> 
+#include <vector>
 
 namespace AutoAlignConstants {
 
@@ -48,7 +48,10 @@ namespace AutoAlignConstants {
     constexpr units::degree_t FerryAngleLeft {45_deg};
     constexpr units::degree_t FerryAngleRight {135_deg};
 
-    const Vector2d kTurretOffset(0.0, 0.0); 
+    const Vector2d kTurretOffset(0.11, 0.0); 
+
+    constexpr double kMinimumVelocityMultiplier {0.25}; 
+    constexpr double kVelocityMultiplier {0.5}; 
 
     const std::vector<units::meter_t> kPowerInterpolatorDistances = {1.1_m, 2.4_m, 3.6_m}; 
     const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.65}; 

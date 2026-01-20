@@ -132,7 +132,6 @@ void Shooter::OverrideSoftLimits(bool isEnabled) {
 }
 
 
-
 void Shooter::SetState(TurretTarget state) {
     m_state = state;
     // Figure out target angle then set rotation to this angle
@@ -142,8 +141,10 @@ void Shooter::SetState(TurretTarget state) {
             frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
             frc::Pose2d targetPose = CalculateTargetPose(currentPose);
 
-            m_targetRotationAngle = units::degree_t{this->GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset)};
             m_targetPower = m_powerInterpolator->GetPower(currentPose, targetPose); 
+            targetPose = UpdateTargetWithVelocity(currentPose, targetPose); 
+
+            m_targetRotationAngle = units::degree_t{this->GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset)};
             break;
         }
         case (TurretTarget::PointStraight): {
@@ -175,7 +176,7 @@ void Shooter::SetFlyWheelTargetPower(double power) {
 
 
 void Shooter::SetFlyWheelPowerTest(double power) {
-    frc::SmartDashboard::PutNumber("FLY WHEEL POWER: ", power); 
+    frc::SmartDashboard::PutNumber("Power Interpolator/power", power); 
 }
 
 void Shooter::SetTurretAngle(units::degree_t angle) {
@@ -231,13 +232,27 @@ void Shooter::SetRotationBrakeMode(Shooter::BrakeMode mode) {
     m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
 }
 
+frc::Pose2d Shooter::UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose) {
+    Vector2d targetVec(targetPose); // Account for velocity 
+    Vector2d robotVelocity = GetRobotSpeed();
+    double robotSpeed = robotVelocity.Length(); 
+    if (robotSpeed > AutoAlignConstants::kMinimumVelocityMultiplier * SwerveModuleConstants::kMaxSpeed.value()) {
+        // Needs to multiply magnitude by a linear interpolation based on ball air time 
+        targetVec = targetVec + robotVelocity * AutoAlignConstants::kVelocityMultiplier * -1; 
+        return targetVec.ToPose2d(); 
+    }
+    return targetPose; 
+}
+
 frc::Pose2d Shooter::CalculateTargetPose(frc::Pose2d robotPose){
     frc::Pose2d targetPose(0.0_m, 0.0_m, frc::Rotation2d(0.0_deg));
+    bool adjustTarget = false; 
     if (frc::DriverStation::GetAlliance()) {
         if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
 
             if (robotPose.X() < AutoAlignConstants::kBlueHubPose.X()){
                 targetPose = AutoAlignConstants::kBlueHubPose;
+                adjustTarget = true; 
             } else {
                 targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldBlue, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
             }
@@ -245,14 +260,15 @@ frc::Pose2d Shooter::CalculateTargetPose(frc::Pose2d robotPose){
         } else {
             if (robotPose.X() > AutoAlignConstants::kRedHubPose.X()){
                 targetPose = AutoAlignConstants::kRedHubPose;
+                adjustTarget = true; 
             } else {
                 targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldRed, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
             }
         }
     }
 
+
     return targetPose;
-    
 }
 
 // returns angle from 180-0
@@ -286,5 +302,13 @@ double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Ve
 
     return targetAngle; // where 90 is the turret's default position  
 }
+
+Vector2d Shooter::GetRobotSpeed() {
+    frc::ChassisSpeeds robotSpeeds = m_swerveDrive->GetRobotRelativeSpeeds(); 
+    frc::SmartDashboard::PutNumber("Robot Velocities/vx", robotSpeeds.vx.value());
+    frc::SmartDashboard::PutNumber("Robot Velocities/vy", robotSpeeds.vy.value());
+    return {robotSpeeds.vx.value(), robotSpeeds.vy.value()}; 
+}
+
 
 

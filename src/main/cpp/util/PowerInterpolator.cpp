@@ -9,7 +9,7 @@ double PowerInterpolator::GetPower(frc::Pose2d robotPose, frc::Pose2d targetPose
     Vector2d robotToTarget(robotPose, targetPose); 
     units::meter_t radius = units::meter_t{robotToTarget.Length()}; 
 
-    frc::SmartDashboard::PutNumber("power interpolator distance: ", radius.value()); 
+    frc::SmartDashboard::PutNumber("Power Interpolator/distance", radius.value()); 
     double radiusDouble = radius.value(); 
 
 
