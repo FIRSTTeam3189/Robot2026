@@ -43,9 +43,9 @@
         constexpr units::turn_t kBackRightOffset {0.471436};
 
         // Motor + sensor inversions
-        constexpr bool kDriveMotorInverted = true;
-        constexpr bool kAngleMotorInverted = true;
-        constexpr bool kCANcoderInverted = false;
+        constexpr bool kDriveMotorInverted = true; 
+        constexpr bool kAngleMotorInverted = true; 
+        constexpr bool kCANcoderInverted = false; 
 
         constexpr units::volt_t kMaxAngleVoltage {12.0};
         // Current limits -- allows continuous operation at certain amps, or a peak of greater amps for <threshold time
@@ -93,8 +93,11 @@
         constexpr units::meters_per_second_t kMaxSpeed {5.75_mps};
         constexpr double kModuleSpeedMultiplier {1.311};
         constexpr double kDEGToRAD {57.2957795131};
+
+
         constexpr double kWheelRadiusInches {2.0};
         constexpr double kWheelRadiusMeters {0.0508};
+   
         constexpr double kWheelCircumferenceMeters {2.0 * PI * kWheelRadiusMeters};
         constexpr double kDriveGearRatio {6.11};
         constexpr double kAngleGearRatio {13.3714};
@@ -183,8 +186,9 @@
         constexpr double kModuleSpeedMultiplier {1.311};
         constexpr double kDEGToRAD {57.2957795131};
 
-        constexpr double kWheelRadiusInches {2.0};
-        constexpr double kWheelRadiusMeters {0.0508};
+        constexpr double kWheelRadiusInches {1.5};
+        constexpr double kWheelRadiusMeters {0.038};
+
         constexpr double kWheelCircumferenceMeters {2.0 * PI * kWheelRadiusMeters};
 
         constexpr double kDriveGearRatio {4.42}; 

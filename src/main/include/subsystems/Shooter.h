@@ -74,7 +74,7 @@ class Shooter : public frc2::SubsystemBase {
 
   double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset);
 
-  Vector2d GetRobotSpeed(); 
+  Vector2d GetRobotVelocity(); 
   
   private:
   // HARDWARE (subsystem owns motors)
@@ -89,6 +89,8 @@ class Shooter : public frc2::SubsystemBase {
   TurretTarget m_state;
   frc::Field2d m_turretField;
   frc::Field2d m_targetField;
+  frc::Field2d m_velocityField;
+
   
   //PID/FF/Motion Magic
   std::string m_rotationPKey;

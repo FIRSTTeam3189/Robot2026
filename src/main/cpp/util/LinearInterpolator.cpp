@@ -2,8 +2,9 @@
 
 
 // template<typename P, typename K>
-// LinearInterpolator<P, K>::LinearInterpolator(const std::vector<P>& xValues, const &std::vector<K> yValues)
-// : m_xValues(xValues), m_yValues(yValues) {}
+// LinearInterpolator<P, K>::LinearInterpolator(const std::vector<P> &xValues, const std::vector<K> &yValues,
+//                                              std::function<double(P)> pToDouble, std::function<double(K)> kToDouble) 
+// : m_xValues(xValues), m_yValues(yValues), m_PToDouble(pToDouble), m_KToDouble(kToDouble) {}
 
 // template<typename P, typename K>
 // K LinearInterpolator<P, K>::Predict(P x) {
@@ -27,11 +28,14 @@
 
 //     }
     
-//     P r1 = m_distances[lowerIndex].value(); 
-//     P r2 = m_distances[upperIndex].value(); 
+//     // Convert P to double 
+//     double r1 = m_PToDouble(m_distances[lowerIndex]); 
+//     double r2 = m_PToDouble(m_distances[upperInd
 
-//     K p1 = m_powers[lowerIndex];
-//     K p2 = m_powers[upperIndex]; 
+
+//     // Convert K to double 
+//     double p1 = m_KToDouble(m_powers[lowerIndex]);
+//     double p2 = m_KToDouble(m_powers[upperIndex]); 
 
 //     if (upperIndex == 0 && upperIndex == lowerIndex) {
 //         r1 = 0;

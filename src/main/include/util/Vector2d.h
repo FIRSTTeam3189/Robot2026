@@ -43,26 +43,43 @@ struct Vector2d {
         return Vector2d(x + other.x, y + other.y); 
     }
 
-    Vector2d operator+=(const Vector2d& other) const {
-        return Vector2d(x + other.x, y + other.y); 
+    Vector2d& operator+=(const Vector2d& other) {
+        x += other.x;
+        y += other.y; 
+        return *this; 
     }
 
     Vector2d operator-(const Vector2d& other) const {
         return Vector2d(x - other.x, y - other.y); 
     }
 
-    Vector2d operator-=(const Vector2d& other) const {
-        return Vector2d(x - other.x, y - other.y); 
+    Vector2d& operator-=(const Vector2d& other) {
+        x -= other.x;
+        y -= other.y; 
+        return *this; 
     }
 
     Vector2d operator*(double scale) const {
         return Vector2d(x * scale, y * scale); 
     }
    
+    Vector2d& operator*=(const Vector2d& other) {
+        x *= other.x;
+        y *= other.y; 
+        return *this; 
+    }
+
     Vector2d operator/(double scale) const {
         if (scale == 0) return Vector2d(0, 0);
         return Vector2d(x / scale, y / scale); 
     } 
+
+    Vector2d& operator/=(const Vector2d& other) {
+        x /= other.x;
+        y /= other.y; 
+        return *this; 
+    }
+
 
     // Angle in radians 
     Vector2d Rotate(double angle) const {

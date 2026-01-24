@@ -171,6 +171,12 @@ frc::ChassisSpeeds SwerveDrive::GetRobotRelativeSpeeds() {
     frc::ChassisSpeeds speeds = SwerveDriveConstants::kKinematics.ToChassisSpeeds(
         frontLeftModuleState, frontRightModuleState, backLeftModuleState, backRightModuleState);
 
+            wpi::array<frc::SwerveModuleState, 4U> states = SwerveDriveConstants::kKinematics.ToSwerveModuleStates(
+                  (fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+                        xSpeed, ySpeed, rot, GetNormalizedYaw())
+                            : frc::ChassisSpeeds{xSpeed, ySpeed, rot}),
+                            centerOfRotation);
+
     // frc::SmartDashboard::PutNumber("Robot relative x speed", speeds.vx.value());
     // frc::SmartDashboard::PutNumber("Robot relative y speed", speeds.vy.value());
     // frc::SmartDashboard::PutNumber("Robot relative omega speed", speeds.omega.value());

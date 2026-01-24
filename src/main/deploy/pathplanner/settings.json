@@ -3,23 +3,10 @@
   "robotLength": 0.889,
   "holonomicMode": true,
   "pathFolders": [
-    "Algae Paths",
-    "Pathfinding Paths",
-    "Score 0",
-    "Score 1",
-    "Score 1 + Setup 1",
-    "Score 2",
-    "Score 3",
-    "Special",
+    
     "Test"
   ],
   "autoFolders": [
-    "Score 0",
-    "Score 1",
-    "Score 1 + Setup 1",
-    "Score 2",
-    "Score 3",
-    "Special",
     "Test"
   ],
   "defaultMaxVel": 2.0,
@@ -46,9 +33,5 @@
   "brModuleY": -0.27125,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": [
-    "{\"name\":\"Algae Intake\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.4,\"y\":0.4},\"end\":{\"x\":-0.4,\"y\":-0.4},\"strokeWidth\":0.02}}",
-    "{\"name\":\"Deep Shooter\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.0,\"y\":-0.35},\"size\":{\"width\":0.075,\"length\":0.2},\"borderRadius\":0.0,\"strokeWidth\":0.02,\"filled\":true}}",
-    "{\"name\":\"Coral Elevator\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.15,\"y\":0.0},\"size\":{\"width\":0.7,\"length\":0.075},\"borderRadius\":0.0,\"strokeWidth\":0.02,\"filled\":true}}"
-  ]
+  "robotFeatures": []
 }

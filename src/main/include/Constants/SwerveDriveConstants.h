@@ -42,10 +42,10 @@ namespace SwerveDriveConstants {
 
     // constexpr frc::Pose2d kBlueResetPose {1.4616_m, 4.026_m, frc::Rotation2d{0.0_deg}};
     // constexpr frc::Pose2d kBlueResetPose {2.366_m, 4.151_m, frc::Rotation2d{0.0_deg}};
-    constexpr frc::Pose2d kBlueResetPose {2.9_m, 4.026_m, frc::Rotation2d{0.0_deg}};
+    constexpr frc::Pose2d kBlueResetPose {2.9_m, 4.026_m, frc::Rotation2d{180.0_deg}};
 
     // constexpr frc::Pose2d kBlueResetPose {7.572_m, 4.026_m, frc::Rotation2d{0.0_deg}};
-    constexpr frc::Pose2d kRedResetPose {4.904_m, 6.1_m, frc::Rotation2d{180.0_deg}};
+    constexpr frc::Pose2d kRedResetPose {4.904_m, 6.1_m, frc::Rotation2d{0.0_deg}};
 
     constexpr units::hertz_t kRefreshRate = units::hertz_t {100};
 
