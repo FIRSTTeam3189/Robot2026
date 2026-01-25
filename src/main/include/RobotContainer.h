@@ -34,6 +34,7 @@
 #include "subsystems/Shooter.h"
 #include "subsystems/PhotonVision.h"
 #include "subsystems/Intake.h"
+#include "subsystems/Articulation.h"
 
 
 // #include "subsystems/Limelight.h"
@@ -92,6 +93,7 @@ class RobotContainer {
   
 
   Shooter *m_shooter = new Shooter(m_swerveDrive, m_powerInterpolator);
+  Articulation *m_articulation = new Articulation();
   PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonCamera3, 
     VisionConstants::kPhotonTurretCameraXOffset, 

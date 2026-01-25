@@ -89,6 +89,25 @@ void Articulation::OverrideSoftLimits(bool isEnabled) {
 void Articulation::SetState(ArticulationTarget state) {
     m_state = state; 
     //TODO
+    switch(state){
+        case(ArticulationTarget::AligntoHub): {
+            frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
+
+            m_targetArticulationAngle = HoodAlign::CalculateArticulationAngle(currentPose);
+            
+            break;
+        }
+        case(ArticulationTarget::Stationary): {
+            m_targetArticulationAngle = ArticulationConstants::kHoodStationaryAngle;
+
+            break;
+
+        }
+        default: {
+            m_targetArticulationAngle = ArticulationConstants::kHoodStationaryAngle;
+
+        }
+    }
 }
 
 void Articulation::SetArticulationAngle(units::degree_t angle) {
@@ -107,9 +126,9 @@ units::degree_t Articulation::GetArticulationAngle() {
     return units::degree_t{encoderValueDouble};
 }
 
-void Articulation::SetArticulationMotorPower(double power) {
-    m_articulationMotor.Set(power);
-}
+// void Articulation::SetArticulationMotorPower(double power) {
+//     m_articulationMotor.Set(power);
+// }
 
 void Articulation::SetArticulationBrakeMode(Articulation::BrakeMode mode) {
     switch (mode) {

@@ -21,11 +21,13 @@
 #include <ctre/phoenix6/StatusSignal.hpp>
 
 #include "subsystems/SwerveDrive.h"
+#include "subsystems/PoseEstimatorHelper.h"
 
 #include "Constants/ArticulationConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
 #include "util/PowerInterpolator.h"
+#include "util/alignUtils/HoodAlign.h"
 
 #include <algorithm>
 #include <cmath> 
@@ -34,7 +36,7 @@ class Articulation : public frc2::SubsystemBase {
  public:
   Articulation();
 
-  void SetArticulationMotorPower(double power);
+  // void SetArticulationMotorPower(double power);
 
   enum class BrakeMode { Brake, Coast, Default };
   void SetArticulationBrakeMode(BrakeMode mode);
@@ -73,6 +75,9 @@ class Articulation : public frc2::SubsystemBase {
   std::string m_articulationVKey;
   std::string m_articulationAKey;
   std::string m_articulationTargetKey;
+
+  PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
+  SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
 
   ArticulationTarget m_state; 
 

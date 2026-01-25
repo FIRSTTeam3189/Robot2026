@@ -17,7 +17,6 @@ void SetTurretAngle::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void SetTurretAngle::Execute() {
   m_shooter->SetState(m_state);
-
 }
 
 // Called once the command ends or is interrupted.
@@ -25,6 +24,7 @@ void SetTurretAngle::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool SetTurretAngle::IsFinished() {
+
   // if (m_state == TurretTarget::AlignHub){
 
   // } else {

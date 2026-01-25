@@ -1,4 +1,5 @@
 #include "util/alignUtils/HoodAlign.h"
+#include "Constants/AutoAlignConstants.h"
 
 namespace HoodAlign {
 
@@ -11,19 +12,19 @@ namespace HoodAlign {
         return {0.0_m, 0.0_m, frc::Rotation2d(0.0_deg)}; 
     }
 
-    double CalculateArticulationAngle(frc::Pose2d robotPose) {
+    units::degree_t CalculateArticulationAngle(frc::Pose2d robotPose) {
         frc::Pose2d hubPose = GetHubPose(); 
 
         Vector2d robotToHub(robotPose, hubPose); 
         units::meter_t radius = units::meter_t{robotToHub.Length()}; 
 
-        units::meter_t y = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
+        // units::meter_t y = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
-        double angle = std::atan((y / radius).value());
+        double angle = std::atan((AutoAlignConstants::ky / radius).value());
 
         frc::SmartDashboard::PutNumber("Distance between robot and hub", radius.value()); 
 
-        return angle + AutoAlignConstants::kHoodDegreeOffset.value(); 
+        return units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value() - AutoAlignConstants::kHoodDefaultAngle};
     }   
 
 

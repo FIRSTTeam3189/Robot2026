@@ -15,7 +15,7 @@
 
 
 enum ArticulationTarget {
-    Align,
+    AligntoHub,
     Stationary
 }; 
 //Articulation Constants
@@ -74,5 +74,7 @@ namespace ArticulationConstants{
     constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 
     constexpr double kShooterRotationalGearRatio {0.0};
+
+    constexpr units::degree_t kHoodStationaryAngle{15.0_deg};
 
 }

@@ -42,6 +42,7 @@ namespace AutoAlignConstants {
     // ! Not verified numbers 
     constexpr units::meter_t kHubHeight {1.524_m}; 
     constexpr units::meter_t kHoodHeight {0.6096_m}; 
+    constexpr units::meter_t ky = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
     constexpr units::degree_t kHoodDegreeOffset {2.0_deg}; 
 
@@ -61,6 +62,8 @@ namespace AutoAlignConstants {
 
     const std::vector<units::meter_t> kPowerInterpolatorDistances = {1.1_m, 2.4_m, 3.6_m}; 
     const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.65}; 
+
+    constexpr double kHoodDefaultAngle{15};
 
     
 }
