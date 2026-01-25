@@ -15,10 +15,9 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/SwerveModuleConstants.h"
 #include "Constants/AutoAlignConstants.h"
-#include "Constants/HoodConstants.h"
+#include "Constants/ArticulationConstants.h"
 
 #include "util/Vector2d.h"
-#include "util/alignUtils/AutoAlign.h"
 
 /*
 

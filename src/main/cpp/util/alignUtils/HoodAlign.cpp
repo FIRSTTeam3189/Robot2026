@@ -17,16 +17,14 @@ namespace HoodAlign {
         Vector2d robotToHub(robotPose, hubPose); 
         units::meter_t radius = units::meter_t{robotToHub.Length()}; 
 
-        units::meter_t y = AutoAlignConstants::kHubHeight - HoodConstants::kHoodHeight;
+        units::meter_t y = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
         double angle = std::atan((y / radius).value());
 
         frc::SmartDashboard::PutNumber("Distance between robot and hub", radius.value()); 
 
-        return angle + HoodConstants::kHoodDegreeOffset.value(); 
+        return angle + AutoAlignConstants::kHoodDegreeOffset.value(); 
     }   
-
-    
 
 
 };
