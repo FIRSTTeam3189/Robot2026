@@ -24,7 +24,7 @@
 #include "commands/utilCommands/SetShooterLoaderPower.h"
 #include "commands/utilCommands/SetShooterRotationPower.h"
 #include "commands/utilCommands/SetTurretAngle.h"
-
+#include "commands/utilCommands/SetIntakeRollerMotor.h"
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/PowerInterpolator.h"
@@ -33,6 +33,7 @@
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/PhotonVision.h"
+#include "subsystems/Intake.h"
 
 
 // #include "subsystems/Limelight.h"
@@ -96,6 +97,8 @@ class RobotContainer {
     VisionConstants::kPhotonTurretCameraXOffset, 
     VisionConstants::kPhotonTurretCameraYOffset, 
     frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
+
+  Intake *m_intake = new Intake(); 
   
     // old m_constraints
   // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(

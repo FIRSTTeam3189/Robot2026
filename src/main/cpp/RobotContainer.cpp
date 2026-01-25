@@ -69,8 +69,8 @@ void RobotContainer::ConfigureDriverBindings() {
   alignToHubButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::AlignHub).ToPtr());
   // alignToHubButton.OnFalse(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
 
-  frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
-  pointStraightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
+  // frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
+  // pointStraightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
 
   frc2::Trigger pointLeftButton([this](){ return m_bill.GetCircleButton(); });
   pointLeftButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryLeft).ToPtr());
@@ -78,19 +78,24 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger pointRightButton([this](){ return m_bill.GetCrossButton(); });
   pointRightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryRight).ToPtr());
 
-  frc2::Trigger slowDownButton([this](){ return m_bill.GetL2Button(); });
-  slowDownButton.OnTrue(frc2::InstantCommand([this]{
-    m_driveState = DriveState::SlowDownSwerves;
-    m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
-  },{m_swerveDrive}).ToPtr());
-  slowDownButton.OnFalse(frc2::InstantCommand([this]{
-    m_driveState = DriveState::HeadingControl;
-    m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
-  },{m_swerveDrive}).ToPtr());
+  // frc2::Trigger slowDownButton([this](){ return m_bill.GetL2Button(); });
+  // slowDownButton.OnTrue(frc2::InstantCommand([this]{
+  //   m_driveState = DriveState::SlowDownSwerves;
+  //   m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  // },{m_swerveDrive}).ToPtr());
+  // slowDownButton.OnFalse(frc2::InstantCommand([this]{
+  //   m_driveState = DriveState::HeadingControl;
+  //   m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  // },{m_swerveDrive}).ToPtr());
 
-  
-  
-  
+
+  frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });
+  runIntakeRollerForward.OnTrue(SetIntakeRollerMotor(m_intake, 0.4).ToPtr()); 
+  runIntakeRollerForward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr()); 
+
+  frc2::Trigger runIntakeRollerBackward([this](){ return m_bill.GetR2Button(); });
+  runIntakeRollerBackward.OnTrue(SetIntakeRollerMotor(m_intake, -0.4).ToPtr()); 
+  runIntakeRollerBackward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr());   
 
 
   // SYSID

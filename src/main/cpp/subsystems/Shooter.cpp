@@ -145,9 +145,10 @@ void Shooter::SetState(TurretTarget state) {
             frc::Pose2d targetPose = TurretAlign::CalculateTargetPose(currentPose);
 
             m_targetPower = m_powerInterpolator->GetPower(currentPose, targetPose); 
-            targetPose = TurretAlign::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity()); 
+            targetPose = TurretAlign::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), m_targetField); 
 
-            m_targetRotationAngle = units::degree_t{TurretAlign::GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset)};
+            m_targetRotationAngle = units::degree_t{TurretAlign::GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset,
+                                                                                m_turretField, m_velocityField)};
             break;
         }
         case (TurretTarget::PointStraight): {

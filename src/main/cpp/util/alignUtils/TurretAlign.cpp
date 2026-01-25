@@ -3,7 +3,8 @@
 
 namespace TurretAlign {
 
-    frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity) {
+    frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity,
+                                         frc::Field2d &velocityField) {
         Vector2d targetVec(targetPose); // Account for velocity 
         double robotSpeed = robotVelocity.Length(); 
         if (robotSpeed > AutoAlignConstants::kMinimumVelocityMultiplier * SwerveModuleConstants::kMaxSpeed.value()) {
@@ -13,10 +14,10 @@ namespace TurretAlign {
         }
 
         // For FIELD 2D ONLY 
-        // Vector2d robotVec(robotPose); 
-        // frc::Pose2d velocityEnd = (robotVec + robotVelocity).ToPose2d(); 
-        // m_velocityField.SetRobotPose(velocityEnd); 
-        // frc::SmartDashboard::PutData("Robot Velocities/velocityVec", &m_velocityField); 
+        Vector2d robotVec(robotPose); 
+        frc::Pose2d velocityEnd = (robotVec + robotVelocity).ToPose2d(); 
+        velocityField.SetRobotPose(velocityEnd); 
+        frc::SmartDashboard::PutData("Robot Velocities/velocityVec", &velocityField); 
 
         return targetPose; 
     }
@@ -46,7 +47,8 @@ namespace TurretAlign {
     }
 
     // returns angle from 180-0
-    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
+    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset, 
+                          frc::Field2d &turretField, frc::Field2d &targetField) {
 
         double robotRotation = robotPose.Rotation().Degrees().value(); 
         Vector2d robotHeading(robotRotation); // assuming robot Heading = turret default Heading 
@@ -65,14 +67,14 @@ namespace TurretAlign {
             frc::Rotation2d(0.0_deg)};
 
 
-        // m_targetField.SetRobotPose(endTargetPose); 
+        targetField.SetRobotPose(endTargetPose); 
 
-        // frc::SmartDashboard::PutData("End target pose rarrrwrwrwrrw", &m_targetField); 
+        frc::SmartDashboard::PutData("Auto Align/End Target Pose", &targetField); 
 
-        // frc::Pose2d turretPoseForViz = frc::Pose2d{robotPose.X(), robotPose.Y(), frc::Rotation2d(units::degree_t(-targetAngle + 90 + robotRotation))};
-        // m_turretField.SetRobotPose(turretPoseForViz);
+        frc::Pose2d turretPoseForViz = frc::Pose2d{robotPose.X(), robotPose.Y(), frc::Rotation2d(units::degree_t(-targetAngle + 90 + robotRotation))};
+        turretField.SetRobotPose(turretPoseForViz);
         
-        // frc::SmartDashboard::PutData("Turret Pose", &m_turretField);
+        frc::SmartDashboard::PutData("Auto Align/Turret Pose", &turretField);
 
         return targetAngle; // where 90 is the turret's default position  
     }

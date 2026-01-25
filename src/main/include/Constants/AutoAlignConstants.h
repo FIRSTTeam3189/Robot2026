@@ -56,7 +56,7 @@ namespace AutoAlignConstants {
 
     const Vector2d kTurretOffset(0.11, 0.0); 
 
-    constexpr double kMinimumVelocityMultiplier {0.25}; 
+    constexpr double kMinimumVelocityMultiplier {0.1}; 
     constexpr double kVelocityMultiplier {0.5}; 
 
     const std::vector<units::meter_t> kPowerInterpolatorDistances = {1.1_m, 2.4_m, 3.6_m}; 

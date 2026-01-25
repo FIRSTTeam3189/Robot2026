@@ -8,6 +8,7 @@
 
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/Field2d.h>
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/CommandPtr.h>
 
@@ -16,8 +17,6 @@
 #include "Constants/AutoAlignConstants.h"
 
 #include "util/Vector2d.h"
-#include "util/alignUtils/AutoAlign.h"
-
 
 /*
 
@@ -30,10 +29,12 @@ Flow: TODO
 */
 namespace TurretAlign {
 
-    frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity);
+    frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity, 
+                                         frc::Field2d &velocityField);
 
     frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose);
 
-    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset); 
+    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset, 
+                          frc::Field2d &turretField, frc::Field2d &targetField); 
 
 }; 
