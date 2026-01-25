@@ -2,9 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include <frc/Preferences.h>
+
 #include "commands/mainCommands/Drive.h"
-#include "Constants/OperatorConstants.h"
+
 
 Drive::Drive(frc::PS5Controller *joystick, SwerveDrive *swerveDrive, DriveState driveState, units::degree_t arbitraryAngle) :
 m_bill(joystick),
@@ -81,9 +81,9 @@ void Drive::Execute(){
       break;
     case(DriveState::SlowDownSwerves) :
       {
-        xSpeed /= 7.0; 
-        ySpeed /= 7.0;
-        rot = GetDesiredRotationalVelocity() / 5;
+        xSpeed *= SwerveDriveConstants::kSlowModeSwerveDriveMultiplier; 
+        ySpeed *= SwerveDriveConstants::kSlowModeSwerveDriveMultiplier;
+        rot = GetDesiredRotationalVelocity() * SwerveDriveConstants::kSlowModeSwerveDriveRotMultiplier;
       }
       break;
 

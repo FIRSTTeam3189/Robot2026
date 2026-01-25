@@ -26,6 +26,7 @@
 #include "Constants/AutoAlignConstants.h"
 
 #include "util/PowerInterpolator.h"
+#include "util/alignUtils/TurretAlign.h"
 
 #include <algorithm>
 #include <cmath> 
@@ -43,10 +44,6 @@ class Shooter : public frc2::SubsystemBase {
 
   enum class BrakeMode { Brake, Coast, Default };
   void SetRotationBrakeMode(BrakeMode mode);
-
-  frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d currentPose);
-
-  frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose);
 
   void OverrideSoftLimits(bool isEnabled);
 
@@ -71,8 +68,6 @@ class Shooter : public frc2::SubsystemBase {
   void SetFlyWheelTargetPower(double power); 
 
   void SetFlyWheelPowerTest(double power); 
-
-  double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset);
 
   Vector2d GetRobotVelocity(); 
   

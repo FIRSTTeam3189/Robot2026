@@ -42,6 +42,7 @@ void Shooter::Periodic() {
 }
 
 
+
 units::degree_t Shooter::GetCurrentTargetAngle() {
     return m_targetRotationAngle;
 }
@@ -92,6 +93,7 @@ void Shooter::ConfigShooter() {
     // m_shooterTurretMotor.SetPosition(0.0_tr);
 }
 
+
 void Shooter::ConfigPID() {
     m_rotationPKey = "Shooter Rotation P";
     m_rotationIKey = "Shooter Rotation I";
@@ -140,12 +142,12 @@ void Shooter::SetState(TurretTarget state) {
     switch (state) {
         case (TurretTarget::AlignHub): {
             frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
-            frc::Pose2d targetPose = CalculateTargetPose(currentPose);
+            frc::Pose2d targetPose = TurretAlign::CalculateTargetPose(currentPose);
 
             m_targetPower = m_powerInterpolator->GetPower(currentPose, targetPose); 
-            targetPose = UpdateTargetWithVelocity(currentPose, targetPose); 
+            targetPose = TurretAlign::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity()); 
 
-            m_targetRotationAngle = units::degree_t{this->GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset)};
+            m_targetRotationAngle = units::degree_t{TurretAlign::GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset)};
             break;
         }
         case (TurretTarget::PointStraight): {
@@ -233,93 +235,23 @@ void Shooter::SetRotationBrakeMode(Shooter::BrakeMode mode) {
     m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
 }
 
-frc::Pose2d Shooter::UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose) {
-    Vector2d targetVec(targetPose); // Account for velocity 
-    Vector2d robotVelocity = GetRobotVelocity();
-    double robotSpeed = robotVelocity.Length(); 
-    if (robotSpeed > AutoAlignConstants::kMinimumVelocityMultiplier * SwerveModuleConstants::kMaxSpeed.value()) {
-        // Needs to multiply magnitude by a linear interpolation based on ball air time 
-        targetVec = targetVec + (robotVelocity * AutoAlignConstants::kVelocityMultiplier * -1); 
 
-        return targetVec.ToPose2d(); 
-    }
-
-    // For FIELD 2D ONLY 
-    Vector2d robotVec(robotPose); 
-    frc::Pose2d velocityEnd = (robotVec + robotVelocity).ToPose2d(); 
-    m_velocityField.SetRobotPose(velocityEnd); 
-    frc::SmartDashboard::PutData("Robot Velocities/velocityVec", &m_velocityField); 
-
-    return targetPose; 
-}
-
-frc::Pose2d Shooter::CalculateTargetPose(frc::Pose2d robotPose){
-    frc::Pose2d targetPose(0.0_m, 0.0_m, frc::Rotation2d(0.0_deg));
-    if (frc::DriverStation::GetAlliance()) {
-        if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
-
-            if (robotPose.X() < AutoAlignConstants::kBlueHubPose.X()){
-                targetPose = AutoAlignConstants::kBlueHubPose;
-            } else {
-                targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldBlue, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
-            }
-
-        } else {
-            if (robotPose.X() > AutoAlignConstants::kRedHubPose.X()){
-                targetPose = AutoAlignConstants::kRedHubPose;
-            } else {
-                targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldRed, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
-            }
-        }
-    }
-
-
-    return targetPose;
-}
-
-// returns angle from 180-0
-double Shooter::GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
-
-    double robotRotation = robotPose.Rotation().Degrees().value(); 
-    Vector2d robotHeading(robotRotation); // assuming robot Heading = turret default Heading 
-
-    // Get the poses as vectors 
-    Vector2d turretVec = Vector2d(robotPose) + turretOffset; 
-    Vector2d targetVec(targetPose); 
-
-    Vector2d turretToTarget = targetVec - turretVec; 
-
-    double errorAngle = turretToTarget.SignedAngle(robotHeading);
-
-    double targetAngle = std::clamp(errorAngle + 90, 0.0, 180.0);
-
-    frc::Pose2d endTargetPose = frc::Pose2d{units::meter_t{turretToTarget.x} + robotPose.X(), units::meter_t{turretToTarget.y} + robotPose.Y(), 
-        frc::Rotation2d(0.0_deg)};
-
-
-    m_targetField.SetRobotPose(endTargetPose); 
-
-    frc::SmartDashboard::PutData("End target pose rarrrwrwrwrrw", &m_targetField); 
-
-    frc::Pose2d turretPoseForViz = frc::Pose2d{robotPose.X(), robotPose.Y(), frc::Rotation2d(units::degree_t(-targetAngle + 90 + robotRotation))};
-    m_turretField.SetRobotPose(turretPoseForViz);
-    
-    frc::SmartDashboard::PutData("Turret Pose", &m_turretField);
-
-    return targetAngle; // where 90 is the turret's default position  
-}
 
 Vector2d Shooter::GetRobotVelocity() {
-    frc::ChassisSpeeds robotSpeeds = m_swerveDrive->GetRobotRelativeSpeeds(); 
-    frc::SmartDashboard::PutNumber("Robot Velocities/vx", robotSpeeds.vx.value());
-    frc::SmartDashboard::PutNumber("Robot Velocities/vy", robotSpeeds.vy.value());
+    frc::ChassisSpeeds robotSpeeds = m_swerveDrive->GetRobotRelativeSpeeds();
 
-    double robotRot = m_swerveDrive->GetEstimatedPose().Rotation().Degrees().value();
-    Vector2d robotRotVec(robotRot); 
-    Vector2d swerveSpeedVec(robotSpeeds.vx.value(), robotSpeeds.vy.value()); 
+    frc::ChassisSpeeds fieldRelativeSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+        robotSpeeds.vx, 
+        robotSpeeds.vy, 
+        robotSpeeds.omega, 
+        m_swerveDrive->GetNormalizedYaw()
+    );
+
+    frc::SmartDashboard::PutNumber("Robot Velocities/vx", fieldRelativeSpeeds.vx.value());
+    frc::SmartDashboard::PutNumber("Robot Velocities/vy", fieldRelativeSpeeds.vy.value());
+
     
-
-    return robotRotVec * swerveSpeedVec.Length(); 
+    return {fieldRelativeSpeeds.vx.value(), fieldRelativeSpeeds.vy.value()}; 
 }
 
 

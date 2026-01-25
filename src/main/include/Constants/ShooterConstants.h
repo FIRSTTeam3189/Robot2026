@@ -23,7 +23,7 @@ namespace ShooterConstants{
     constexpr int kShooterFlywheelID{22};
     constexpr int kShooterLoaderID{21};
     constexpr int kShooterRotationID{20};
-    constexpr int kRotationEncoderID{10};
+    constexpr int kRotationEncoderID{35};
 
     constexpr double kRotationAngleTolerance {1.0};
 

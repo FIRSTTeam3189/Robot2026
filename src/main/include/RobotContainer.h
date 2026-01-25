@@ -26,8 +26,9 @@
 #include "commands/utilCommands/SetTurretAngle.h"
 
 
-#include "util/AutoAlignBasic.h"
+#include "util/alignUtils/AutoAlign.h"
 #include "util/PowerInterpolator.h"
+
 
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/Shooter.h"
@@ -41,7 +42,6 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/ShooterConstants.h"
 #include "Constants/VisionConstants.h"
-
 
 
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -81,12 +81,15 @@ class RobotContainer {
  
 
   // frc::GenericHID m_buttonBoard{OperatorConstants::kButtonBoardPort}; 
-
-
   // The robot's subsystems are defined here..p.
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
-  PowerInterpolator *m_powerInterpolator = new PowerInterpolator(AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers); 
+
+
+  PowerInterpolator *m_powerInterpolator = new PowerInterpolator(
+    AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers); 
+  
+
   Shooter *m_shooter = new Shooter(m_swerveDrive, m_powerInterpolator);
   PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonCamera3, 

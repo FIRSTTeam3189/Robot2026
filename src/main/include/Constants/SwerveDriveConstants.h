@@ -72,7 +72,7 @@ namespace SwerveDriveConstants {
     constexpr double kIRot {0.0}; // constexpr double kIRot {0.00025};
     constexpr double kDRot {0.0};
 
-   
+    
     // !! OLD DON'T WORRY ABOUT IT
     // constexpr frc::Pose2d kPathEndTolerance {0.05_m, 0.05_m, 2.5_deg};  // For all paths for now in teleop
 
@@ -83,6 +83,10 @@ namespace SwerveDriveConstants {
 
     constexpr double kSlowModeDriveMultiplier {0.35};
     constexpr double kSwerveRotationTolerance {1.0};
+
+    constexpr double kSlowModeSwerveDriveMultiplier {0.142857};
+    constexpr double kSlowModeSwerveDriveRotMultiplier {0.25};
+
 
     
 

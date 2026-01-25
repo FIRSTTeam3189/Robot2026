@@ -1,5 +1,6 @@
 #pragma once
 
+#include <frc/Preferences.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/DriverStation.h>
 #include <frc2/command/Command.h>
@@ -8,7 +9,8 @@
 #include <frc/Joystick.h>
 #include <frc/PS5Controller.h>
 #include "subsystems/SwerveDrive.h"
-
+#include "Constants/OperatorConstants.h"
+#include "Constants/SwerveDriveConstants.h"
 
 class Drive
     : public frc2::CommandHelper<frc2::Command, Drive> {

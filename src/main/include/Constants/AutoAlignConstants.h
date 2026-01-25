@@ -39,6 +39,9 @@ namespace AutoAlignConstants {
     constexpr frc::Pose2d kBlueHubPose {4.624_m, 4.036_m, frc::Rotation2d(0.0_deg)};
     constexpr frc::Pose2d kRedHubPose {11.909_m, 4.036_m, frc::Rotation2d(0.0_deg)};
 
+    // ! Not verified 
+    constexpr units::meter_t kHubHeight {1.524_m}; 
+
     constexpr frc::Pose2d kFerryLeftPose {3.07_m, 2.33_m, frc::Rotation2d(0.0_deg)};
     constexpr frc::Pose2d kFerryRightPose {3.07_m, 6.397_m, frc::Rotation2d(0.0_deg)};
 
@@ -55,6 +58,5 @@ namespace AutoAlignConstants {
 
     const std::vector<units::meter_t> kPowerInterpolatorDistances = {1.1_m, 2.4_m, 3.6_m}; 
     const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.65}; 
-
-
+    
 }

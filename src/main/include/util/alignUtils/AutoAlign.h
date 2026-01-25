@@ -31,7 +31,4 @@ namespace AutoAlign {
     frc::Pose2d GetClosestRobotPose(double robotX, double robotY);
 
     frc2::CommandPtr AutoAlignToPose(frc::Pose2d robotPose, pathplanner::PathConstraints constraints);
-
-    double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose); 
-
 }; 

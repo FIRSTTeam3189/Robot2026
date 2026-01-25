@@ -65,7 +65,7 @@ void RobotContainer::ConfigureDriverBindings() {
   applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_shooter, -0.2).ToPtr());
   applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
 
-  frc2::Trigger alignToHubButton([this](){ return m_bill.GetL2Button(); });
+  frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
   alignToHubButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::AlignHub).ToPtr());
   // alignToHubButton.OnFalse(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
 
@@ -77,6 +77,16 @@ void RobotContainer::ConfigureDriverBindings() {
 
   frc2::Trigger pointRightButton([this](){ return m_bill.GetCrossButton(); });
   pointRightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryRight).ToPtr());
+
+  frc2::Trigger slowDownButton([this](){ return m_bill.GetL2Button(); });
+  slowDownButton.OnTrue(frc2::InstantCommand([this]{
+    m_driveState = DriveState::SlowDownSwerves;
+    m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  },{m_swerveDrive}).ToPtr());
+  slowDownButton.OnFalse(frc2::InstantCommand([this]{
+    m_driveState = DriveState::HeadingControl;
+    m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  },{m_swerveDrive}).ToPtr());
 
   
   
