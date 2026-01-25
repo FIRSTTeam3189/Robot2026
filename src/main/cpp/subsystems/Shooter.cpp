@@ -4,7 +4,7 @@
 
 #include "subsystems/Shooter.h"
 
-Shooter::Shooter(SwerveDrive* swerveDrive, PowerInterpolator* powerInterpolator)
+Shooter::Shooter(SwerveDrive* swerveDrive, Articulation* articulation)
   : 
     m_shooterTurretMotor(ShooterConstants::kShooterRotationID, "Swerve"),
     m_shooterFlywheelMotor(ShooterConstants::kShooterFlywheelID, "Swerve"),
@@ -15,7 +15,8 @@ Shooter::Shooter(SwerveDrive* swerveDrive, PowerInterpolator* powerInterpolator)
     m_turretField(),
     m_targetField(),
     m_velocityField(),
-    m_powerInterpolator(powerInterpolator)
+    m_powerInterpolator(new PowerInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers)),
+    m_articulation(articulation) 
 {
     ConfigShooter();
     ConfigPID();
@@ -144,7 +145,8 @@ void Shooter::SetState(TurretTarget state) {
             frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
             frc::Pose2d targetPose = TurretAlign::CalculateTargetPose(currentPose);
 
-            m_targetPower = m_powerInterpolator->GetPower(currentPose, targetPose); 
+            double hoodAngle = m_articulation->GetTargetAngle().value(); 
+            m_targetPower = m_powerInterpolator->GetPower(hoodAngle); 
             targetPose = TurretAlign::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), m_targetField); 
 
             m_targetRotationAngle = units::degree_t{TurretAlign::GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset,
@@ -257,3 +259,6 @@ Vector2d Shooter::GetRobotVelocity() {
 
 
 
+Shooter::~Shooter() {
+    delete m_powerInterpolator;
+}

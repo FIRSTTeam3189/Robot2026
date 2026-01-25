@@ -22,9 +22,12 @@ namespace HoodAlign {
 
         double angle = std::atan((AutoAlignConstants::ky / radius).value());
 
-        frc::SmartDashboard::PutNumber("Distance between robot and hub", radius.value()); 
+        frc::SmartDashboard::PutNumber("Auto Align/Distance between robot and hub", radius.value()); 
 
-        return units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value() - AutoAlignConstants::kHoodDefaultAngle};
+        units::degree_t offsetAngle = units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value() - AutoAlignConstants::kHoodDefaultAngle};
+        frc::SmartDashboard::PutNumber("Auto Align/Hood Angle", offsetAngle.value()); 
+
+        return offsetAngle;
     }   
 
 

@@ -4,12 +4,14 @@
 
 #include "subsystems/Articulation.h"
 
-Articulation::Articulation()
+Articulation::Articulation(SwerveDrive *swerveDrive)
   : 
     m_articulationMotor(ArticulationConstants::kArticulationMotorID, "Swerve"),
-    m_articulationConfig()
+    m_articulationConfig(),
+    m_swerveDrive(swerveDrive)
 {
     ConfigArticulation();
+    ConfigPID();
 
     m_allSignals.emplace_back(&m_articulationAngle);
     m_allSignals.emplace_back(&m_articulationVelocity);
@@ -78,6 +80,28 @@ void Articulation::UpdatePreferences() {
 
     m_articulationMotor.GetConfigurator().Apply(m_articulationConfig);
 }
+
+void Articulation::ConfigPID() {
+    m_articulationPKey = "Articulation Rotation P";
+    m_articulationIKey = "Articulation Rotation I";
+    m_articulationDKey = "Articulation Rotation D";
+    m_articulationGKey = "Articulation Rotation G";
+    m_articulationSKey = "Articulation Rotation S";
+    m_articulationVKey = "Articulation Rotation V";
+    m_articulationAKey = "Articulation Rotation A";
+    m_articulationTargetKey = "Articulation Rotation Target Angle";
+    //keys for PID and FF 
+
+    frc::Preferences::SetDouble(m_articulationPKey, ArticulationConstants::kPRotation);
+    frc::Preferences::SetDouble(m_articulationIKey, ArticulationConstants::kIRotation);
+    frc::Preferences::SetDouble(m_articulationDKey, ArticulationConstants::kDRotation);
+    frc::Preferences::SetDouble(m_articulationSKey, ArticulationConstants::kSRotation);
+    frc::Preferences::SetDouble(m_articulationVKey, ArticulationConstants::kVRotation);
+    frc::Preferences::SetDouble(m_articulationAKey, ArticulationConstants::kARotation);
+    // frc::Preferences::SetDouble("ramprate", m_rampRate.value());
+    frc::Preferences::SetDouble(m_articulationTargetKey, m_targetArticulationAngle.value());
+}
+
 
 void Articulation::OverrideSoftLimits(bool isEnabled) {
     m_articulationConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = isEnabled;
@@ -152,4 +176,8 @@ void Articulation::SetArticulationBrakeMode(Articulation::BrakeMode mode) {
 
 void Articulation::RefreshAllSignals() {
     frc::SmartDashboard::PutString("Articulation signal status", ctre::phoenix6::BaseStatusSignal::WaitForAll(0.02_s, m_allSignals).GetName());
+}
+
+units::degree_t Articulation::GetTargetAngle() {
+    return m_targetArticulationAngle;
 }

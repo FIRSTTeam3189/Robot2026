@@ -34,7 +34,7 @@
 
 class Articulation : public frc2::SubsystemBase {
  public:
-  Articulation();
+  Articulation(SwerveDrive *swerveDrive);
 
   // void SetArticulationMotorPower(double power);
 
@@ -49,9 +49,15 @@ class Articulation : public frc2::SubsystemBase {
 
   void UpdatePreferences();
 
+  void ConfigPID();
+  
   void RefreshAllSignals();
 
+  units::degree_t GetTargetAngle(); 
+
   void OverrideSoftLimits(bool isEnabled);
+
+  void ConfigArticulation();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -61,6 +67,7 @@ class Articulation : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+
 
   ctre::phoenix6::hardware::TalonFX m_articulationMotor;
 
@@ -76,8 +83,7 @@ class Articulation : public frc2::SubsystemBase {
   std::string m_articulationAKey;
   std::string m_articulationTargetKey;
 
-  PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
-  SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
+  SwerveDrive *m_swerveDrive;
 
   ArticulationTarget m_state; 
 
@@ -87,8 +93,6 @@ class Articulation : public frc2::SubsystemBase {
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_articulationAngle = m_articulationMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_articulationVelocity = m_articulationMotor.GetVelocity();
   std::vector<ctre::phoenix6::BaseStatusSignal*> m_allSignals;
-
-  void ConfigArticulation();
 
 
 };

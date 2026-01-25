@@ -60,8 +60,9 @@ namespace AutoAlignConstants {
     constexpr double kMinimumVelocityMultiplier {0.1}; 
     constexpr double kVelocityMultiplier {0.5}; 
 
-    const std::vector<units::meter_t> kPowerInterpolatorDistances = {1.1_m, 2.4_m, 3.6_m}; 
-    const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.65}; 
+    // 0 is 15, and max is 35 
+    const std::vector<double> kPowerInterpolatorAngles = {10, 15, 20, 25, 30, 35}; 
+    const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.51, 0.62, 0.8}; 
 
     constexpr double kHoodDefaultAngle{15};
 

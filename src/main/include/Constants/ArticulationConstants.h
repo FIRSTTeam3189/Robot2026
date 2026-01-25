@@ -22,7 +22,7 @@ enum ArticulationTarget {
 
 namespace ArticulationConstants{
 
-    constexpr int kArticulationMotorID{1};
+    constexpr int kArticulationMotorID{45};
 
     constexpr double kRotationAngleTolerance {1.0};
     constexpr bool kSoftLimitEnabledForward{false};
@@ -37,8 +37,6 @@ namespace ArticulationConstants{
     constexpr auto kArticulationKv = 0.023_V / 1_rad_per_s; 
     constexpr auto kArticulationlKa = 0.001_V / 1_rad_per_s_sq;
 
-    constexpr double kArticulationQelms = 8.0; // qelms. Velocity error tolerance, in radians per second. Decrease this to more heavily penalize state excursion, or make the controller behave more aggressively.
-    constexpr double kArticulationRelms = 12.0; // relms. Control effort (voltage) tolerance. Decrease this to more heavily penalize control effort, or make the controller less aggressive. 12 is a good starting point because that is the (approximate) maximum voltage of a battery.
 
     constexpr double kShooterGearRatio {1.0};
 

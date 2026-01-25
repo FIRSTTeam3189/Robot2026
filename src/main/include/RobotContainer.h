@@ -25,6 +25,8 @@
 #include "commands/utilCommands/SetShooterRotationPower.h"
 #include "commands/utilCommands/SetTurretAngle.h"
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
+#include "commands/utilCommands/SetArticulationAngle.h"
+
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/PowerInterpolator.h"
@@ -44,6 +46,8 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/ShooterConstants.h"
 #include "Constants/VisionConstants.h"
+#include "Constants/ArticulationConstants.h"
+
 
 
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -86,14 +90,10 @@ class RobotContainer {
   // The robot's subsystems are defined here..p.
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
-
-
-  PowerInterpolator *m_powerInterpolator = new PowerInterpolator(
-    AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers); 
   
+  Articulation *m_articulation = new Articulation(m_swerveDrive);
+  Shooter *m_shooter = new Shooter(m_swerveDrive, m_articulation);
 
-  Shooter *m_shooter = new Shooter(m_swerveDrive, m_powerInterpolator);
-  Articulation *m_articulation = new Articulation();
   PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonCamera3, 
     VisionConstants::kPhotonTurretCameraXOffset, 

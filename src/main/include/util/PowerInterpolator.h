@@ -20,10 +20,10 @@
 
 class PowerInterpolator {
     public: 
-        PowerInterpolator(std::vector<units::meter_t> distances, std::vector<double> powers);
-        double GetPower(frc::Pose2d robotPose, frc::Pose2d targetPose); 
+        PowerInterpolator(std::vector<double> angles, std::vector<double> powers);
+        double GetPower(double hoodAngle); 
     private:    
-        std::vector<units::meter_t> m_distances; 
+        std::vector<double> m_angles; 
         std::vector<double> m_powers; 
 
 };

@@ -19,6 +19,8 @@ void Intake::ConfigRollerMotor() {
     m_rollerMotor.Configure(m_rollerConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
 }
 
+
+
 void Intake::SetRollerPower(double power){
     m_rollerMotor.Set(power);
 }

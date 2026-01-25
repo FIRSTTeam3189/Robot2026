@@ -21,6 +21,7 @@
 #include <ctre/phoenix6/StatusSignal.hpp>
 
 #include "subsystems/SwerveDrive.h"
+#include "subsystems/Articulation.h"
 
 #include "Constants/ShooterConstants.h"
 #include "Constants/AutoAlignConstants.h"
@@ -33,7 +34,7 @@
 
 class Shooter : public frc2::SubsystemBase {
  public:
-  Shooter(SwerveDrive* swerveDrive, PowerInterpolator* powerInterpolator);
+  Shooter(SwerveDrive* swerveDrive, Articulation* articulation);
 
   // SysId helpers (return commands that run the SysId routines)
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
@@ -70,6 +71,8 @@ class Shooter : public frc2::SubsystemBase {
   void SetFlyWheelPowerTest(double power); 
 
   Vector2d GetRobotVelocity(); 
+
+  ~Shooter(); 
   
   private:
   // HARDWARE (subsystem owns motors)
@@ -102,6 +105,7 @@ class Shooter : public frc2::SubsystemBase {
 
   double m_targetPower;
   PowerInterpolator *m_powerInterpolator; 
+  Articulation *m_articulation; 
 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_shooterTurretMotor.GetVelocity();
