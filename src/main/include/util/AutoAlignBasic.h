@@ -11,7 +11,8 @@
 
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/AutoAlignConstants.h"
-
+#include "util/Vector2d.h" 
+#include <algorithm>
 
 
 /*
@@ -32,5 +33,5 @@ namespace AutoAlign {
     frc::Pose2d getClosestRobotPose(double robotX, double robotY);
 
     frc2::CommandPtr autoAlignToPose(frc::Pose2d robotPose, pathplanner::PathConstraints constraints);
-  
+
 };

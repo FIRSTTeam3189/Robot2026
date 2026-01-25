@@ -1,6 +1,4 @@
 #include "util/AutoAlignBasic.h"
-#include <math.h>
-
 
 namespace AutoAlign {
 
@@ -33,7 +31,6 @@ namespace AutoAlign {
 
     }
 
-        
 
     frc2::CommandPtr autoAlignToPose(frc::Pose2d robotPose, pathplanner::PathConstraints constraints) {
         frc::Pose2d targetSetpointPose = getClosestRobotPose(robotPose.X().value(), robotPose.Y().value());

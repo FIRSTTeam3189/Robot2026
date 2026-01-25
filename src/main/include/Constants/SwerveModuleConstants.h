@@ -78,13 +78,13 @@
         constexpr int kSyncCANcoder{6};
 
         // Even though probably not using FF, keep constants in case
-        constexpr double kPDrive {2.5};
+        constexpr double kPDrive {2.0};
         constexpr double kIDrive {0.0};
         constexpr double kDDrive {0.0};
         constexpr double kVDrive {0.0};
         constexpr double kSDrive {0.0};
 
-        constexpr double kPAngle {35.0};
+        constexpr double kPAngle {25.0};
         constexpr double kIAngle {0.0};
         constexpr double kDAngle {0.0};
         constexpr double kVAngle {0.0};

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.369,
+        "y": 4.916
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1238548310772702,
+        "y": 4.866970966215455
+      },
+      "isLocked": false,
+      "linkedName": "Top Hub Score"
+    },
+    {
+      "anchor": {
+        "x": 1.5741348713398398,
+        "y": 3.7734427684117122
+      },
+      "prevControl": {
+        "x": 1.8238519057709492,
+        "y": 3.785334055765574
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Tower"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -34.77099171264049
+  },
+  "useDefaultConstraints": true
+}

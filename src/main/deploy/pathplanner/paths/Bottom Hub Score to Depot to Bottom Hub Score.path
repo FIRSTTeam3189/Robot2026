@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.608198757763975,
+        "y": 4.030976042590949
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.9171575343597196,
+        "y": 3.9848550319526526
+      },
+      "isLocked": false,
+      "linkedName": "Bottom Hub Score"
+    },
+    {
+      "anchor": {
+        "x": 0.6808163265306115,
+        "y": 7.435244010647738
+      },
+      "prevControl": {
+        "x": 1.0889945180199732,
+        "y": 6.770496670222206
+      },
+      "nextControl": {
+        "x": 0.4191848098624529,
+        "y": 7.861329623507309
+      },
+      "isLocked": false,
+      "linkedName": "Depot"
+    },
+    {
+      "anchor": {
+        "x": 4.608198757763975,
+        "y": 4.030976042590949
+      },
+      "prevControl": {
+        "x": 4.074597693934187,
+        "y": 4.043166202165418
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Bottom Hub Score"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -43.33166255170669
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "RevFlywheel",
+      "waypointRelativePos": 1.6,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 36.030895728191126
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 36.030895728191126
+  },
+  "useDefaultConstraints": true
+}

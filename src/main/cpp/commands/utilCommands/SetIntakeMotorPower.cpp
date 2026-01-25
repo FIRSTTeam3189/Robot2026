@@ -6,6 +6,7 @@
 
 SetIntakeMotorPower::SetIntakeMotorPower(Intake *intake, double power) : m_intake(intake), m_rollerPower(power) {
   // Use addRequirements() here to declare subsystem dependencies.
+  addRequirements(); 
 }
 
 // Called when the command is initially scheduled.
