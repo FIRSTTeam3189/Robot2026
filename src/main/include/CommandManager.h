@@ -20,9 +20,7 @@
 #include "commands/utilCommands/SetShooterLoaderPower.h"
 #include "commands/utilCommands/SetShooterRotationPower.h"
 #include "commands/utilCommands/SetTurretAngle.h"
-#include "commands/utilCommands/SetIntakeRollerMotor.h"
 #include "commands/utilCommands/SetArticulationAngle.h"
-#include "commands/mainCommands/SetIntakeAngleAndPower.h"
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/PowerInterpolator.h"
@@ -31,7 +29,6 @@
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/shooterSubsystem/Turret.h"
 #include "subsystems/PhotonVision.h"
-#include "subsystems/Intake.h"
 #include "subsystems/shooterSubsystem/Articulation.h"
 #include "subsystems/shooterSubsystem/Loader.h"
 #include "subsystems/shooterSubsystem/Flywheel.h"
