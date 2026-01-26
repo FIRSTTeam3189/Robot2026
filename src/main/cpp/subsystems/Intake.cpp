@@ -4,9 +4,8 @@ Intake::Intake() :
 
  m_rollerMotor(IntakeConstants::kRollerMotorID, rev::spark::SparkMax::MotorType::kBrushless),
  m_rollerConfig(),
- m_intakeSolenoid(IntakeConstants::kSolenoidModule, IntakeConstants::kSolenoidType, IntakeConstants::kSolenoidForwardChannel, IntakeConstants::kSolenoidReverseChannel),
- m_intakeSolenoid2(IntakeConstants::kSolenoidModule, IntakeConstants::kSolenoidType, IntakeConstants::kSolenoidForwardChannel2, IntakeConstants::kSolenoidReverseChannel2)
-
+ m_intakeSolenoid(IntakeConstants::kSolenoidModule, IntakeConstants::kSolenoidType,
+                  IntakeConstants::kSolenoidForwardChannel, IntakeConstants::kSolenoidReverseChannel)
 {
     ConfigRollerMotor();
 
@@ -18,9 +17,9 @@ void Intake::ConfigRollerMotor() {
         .Inverted(IntakeConstants::kRollerMotorInverted)
         .SmartCurrentLimit(IntakeConstants::kRollerMotorCurrentLimit)
         .SetIdleMode(IntakeConstants::kRollerMotorIdleMode);
-    m_rollerMotor.Configure(m_rollerConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
+    m_rollerMotor.Configure(m_rollerConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, 
+                            rev::spark::SparkBase::PersistMode::kPersistParameters);
 }
-
 
 
 void Intake::SetRollerPower(double power){
@@ -29,13 +28,11 @@ void Intake::SetRollerPower(double power){
 
 void Intake::SetIntake(double power) {
     m_intakeSolenoid.Set(frc::DoubleSolenoid::kForward);
-    m_intakeSolenoid2.Set(frc::DoubleSolenoid::kForward);
     m_rollerMotor.Set(power);
 }
 
 void Intake::RetractIntake() {
     m_intakeSolenoid.Set(frc::DoubleSolenoid::kReverse);
-    m_intakeSolenoid2.Set(frc::DoubleSolenoid::kReverse);
     m_rollerMotor.Set(0.0);
 }
 

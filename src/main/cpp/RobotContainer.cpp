@@ -102,12 +102,21 @@ void RobotContainer::ConfigureDriverBindings() {
   // runIntakeRollerBackward.OnTrue(SetIntakeRollerMotor(m_intake, -0.4).ToPtr()); 
   // runIntakeRollerBackward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr());
 
+  // frc2::Trigger extendAndRunIntake([this](){ return m_bill.GetR2Button(); });
+  // extendAndRunIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.8, true).ToPtr());
+
+  // frc2::Trigger retractIntake([this](){ return m_bill.GetL2Button(); });
+  // retractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.0, false).ToPtr());  // passes in 0.0 but does nothing
+
   frc2::Trigger extendAndRunIntake([this](){ return m_bill.GetR2Button(); });
-  extendAndRunIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.8, true).ToPtr());
+  extendAndRunIntake.OnTrue(frc2::InstantCommand([this]() {
+    m_intake->SetIntake(0.4); 
+  }, {m_intake}).ToPtr());
 
   frc2::Trigger retractIntake([this](){ return m_bill.GetL2Button(); });
-  retractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.0, false).ToPtr());  // passes in 0.0 but does nothing
-
+  retractIntake.OnTrue(frc2::InstantCommand([this]() {
+    m_intake->RetractIntake(); 
+  }, {m_intake}).ToPtr());  // passes in 0.0 but does nothing
 
   // Flywheel as intake 
   // frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });

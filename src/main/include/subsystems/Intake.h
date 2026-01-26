@@ -40,7 +40,6 @@ class Intake : public frc2::SubsystemBase {
   rev::spark::SparkMaxConfig m_rollerConfig;
 
   frc::DoubleSolenoid m_intakeSolenoid;
-  frc::DoubleSolenoid m_intakeSolenoid2;
 
 };
 

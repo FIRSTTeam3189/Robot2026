@@ -24,10 +24,8 @@ namespace IntakeConstants{
 
     // Pneumatics:
     constexpr int kSolenoidModule {23};
-    constexpr int kSolenoidForwardChannel {0};
-    constexpr int kSolenoidReverseChannel {7};
-    constexpr int kSolenoidForwardChannel2 {9};
-    constexpr int kSolenoidReverseChannel2 {10};
+    constexpr int kSolenoidForwardChannel {1};
+    constexpr int kSolenoidReverseChannel {0};
     constexpr frc::PneumaticsModuleType kSolenoidType {frc::PneumaticsModuleType::REVPH};
     
 }
