@@ -6,11 +6,11 @@
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
-#include "subsystems/Shooter.h"
+#include "subsystems/shooterSubsystem/Flywheel.h"
 
 class SetFlywheelMotorPower : public frc2::CommandHelper<frc2::Command, SetFlywheelMotorPower> {
  public:
-  explicit SetFlywheelMotorPower(Shooter* shooter, double power);
+  explicit SetFlywheelMotorPower(Flywheel *flywheel, double power);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -22,6 +22,6 @@ class SetFlywheelMotorPower : public frc2::CommandHelper<frc2::Command, SetFlywh
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  Shooter* m_shooter;
+  Flywheel *m_flywheel;
   double m_power;
 };

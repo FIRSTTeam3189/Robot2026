@@ -26,17 +26,22 @@
 #include "commands/utilCommands/SetTurretAngle.h"
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
 #include "commands/utilCommands/SetArticulationAngle.h"
+#include "commands/mainCommands/SetIntakeAngleAndPower.h"
 
+#include "CommandManager.h"
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/PowerInterpolator.h"
 
 
 #include "subsystems/PoseEstimatorHelper.h"
-#include "subsystems/Shooter.h"
+#include "subsystems/shooterSubsystem/Turret.h"
 #include "subsystems/PhotonVision.h"
 #include "subsystems/Intake.h"
-#include "subsystems/Articulation.h"
+#include "subsystems/shooterSubsystem/Articulation.h"
+#include "subsystems/shooterSubsystem/Loader.h"
+#include "subsystems/shooterSubsystem/Flywheel.h"
+
 
 
 // #include "subsystems/Limelight.h"
@@ -44,9 +49,10 @@
 #include "Constants/OperatorConstants.h"
 #include "Constants/AutoConstants.h"
 #include "Constants/SwerveDriveConstants.h"
-#include "Constants/ShooterConstants.h"
+#include "Constants/shooterConstants/TurretConstants.h"
+#include "Constants/shooterConstants/ArticulationConstants.h"
+
 #include "Constants/VisionConstants.h"
-#include "Constants/ArticulationConstants.h"
 
 
 
@@ -78,7 +84,7 @@ class RobotContainer {
   void SetAllNormalBrakeMode();
   void PrintActiveCommands();
 
-  Shooter* GetShooterSubsystem(); 
+  Turret* GetShooterSubsystem(); 
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -91,8 +97,10 @@ class RobotContainer {
   PoseEstimatorHelper *m_poseEstimator = new PoseEstimatorHelper();
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
   
+  Loader *m_loader = new Loader(); 
+  Flywheel *m_flywheel = new Flywheel(); 
   Articulation *m_articulation = new Articulation(m_swerveDrive);
-  Shooter *m_shooter = new Shooter(m_swerveDrive, m_articulation);
+  Turret *m_turret = new Turret(m_swerveDrive, m_articulation);
 
   PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonCamera3, 
@@ -100,7 +108,7 @@ class RobotContainer {
     VisionConstants::kPhotonTurretCameraYOffset, 
     frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
 
-  Intake *m_intake = new Intake(); 
+  Intake *m_intake = new Intake();
   
     // old m_constraints
   // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(

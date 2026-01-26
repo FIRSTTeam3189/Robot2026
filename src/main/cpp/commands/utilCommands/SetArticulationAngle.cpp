@@ -17,7 +17,7 @@ SetArticulationAngle::SetArticulationAngle(Articulation* articulation, Articulat
 
 // Called when the command is initially scheduled.
 void SetArticulationAngle::Initialize() {
-  // m_shooter->SetState(m_state);
+  // m_turret->SetState(m_state);
 }
 
 

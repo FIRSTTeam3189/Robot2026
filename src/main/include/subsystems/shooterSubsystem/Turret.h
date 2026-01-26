@@ -21,9 +21,10 @@
 #include <ctre/phoenix6/StatusSignal.hpp>
 
 #include "subsystems/SwerveDrive.h"
-#include "subsystems/Articulation.h"
+#include "subsystems/shooterSubsystem/Articulation.h"
 
-#include "Constants/ShooterConstants.h"
+
+#include "Constants/shooterConstants/TurretConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
 #include "util/PowerInterpolator.h"
@@ -32,9 +33,9 @@
 #include <algorithm>
 #include <cmath> 
 
-class Shooter : public frc2::SubsystemBase {
+class Turret : public frc2::SubsystemBase {
  public:
-  Shooter(SwerveDrive* swerveDrive, Articulation* articulation);
+  Turret(SwerveDrive* swerveDrive, Articulation* articulation);
 
   // SysId helpers (return commands that run the SysId routines)
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
@@ -50,8 +51,6 @@ class Shooter : public frc2::SubsystemBase {
 
   void Periodic() override;
 
-  void SetShooterFlywheelMotorPower(double power);
-
   void UpdatePreferences();
 
   void ConfigPID();
@@ -66,29 +65,23 @@ class Shooter : public frc2::SubsystemBase {
 
   void SetState(TurretTarget state);
 
-  void SetFlyWheelTargetPower(double power); 
-
-  void SetFlyWheelPowerTest(double power); 
-
   Vector2d GetRobotVelocity(); 
 
-  ~Shooter(); 
+  ~Turret(); 
   
   private:
   // HARDWARE (subsystem owns motors)
   ctre::phoenix6::hardware::TalonFX m_shooterTurretMotor;
-  ctre::phoenix6::hardware::TalonFX m_shooterFlywheelMotor;
   
   // CONFIG
   ctre::phoenix6::configs::TalonFXConfiguration m_shooterConfig {};
-  ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
   
   SwerveDrive *m_swerveDrive;
   TurretTarget m_state;
   frc::Field2d m_turretField;
   frc::Field2d m_targetField;
   frc::Field2d m_velocityField;
-
+  
   
   //PID/FF/Motion Magic
   std::string m_rotationPKey;
@@ -106,7 +99,7 @@ class Shooter : public frc2::SubsystemBase {
   double m_targetPower;
   PowerInterpolator *m_powerInterpolator; 
   Articulation *m_articulation; 
-
+ 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_shooterTurretMotor.GetVelocity();
   std::vector<ctre::phoenix6::BaseStatusSignal*> m_allSignals;

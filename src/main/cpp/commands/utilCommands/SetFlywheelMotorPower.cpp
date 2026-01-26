@@ -4,19 +4,19 @@
 
 #include "commands/utilCommands/SetFlywheelMotorPower.h"
 
-SetFlywheelMotorPower::SetFlywheelMotorPower(Shooter* shooter, double power)
-  : m_shooter(shooter),
+SetFlywheelMotorPower::SetFlywheelMotorPower(Flywheel *flywheel, double power)
+  : m_flywheel(flywheel),
     m_power(power)
 {
-    AddRequirements(shooter);
+    AddRequirements(flywheel);
 }
 
 void SetFlywheelMotorPower::Execute() {
-    m_shooter->SetShooterFlywheelMotorPower(m_power);
+    m_flywheel->SetShooterFlywheelMotorPower(m_power);
 }
 
 void SetFlywheelMotorPower::End(bool interrupted) {
-    m_shooter->SetShooterFlywheelMotorPower(0.0);
+    m_flywheel->SetShooterFlywheelMotorPower(0.0);
 }
 
 bool SetFlywheelMotorPower::IsFinished() {

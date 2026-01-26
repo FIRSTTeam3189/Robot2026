@@ -4,19 +4,19 @@
 
 #include "commands/utilCommands/SetTurretAngle.h"
 
-SetTurretAngle::SetTurretAngle(Shooter* shooter, TurretTarget state) : m_shooter(shooter), m_state(state) {
+SetTurretAngle::SetTurretAngle(Turret* shooter, TurretTarget state) : m_turret(shooter), m_state(state) {
   // Use addRequirements() here to declare subsystem dependencies.
-  AddRequirements(m_shooter);
+  AddRequirements(m_turret);
 }
 
 // Called when the command is initially scheduled.
 void SetTurretAngle::Initialize() {
-  // m_shooter->SetState(m_state);
+  // m_turret->SetState(m_state);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void SetTurretAngle::Execute() {
-  m_shooter->SetState(m_state);
+  m_turret->SetState(m_state);
 }
 
 // Called once the command ends or is interrupted.
@@ -30,6 +30,6 @@ bool SetTurretAngle::IsFinished() {
   // } else {
 
   // }
-  // if (m_shooter->GetTurretAngle().value())
+  // if (m_turret->GetTurretAngle().value())
   return false;
 }

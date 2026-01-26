@@ -4,8 +4,6 @@
 
 #include "RobotContainer.h"
 
-#include <frc2/command/button/Trigger.h>
-
 RobotContainer::RobotContainer() {
   (void)VisionConstants::kSyncBytes[0];
   RegisterAutoCommands();
@@ -24,7 +22,9 @@ RobotContainer::RobotContainer() {
       break;
     default :
       break;
+ 
   }
+
 
   frc::SmartDashboard::PutData("Auto Routines", &m_chooser);
   
@@ -58,28 +58,30 @@ void RobotContainer::ConfigureDriverBindings() {
   },{m_swerveDrive}).ToPtr());
 
   frc2::Trigger applyTurretPowerForward([this](){ return m_bill.GetR1Button(); });
-  applyTurretPowerForward.OnTrue(SetShooterRotationPower(m_shooter, 0.2).ToPtr());
-  applyTurretPowerForward.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
+  applyTurretPowerForward.OnTrue(SetShooterRotationPower(m_turret, 0.2).ToPtr());
+  applyTurretPowerForward.OnFalse(SetShooterRotationPower(m_turret, 0.0).ToPtr());
 
   frc2::Trigger applyTurretPowerReverse([this](){ return m_bill.GetL1Button(); });
-  applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_shooter, -0.2).ToPtr());
-  applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_shooter, 0.0).ToPtr());
+  applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_turret, -0.2).ToPtr());
+  applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_turret, 0.0).ToPtr());
 
   frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
   alignToHubButton.OnTrue(frc2::ParallelCommandGroup(
-    SetTurretAngle(m_shooter, TurretTarget::AlignHub),
+    SetTurretAngle(m_turret, TurretTarget::AlignHub),
     SetArticulationAngle(m_articulation, ArticulationTarget::AligntoHub)
   ).ToPtr());
-  // alignToHubButton.OnFalse(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
+  // alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
 
   // frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
-  // pointStraightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointStraight).ToPtr());
+  // pointStraightButton.OnTrue(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
 
   frc2::Trigger pointLeftButton([this](){ return m_bill.GetCircleButton(); });
-  pointLeftButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryLeft).ToPtr());
+  pointLeftButton.OnTrue(SetTurretAngle(m_turret, TurretTarget::PointFerryLeft).ToPtr());
 
   frc2::Trigger pointRightButton([this](){ return m_bill.GetCrossButton(); });
-  pointRightButton.OnTrue(SetTurretAngle(m_shooter, TurretTarget::PointFerryRight).ToPtr());
+  pointRightButton.OnTrue(SetTurretAngle(m_turret, TurretTarget::PointFerryRight).ToPtr());
+
+
 
   // frc2::Trigger slowDownButton([this](){ return m_bill.GetL2Button(); });
   // slowDownButton.OnTrue(frc2::InstantCommand([this]{
@@ -92,52 +94,53 @@ void RobotContainer::ConfigureDriverBindings() {
   // },{m_swerveDrive}).ToPtr());
 
 
-  frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });
-  runIntakeRollerForward.OnTrue(SetIntakeRollerMotor(m_intake, 0.4).ToPtr()); 
-  runIntakeRollerForward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr()); 
+  // frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });
+  // runIntakeRollerForward.OnTrue(SetIntakeRollerMotor(m_intake, 0.4).ToPtr()); 
+  // runIntakeRollerForward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr()); 
 
-  frc2::Trigger runIntakeRollerBackward([this](){ return m_bill.GetR2Button(); });
-  runIntakeRollerBackward.OnTrue(SetIntakeRollerMotor(m_intake, -0.4).ToPtr()); 
-  runIntakeRollerBackward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr());   
+  // frc2::Trigger runIntakeRollerBackward([this](){ return m_bill.GetR2Button(); });
+  // runIntakeRollerBackward.OnTrue(SetIntakeRollerMotor(m_intake, -0.4).ToPtr()); 
+  // runIntakeRollerBackward.OnFalse(SetIntakeRollerMotor(m_intake, 0.0).ToPtr());
+
+  frc2::Trigger extendAndRunIntake([this](){ return m_bill.GetR2Button(); });
+  extendAndRunIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.8, true).ToPtr());
+
+  frc2::Trigger retractIntake([this](){ return m_bill.GetL2Button(); });
+  retractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.0, false).ToPtr());  // passes in 0.0 but does nothing
+
 
   // Flywheel as intake 
   // frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });
-  // runIntakeRollerForward.OnTrue(SetFlywheelMotorPower(m_shooter, 0.8).ToPtr()); 
-  // runIntakeRollerForward.OnFalse(SetFlywheelMotorPower(m_shooter, 0.0).ToPtr()); 
+  // runIntakeRollerForward.OnTrue(SetFlywheelMotorPower(m_flywheel, 0.8).ToPtr()); 
+  // runIntakeRollerForward.OnFalse(SetFlywheelMotorPower(m_flywheel, 0.0).ToPtr()); 
 
   // frc2::Trigger runIntakeRollerBackward([this](){ return m_bill.GetR2Button(); });
-  // runIntakeRollerBackward.OnTrue(SetFlywheelMotorPower(m_shooter, -0.8).ToPtr()); 
-  // runIntakeRollerBackward.OnFalse(SetFlywheelMotorPower(m_shooter, 0.0).ToPtr());   
+  // runIntakeRollerBackward.OnTrue(SetFlywheelMotorPower(m_flywheel, -0.8).ToPtr()); 
+  // runIntakeRollerBackward.OnFalse(SetFlywheelMotorPower(m_flywheel, 0.0).ToPtr());   
 
 
   // SYSID
 
 //  frc2::Trigger Quasistaticstuff([this](){ return m_bill.GetCrossButton(); });
-//   Quasistaticstuff.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
+//   Quasistaticstuff.OnTrue(m_turret->SysIdQuasistatic(frc2::sysid::Direction::kForward));
 
 
 //   frc2::Trigger Quasistaticforward([this](){ return m_bill.GetCircleButton(); });
-//   Quasistaticforward.OnTrue(m_shooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+//   Quasistaticforward.OnTrue(m_turret->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
 
   
 //   frc2::Trigger DynamicStuff([this](){ return m_bill.GetTriangleButton(); });
-//   DynamicStuff.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kForward));
+//   DynamicStuff.OnTrue(m_turret->SysIdDynamic(frc2::sysid::Direction::kForward));
 
 
 //   frc2::Trigger Dynamicforward([this](){ return m_bill.GetSquareButton(); });
-//   Dynamicforward.OnTrue(m_shooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
+//   Dynamicforward.OnTrue(m_turret->SysIdDynamic(frc2::sysid::Direction::kReverse));
 
 //[this]{
   //     m_algaeIntake->SetRollerPower(AlgaeIntakeConstants::kRollerIntakePower);
   //   }, {m_algaeIntake}),
 
-  // frc2::Trigger runIntakeAlign ([this](){return m_bill.GetL1Button(); });
-  // runIntakeAlign.OnTrue(frc2::InstantCommand([this]{
-  //   m_intake->SetRollerPower(0.8);
-  // },(m_intake)).ToPtr());
-
- // runIntakeAlign.OnFalse(frc2::InstantCommand(m_intake->SetRollerPower(0.0)).ToPtr());
 
 }
 
@@ -221,8 +224,8 @@ void RobotContainer::ConfigureTestBindings() {
   
 }
 
-Shooter* RobotContainer::GetShooterSubsystem() {
-  return m_shooter; 
+Turret* RobotContainer::GetShooterSubsystem() {
+  return m_turret; 
 }
 
 

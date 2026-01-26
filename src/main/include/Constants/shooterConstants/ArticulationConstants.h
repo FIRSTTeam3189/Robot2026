@@ -20,7 +20,7 @@ enum ArticulationTarget {
 }; 
 //Articulation Constants
 
-namespace ArticulationConstants{
+namespace ArticulationConstants {
 
     constexpr int kArticulationMotorID{45};
 

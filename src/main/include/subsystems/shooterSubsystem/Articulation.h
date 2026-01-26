@@ -23,7 +23,8 @@
 #include "subsystems/SwerveDrive.h"
 #include "subsystems/PoseEstimatorHelper.h"
 
-#include "Constants/ArticulationConstants.h"
+#include "Constants/shooterConstants/ArticulationConstants.h"
+
 #include "Constants/AutoAlignConstants.h"
 
 #include "util/PowerInterpolator.h"

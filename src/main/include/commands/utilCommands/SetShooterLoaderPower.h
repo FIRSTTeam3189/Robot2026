@@ -7,7 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
-#include "subsystems/ShooterLoader.h"
+#include "subsystems/shooterSubsystem/Loader.h"
 
 class SetShooterLoaderPower : public frc2::CommandHelper<frc2::Command, SetShooterLoaderPower> {
  public:

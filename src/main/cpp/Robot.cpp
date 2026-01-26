@@ -91,7 +91,7 @@ void Robot::TeleopInit() {
    if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Cancel();
   }
-  m_container.GetShooterSubsystem()->SetState(TurretTarget::PointStraight); 
+  m_container.GetShooterSubsystem()->SetState(TurretTarget::AlignHub); 
 }
 
 /**

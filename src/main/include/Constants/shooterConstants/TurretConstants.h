@@ -18,9 +18,9 @@ enum class TurretTarget {
     PointFerryRight,
 };
 
-//Shooter Constants
-namespace ShooterConstants{
-    constexpr int kShooterFlywheelID{22};
+//Turret Constants
+namespace TurretConstants {
+    constexpr int kShooterFlywheelID{18};
     constexpr int kShooterLoaderID{21};
     constexpr int kShooterRotationID{20};
     constexpr int kRotationEncoderID{35};

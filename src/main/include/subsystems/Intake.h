@@ -15,7 +15,7 @@
 #include <frc/controller/ProfiledPIDController.h>
 
 #include "Constants/IntakeConstants.h"
-
+#include <frc/DoubleSolenoid.h>
 
 
 class Intake : public frc2::SubsystemBase {
@@ -24,6 +24,9 @@ class Intake : public frc2::SubsystemBase {
   void SetRollerPower(double power);
   void UpdatePreferences();
   void ConfigRollerMotor();
+
+  void SetIntake(double power);
+  void RetractIntake();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -35,6 +38,9 @@ class Intake : public frc2::SubsystemBase {
 
   rev::spark::SparkMax m_rollerMotor;
   rev::spark::SparkMaxConfig m_rollerConfig;
+
+  frc::DoubleSolenoid m_intakeSolenoid;
+  frc::DoubleSolenoid m_intakeSolenoid2;
 
 };
 

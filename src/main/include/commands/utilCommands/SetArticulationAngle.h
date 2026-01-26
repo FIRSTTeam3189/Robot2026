@@ -8,8 +8,11 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Articulation.h"
-#include "Constants/ArticulationConstants.h"
+#include "subsystems/shooterSubsystem/Articulation.h"
+
+#include "Constants/shooterConstants/ArticulationConstants.h"
+
+
 
 
 /**
