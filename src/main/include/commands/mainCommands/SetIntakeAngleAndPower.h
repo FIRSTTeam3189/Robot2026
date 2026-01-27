@@ -10,7 +10,7 @@
 
 class SetIntakeAngleAndPower : public frc2::CommandHelper<frc2::Command, SetIntakeAngleAndPower> {
  public:
-  explicit SetIntakeAngleAndPower(Intake* shooter, double power, bool retractOrExtend);
+  explicit SetIntakeAngleAndPower(Intake* intake, double power);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -25,5 +25,5 @@ class SetIntakeAngleAndPower : public frc2::CommandHelper<frc2::Command, SetInta
   // declared private and exposed only through public methods.
   Intake* m_intake;
   double m_power;
-  double m_retractOrExtend;
+
 };

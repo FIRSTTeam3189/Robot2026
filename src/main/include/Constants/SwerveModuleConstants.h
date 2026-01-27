@@ -13,7 +13,7 @@
 #define PI 3.14159265358979323846
 
 
-#define SWERVEMODULECONSTANTS2025
+// #define SWERVEMODULECONSTANTS2025
 
 #ifdef SWERVEMODULECONSTANTS2025
 // 2025
@@ -84,7 +84,7 @@
         constexpr double kVDrive {0.0};
         constexpr double kSDrive {0.0};
 
-        constexpr double kPAngle {35.0};
+        constexpr double kPAngle {24.0};
         constexpr double kIAngle {0.0};
         constexpr double kDAngle {0.0};
         constexpr double kVAngle {0.0};
@@ -132,7 +132,7 @@
         constexpr units::turn_t kBackRightOffset {-0.114258};// TBD
 
         // Motor + sensor inversions
-        constexpr bool kDriveMotorInverted = false;
+        constexpr bool kDriveMotorInverted = true;
         constexpr bool kAngleMotorInverted = false;
         constexpr bool kCANcoderInverted = true;
 
@@ -167,14 +167,14 @@
         constexpr int kSyncCANcoder{6};
 
         // Even though probably not using FF, keep constants in case
-        constexpr double kPDrive {2.0};
+        constexpr double kPDrive {1.5};
         constexpr double kIDrive {0.0};
         constexpr double kDDrive {0.0};
         constexpr double kVDrive {0.0};
         constexpr double kSDrive {0.0};
 
         
-        constexpr double kPAngle {30.0};
+        constexpr double kPAngle {17.5};
         constexpr double kIAngle {0.0};
         constexpr double kDAngle {0.0};
         constexpr double kVAngle {0.0};

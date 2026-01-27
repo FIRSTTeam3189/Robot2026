@@ -34,6 +34,9 @@ namespace HoodAlign {
 
     frc::Pose2d GetHubPose(); 
 
+    bool BehindHub(frc::Pose2d robotPose);
+    bool InNeutralZone(frc::Pose2d robotPose);
+
     units::degree_t CalculateArticulationAngle(frc::Pose2d robotPose);
 
 }; 

@@ -17,6 +17,8 @@
 #include "Constants/IntakeConstants.h"
 #include <frc/DoubleSolenoid.h>
 
+enum class IntakeState {ExtendIntake, RetractIntake};
+
 
 class Intake : public frc2::SubsystemBase {
  public:
@@ -27,6 +29,9 @@ class Intake : public frc2::SubsystemBase {
 
   void SetIntake(double power);
   void RetractIntake();
+
+  void SetState(IntakeState state, double rollerPower);
+  IntakeState GetState();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -40,6 +45,8 @@ class Intake : public frc2::SubsystemBase {
   rev::spark::SparkMaxConfig m_rollerConfig;
 
   frc::DoubleSolenoid m_intakeSolenoid;
+
+  IntakeState m_state;
 
 };
 

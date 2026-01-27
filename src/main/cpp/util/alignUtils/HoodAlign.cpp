@@ -1,5 +1,4 @@
 #include "util/alignUtils/HoodAlign.h"
-#include "Constants/AutoAlignConstants.h"
 
 namespace HoodAlign {
 
@@ -12,22 +11,52 @@ namespace HoodAlign {
         return {0.0_m, 0.0_m, frc::Rotation2d(0.0_deg)}; 
     }
 
-    units::degree_t CalculateArticulationAngle(frc::Pose2d robotPose) {
+    bool BehindHub(frc::Pose2d robotPose) {
+        if (!InNeutralZone) {
+            return false; 
+        }
+
         frc::Pose2d hubPose = GetHubPose(); 
+        double hubY = hubPose.Y().value(); 
+
+        double y = robotPose.Y().value();
+        double yMax = hubY + (AutoAlignConstants::kHubWidth.value() / 2);
+        double yMin = hubY - (AutoAlignConstants::kHubWidth.value() / 2);
+
+        return y > yMin && y < yMax;
+    }
+
+    bool InNeutralZone(frc::Pose2d robotPose) {
+        double x = robotPose.X().value();
+        return x > AutoAlignConstants::kBlueHubPose.X().value() && x < AutoAlignConstants::kRedHubPose.X().value();
+    }
+
+    units::degree_t CalculateArticulationAngle(frc::Pose2d robotPose) {
+        frc::Pose2d hubPose = GetHubPose();
+
+        if (InNeutralZone(robotPose)) {
+            if (BehindHub(robotPose)) {
+                return AutoAlignConstants::kHoodMinimumAngle;
+            }
+            return AutoAlignConstants::kHoodMaximumAngle; 
+        }
 
         Vector2d robotToHub(robotPose, hubPose); 
         units::meter_t radius = units::meter_t{robotToHub.Length()}; 
 
         // units::meter_t y = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
-        double angle = std::atan((AutoAlignConstants::ky / radius).value());
+        double angle = std::atan((AutoAlignConstants::kHoodAndHubHeightDiff / radius).value());
 
         frc::SmartDashboard::PutNumber("Auto Align/Distance between robot and hub", radius.value()); 
+        frc::SmartDashboard::PutNumber("Auto Align/Theta 2", angle); 
 
-        units::degree_t offsetAngle = units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value() - AutoAlignConstants::kHoodDefaultAngle};
+
+        units::degree_t offsetAngle = units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value() - AutoAlignConstants::kHoodDefaultAngle.value()};
         frc::SmartDashboard::PutNumber("Auto Align/Hood Angle", offsetAngle.value()); 
 
         return offsetAngle;
+        
     }   
 
 

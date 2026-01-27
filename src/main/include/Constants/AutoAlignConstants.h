@@ -42,7 +42,7 @@ namespace AutoAlignConstants {
     // ! Not verified numbers 
     constexpr units::meter_t kHubHeight {1.524_m}; 
     constexpr units::meter_t kHoodHeight {0.6096_m}; 
-    constexpr units::meter_t ky = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
+    constexpr units::meter_t kHoodAndHubHeightDiff = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
     constexpr units::degree_t kHoodDegreeOffset {2.0_deg}; 
 
@@ -52,6 +52,7 @@ namespace AutoAlignConstants {
     constexpr units::meter_t kMidpointOnFieldBlue {2.397_m};
     constexpr units::meter_t kMidpointOnFieldRed {14.381_m};
 
+    // don't add a k (*-*)
     constexpr units::degree_t FerryAngleLeft {45_deg};
     constexpr units::degree_t FerryAngleRight {135_deg};
 
@@ -64,7 +65,16 @@ namespace AutoAlignConstants {
     const std::vector<double> kPowerInterpolatorAngles = {10, 15, 20, 25, 30, 35}; 
     const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.51, 0.62, 0.8}; 
 
-    constexpr double kHoodDefaultAngle{15};
+    //! need to be configured 
+    constexpr units::degree_t kHoodDefaultAngle{15_deg};
+
+    // 15 is like suoper high arc and 50 is lowwww
+    constexpr units::degree_t kHoodMinimumAngle{15_deg};
+    constexpr units::degree_t kHoodMaximumAngle{50_deg};
+
+    constexpr units::meter_t kHubWidth {1.2_m}; 
+
+
 
     
 }

@@ -4,17 +4,18 @@
 
 #include "commands/mainCommands/SetIntakeAngleAndPower.h"
 
-SetIntakeAngleAndPower::SetIntakeAngleAndPower(Intake *intake, double rollerPower, bool retractOrExtend) :
-m_intake(intake), m_power(rollerPower), m_retractOrExtend(m_retractOrExtend) {
+SetIntakeAngleAndPower::SetIntakeAngleAndPower(Intake *intake, double power) :
+m_intake(intake), m_power(power) {
   AddRequirements(intake);
 }
 
 // Called when the command is initially scheduled.
 void SetIntakeAngleAndPower::Initialize() {
-  if (m_retractOrExtend){
-    m_intake->SetIntake(m_power);
+  frc::SmartDashboard::PutNumber("Intake State", static_cast<int>(m_intake->GetState()));
+  if (m_intake->GetState() == IntakeState::ExtendIntake){
+    m_intake->SetState(IntakeState::RetractIntake, m_power);
   } else {
-    m_intake->RetractIntake();
+    m_intake->SetState(IntakeState::ExtendIntake, m_power);
   }
 }
 
@@ -23,7 +24,7 @@ void SetIntakeAngleAndPower::Execute() {}
 
 // Called once the command ends or is interrupted.
 void SetIntakeAngleAndPower::End(bool interrupted) {
-  m_intake->SetRollerPower(0.0);
+  // m_intake->SetRollerPower(0.0);
 }
 
 // Returns true when the command should end.

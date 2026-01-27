@@ -57,13 +57,13 @@ void RobotContainer::ConfigureDriverBindings() {
     }
   },{m_swerveDrive}).ToPtr());
 
-  frc2::Trigger applyTurretPowerForward([this](){ return m_bill.GetR1Button(); });
-  applyTurretPowerForward.OnTrue(SetShooterRotationPower(m_turret, 0.2).ToPtr());
-  applyTurretPowerForward.OnFalse(SetShooterRotationPower(m_turret, 0.0).ToPtr());
+  // frc2::Trigger applyTurretPowerForward([this](){ return m_bill.GetR1Button(); });
+  // applyTurretPowerForward.OnTrue(SetShooterRotationPower(m_turret, 0.2).ToPtr());
+  // applyTurretPowerForward.OnFalse(SetShooterRotationPower(m_turret, 0.0).ToPtr());
 
-  frc2::Trigger applyTurretPowerReverse([this](){ return m_bill.GetL1Button(); });
-  applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_turret, -0.2).ToPtr());
-  applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_turret, 0.0).ToPtr());
+  // frc2::Trigger applyTurretPowerReverse([this](){ return m_bill.GetL1Button(); });
+  // applyTurretPowerReverse.OnTrue(SetShooterRotationPower(m_turret, -0.2).ToPtr());
+  // applyTurretPowerReverse.OnFalse(SetShooterRotationPower(m_turret, 0.0).ToPtr());
 
   frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
   alignToHubButton.OnTrue(frc2::ParallelCommandGroup(
@@ -83,15 +83,15 @@ void RobotContainer::ConfigureDriverBindings() {
 
 
 
-  // frc2::Trigger slowDownButton([this](){ return m_bill.GetL2Button(); });
-  // slowDownButton.OnTrue(frc2::InstantCommand([this]{
-  //   m_driveState = DriveState::SlowDownSwerves;
-  //   m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
-  // },{m_swerveDrive}).ToPtr());
-  // slowDownButton.OnFalse(frc2::InstantCommand([this]{
-  //   m_driveState = DriveState::HeadingControl;
-  //   m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
-  // },{m_swerveDrive}).ToPtr());
+  frc2::Trigger slowDownButton([this](){ return m_bill.GetL1Button(); });
+  slowDownButton.OnTrue(frc2::InstantCommand([this]{
+    m_driveState = DriveState::SlowDownSwerves;
+    m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  },{m_swerveDrive}).ToPtr());
+  slowDownButton.OnFalse(frc2::InstantCommand([this]{
+    m_driveState = DriveState::HeadingControl;
+    m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  },{m_swerveDrive}).ToPtr());
 
 
   // frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });
@@ -108,15 +108,19 @@ void RobotContainer::ConfigureDriverBindings() {
   // frc2::Trigger retractIntake([this](){ return m_bill.GetL2Button(); });
   // retractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.0, false).ToPtr());  // passes in 0.0 but does nothing
 
-  frc2::Trigger extendAndRunIntake([this](){ return m_bill.GetR2Button(); });
-  extendAndRunIntake.OnTrue(frc2::InstantCommand([this]() {
-    m_intake->SetIntake(0.4); 
-  }, {m_intake}).ToPtr());
+  // frc2::Trigger extendAndRunIntake([this](){ return m_bill.GetR2Button(); });
+  // extendAndRunIntake.OnTrue(frc2::InstantCommand([this]() {
+  //   m_intake->SetIntake(0.4); 
+  // }, {m_intake}).ToPtr());
 
-  frc2::Trigger retractIntake([this](){ return m_bill.GetL2Button(); });
-  retractIntake.OnTrue(frc2::InstantCommand([this]() {
-    m_intake->RetractIntake(); 
-  }, {m_intake}).ToPtr());  // passes in 0.0 but does nothing
+  // frc2::Trigger retractIntake([this](){ return m_bill.GetL2Button(); });
+  // retractIntake.OnTrue(frc2::InstantCommand([this]() {
+  //   m_intake->RetractIntake(); 
+  // }, {m_intake}).ToPtr());  // passes in 0.0 but does nothing
+
+  frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL2Button(); });
+  extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.8).ToPtr()); // 0.8 when set, nothign when retract
+  extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr());  // idk bro
 
   // Flywheel as intake 
   // frc2::Trigger runIntakeRollerForward([this]() {return m_bill.GetL2Button(); });
