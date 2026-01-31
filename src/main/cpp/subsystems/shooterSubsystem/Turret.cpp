@@ -13,7 +13,7 @@ Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
     m_turretField(),
     m_targetField(),
     m_velocityField(),
-    m_powerInterpolator(new PowerInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers)),
+    m_powerInterpolator(new LinearInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers)),
     m_articulation(articulation) 
 {
     ConfigShooter();
@@ -141,7 +141,10 @@ void Turret::SetState(TurretTarget state) {
             frc::Pose2d targetPose = TurretAlign::CalculateTargetPose(currentPose);
 
             double hoodAngle = m_articulation->GetTargetAngle().value(); 
-            m_targetPower = m_powerInterpolator->GetPower(hoodAngle); 
+            m_targetPower = m_powerInterpolator->Predict(hoodAngle); 
+
+            frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
+
             targetPose = TurretAlign::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), m_targetField); 
 
             m_targetRotationAngle = units::degree_t{TurretAlign::GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset,

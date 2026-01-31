@@ -13,8 +13,8 @@
 namespace IntakeConstants{
     constexpr int kRollerMotorID {15};
 
-    constexpr double kRollerScorePower {0.4};
-    constexpr double kRollerIntakePower {-0.75};
+    constexpr double kRollerIntakePower {-0.90};
+    constexpr double kRollerReverseIntakePower {0.90};
 
     // Other roller configs
     constexpr bool kRollerMotorInverted {true};

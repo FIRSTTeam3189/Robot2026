@@ -31,7 +31,7 @@
 #include "CommandManager.h"
 
 #include "util/alignUtils/AutoAlign.h"
-#include "util/PowerInterpolator.h"
+#include "util/LinearInterpolator.h"
 
 
 #include "subsystems/PoseEstimatorHelper.h"

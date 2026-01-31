@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include "Constants/shooterConstants/LoaderConstants.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 
 class Loader : public frc2::SubsystemBase {

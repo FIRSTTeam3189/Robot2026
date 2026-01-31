@@ -24,8 +24,10 @@ void Loader::ConfigLoaderMotor() {
 }
 
 void Loader::SetShooterLoaderMotorPower(double power) {
-    m_ShooterLoaderMotor.Set(power);
+    frc::SmartDashboard::PutNumber("Test Bindings/loaderPower", power); 
+    // m_ShooterLoaderMotor.Set(power);
 }
+
 
 // This method will be called once per scheduler run
 void Loader::Periodic() {}

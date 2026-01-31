@@ -26,6 +26,10 @@ class Flywheel : public frc2::SubsystemBase {
 
   void SetFlyWheelPowerTest(double power); 
 
+  double IncrementPower(double power); 
+
+  void ApplyFlywheelPowerIncrements(); 
+
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -40,5 +44,6 @@ class Flywheel : public frc2::SubsystemBase {
   ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
 
   double m_targetPower; 
+  double m_currentPower; 
   
 };

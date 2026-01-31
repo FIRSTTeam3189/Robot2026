@@ -32,5 +32,12 @@ namespace CommandManager {
     frc2::CommandPtr FlywheelPowerForward(Flywheel *flywheel);
     frc2::CommandPtr FlywheelPowerReverse(Flywheel *flywheel);
     frc2::CommandPtr ResetFlywheelPower(Flywheel *flywheel);
+    frc2::CommandPtr IncrementFlywheelPower(Flywheel *flywheel); 
+    frc2::CommandPtr DecrementFlywheelPower(Flywheel *flywheel);
+
+    frc2::CommandPtr ArticulationAngleUp(Articulation *articulation);
+    frc2::CommandPtr ArticulationAngleDown(Articulation *articulation);
+
+    frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel); 
 
 };

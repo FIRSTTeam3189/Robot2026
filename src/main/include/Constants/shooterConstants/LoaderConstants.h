@@ -15,6 +15,8 @@
 namespace LoaderConstants {
     constexpr int kShooterLoaderID{21};
 
+    constexpr double kLoaderMotorPower {0.75}; 
+
     constexpr bool kLoaderMotorInverted {true};
     constexpr ctre::phoenix6::signals::NeutralModeValue kLoaderNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 

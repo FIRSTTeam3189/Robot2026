@@ -75,4 +75,7 @@ namespace ArticulationConstants {
 
     constexpr units::degree_t kHoodStationaryAngle{15.0_deg};
 
+    constexpr units::degree_t kArticulationAngleIncrement {5.0_deg};
+    constexpr units::degree_t kArticulationAngleDecrement {-5.0_deg};
+
 }

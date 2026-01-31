@@ -27,7 +27,7 @@
 
 #include "Constants/AutoAlignConstants.h"
 
-#include "util/PowerInterpolator.h"
+#include "util/LinearInterpolator.h"
 #include "util/alignUtils/HoodAlign.h"
 
 #include <algorithm>

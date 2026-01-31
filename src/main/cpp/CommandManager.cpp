@@ -60,16 +60,16 @@ namespace CommandManager {
     },{swerveDrive}).ToPtr();
   }
 
-  frc2::CommandPtr IntakePowerForward(Intake *Intake){
-    return SetIntakeRollerMotor(Intake, 0.4).ToPtr();
+  frc2::CommandPtr IntakePowerForward(Intake *intake){
+    return SetIntakeRollerMotor(intake, IntakeConstants::kRollerIntakePower).ToPtr();
   }
 
-  frc2::CommandPtr IntakePowerReverse(Intake *Intake){
-    return SetIntakeRollerMotor(Intake, -0.4).ToPtr();
+  frc2::CommandPtr IntakePowerReverse(Intake *intake){
+    return SetIntakeRollerMotor(intake, IntakeConstants::kRollerReverseIntakePower).ToPtr();
   }
 
-  frc2::CommandPtr ResetIntakePower(Intake *Intake){
-    return SetIntakeRollerMotor(Intake, 0.0).ToPtr();
+  frc2::CommandPtr ResetIntakePower(Intake *intake){
+    return SetIntakeRollerMotor(intake, 0.0).ToPtr();
   }
 
   frc2::CommandPtr FlywheelPowerForward(Flywheel *flywheel){
@@ -82,6 +82,44 @@ namespace CommandManager {
 
   frc2::CommandPtr ResetFlywheelPower(Flywheel *flywheel){
     return SetFlywheelMotorPower(flywheel, 0.0).ToPtr();
+  }
+
+  frc2::CommandPtr IncrementFlywheelPower(Flywheel *flywheel) {
+    return frc2::InstantCommand([flywheel](){
+      flywheel->IncrementPower(FlywheelConstants::kFlyWheelPowerIncrement); 
+    }, {flywheel}).ToPtr();
+  } 
+
+  frc2::CommandPtr DecrementFlywheelPower(Flywheel *flywheel) {
+    return frc2::InstantCommand([flywheel](){
+      flywheel->IncrementPower(FlywheelConstants::kFlyWheelPowerDecrement); 
+    }, {flywheel}).ToPtr();
+  } 
+
+  frc2::CommandPtr ArticulationAngleUp(Articulation *articulation) {
+      frc2::InstantCommand([articulation]() {
+        articulation->SetArticulationAngle(articulation->GetArticulationAngle() + ArticulationConstants::kArticulationAngleIncrement);
+      }, {articulation}).ToPtr();
+  }
+
+  frc2::CommandPtr ArticulationAngleDown(Articulation *articulation) {
+      frc2::InstantCommand([articulation]() {
+        articulation->SetArticulationAngle(articulation->GetArticulationAngle() + ArticulationConstants::kArticulationAngleDecrement);
+      }, {articulation}).ToPtr();
+  }
+
+  frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel) {
+    frc2::ParallelCommandGroup(
+      frc2::InstantCommand([flywheel]() {
+        flywheel->ApplyFlywheelPowerIncrements(); 
+      }, {flywheel}),
+      frc2::SequentialCommandGroup(
+        frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay),
+        frc2::InstantCommand([loader]() {
+          loader->SetShooterLoaderMotorPower(LoaderConstants::kLoaderMotorPower); 
+        }, {flywheel})
+      )
+    ).ToPtr(); 
   }
 
 

@@ -27,7 +27,7 @@
 #include "Constants/shooterConstants/TurretConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
-#include "util/PowerInterpolator.h"
+#include "util/LinearInterpolator.h"
 #include "util/alignUtils/TurretAlign.h"
 
 #include <algorithm>
@@ -97,7 +97,7 @@ class Turret : public frc2::SubsystemBase {
   units::degree_t m_currentRotationAngle;
 
   double m_targetPower;
-  PowerInterpolator *m_powerInterpolator; 
+  LinearInterpolator *m_powerInterpolator; 
   Articulation *m_articulation; 
  
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();

@@ -46,16 +46,18 @@ namespace HoodAlign {
 
         // units::meter_t y = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
-        double angle = std::atan((AutoAlignConstants::kHoodAndHubHeightDiff / radius).value());
+        double angle = std::atan((AutoAlignConstants::kHoodAndHubHeightDiff / radius).value()) * (180 / PI);
 
         frc::SmartDashboard::PutNumber("Auto Align/Distance between robot and hub", radius.value()); 
-        frc::SmartDashboard::PutNumber("Auto Align/Theta 2", angle); 
+        frc::SmartDashboard::PutNumber("Auto Align/Theta 2", angle);
 
+        units::degree_t rawAngleToHubWithOffset = units::degree_t{(angle + AutoAlignConstants::kHoodDegreeOffset.value())};  // point a bit above hub
+        units::degree_t targetHoodAngle = 90.0_deg - rawAngleToHubWithOffset; // convert to angle on other side of hood
+        targetHoodAngle -= AutoAlignConstants::kHoodDefaultAngle; // account for the normal (0 read from encoder) actually at 15 degrees
 
-        units::degree_t offsetAngle = units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value() - AutoAlignConstants::kHoodDefaultAngle.value()};
-        frc::SmartDashboard::PutNumber("Auto Align/Hood Angle", offsetAngle.value()); 
+        frc::SmartDashboard::PutNumber("Auto Align/Hood Angle", targetHoodAngle.value());
 
-        return offsetAngle;
+        return targetHoodAngle; 
         
     }   
 

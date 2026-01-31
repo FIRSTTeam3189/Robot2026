@@ -8,7 +8,8 @@ Flywheel::Flywheel()
   : 
     m_flywheelMotor(FlywheelConstants::kShooterFlywheelID, "Swerve"),
     m_flywheelConfig(),
-    m_targetPower()
+    m_targetPower(),
+    m_currentPower()
 {}
 
 // This method will be called once per scheduler run
@@ -33,4 +34,14 @@ void Flywheel::SetFlyWheelPowerTest(double power) {
 
 void Flywheel::SetShooterFlywheelMotorPower(double power) {
     m_flywheelMotor.Set(power);
+}
+
+void Flywheel::ApplyFlywheelPowerIncrements() {
+    frc::SmartDashboard::PutNumber("Test Bindings/applied power", m_currentPower); 
+    // m_flywheelMotor.Set(m_currentPower); 
+}   
+
+double Flywheel::IncrementPower(double power) {
+    frc::SmartDashboard::PutNumber("Test Bindings/power", m_currentPower); 
+    m_currentPower += power;
 }

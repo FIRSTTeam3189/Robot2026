@@ -137,10 +137,11 @@ void Articulation::SetState(ArticulationTarget state) {
 }
 
 void Articulation::SetArticulationAngle(units::degree_t angle) {
-    ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
+    frc::SmartDashboard::PutNumber("Test Bindings/articulatinAngle", angle.value()); 
+    // ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
 
-        m_articulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
-            ArticulationConstants::kRotationConversionRotationsToDegrees}));
+    //     m_articulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
+    //         ArticulationConstants::kRotationConversionRotationsToDegrees}));
 }
 
 units::degree_t Articulation::GetArticulationAngle() {
