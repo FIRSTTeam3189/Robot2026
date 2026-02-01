@@ -13,7 +13,7 @@
 #define PI 3.14159265358979323846
 
                                                                                                            
-// #define SWERVEMODULECONSTANTS2025
+#define SWERVEMODULECONSTANTS2025
 
 #ifdef SWERVEMODULECONSTANTS2025
 // 2025
@@ -184,12 +184,12 @@
         constexpr double kModuleSpeedMultiplier {1.311};
         constexpr double kDEGToRAD {57.2957795131};
 
-        constexpr double kWheelRadiusInches {2.0};
-        constexpr double kWheelRadiusMeters {0.0508};
+        constexpr double kWheelRadiusInches {1.75};
+        constexpr double kWheelRadiusMeters {0.0444};
         constexpr double kWheelCircumferenceMeters {2.0 * PI * kWheelRadiusMeters};
 
-        constexpr double kDriveGearRatio {4.42}; 
-        constexpr double kAngleGearRatio {25.91}; 
+        constexpr double kDriveGearRatio {4.42};
+        constexpr double kAngleGearRatio {25.91};
 
         constexpr double kRotationsPerMeter {1.0 / kWheelCircumferenceMeters};
     }

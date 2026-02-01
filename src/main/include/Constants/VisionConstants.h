@@ -52,7 +52,7 @@ namespace VisionConstants {
     // constexpr units::degree_t kPhotonTurretCameraYawOffset {0.0_deg}; 
     //! END VERSION THAT WE DID JANKILY //////
 
-
+    
 
     const std::string kPhotonCamera1 {"Vision 1"};
     constexpr units::meter_t kPhotonIntakeCameraXOffset {-0.18519_m}; 
