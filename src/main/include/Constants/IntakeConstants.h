@@ -9,17 +9,24 @@
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
 #include <frc/DoubleSolenoid.h>
+#include <ctre/phoenix6/TalonFX.hpp>
+
 
 namespace IntakeConstants{
     constexpr int kRollerMotorID {15};
 
-    constexpr double kRollerIntakePower {-0.90};
-    constexpr double kRollerReverseIntakePower {0.90};
+    constexpr double kRollerIntakePower {0.96}; //-0.90
+    constexpr double kRollerReverseIntakePower {-0.96}; //0.90
 
     // Other roller configs
     constexpr bool kRollerMotorInverted {true};
-    constexpr rev::spark::SparkBaseConfig::IdleMode kRollerMotorIdleMode {rev::spark::SparkBaseConfig::IdleMode::kBrake};
-    constexpr unsigned int kRollerMotorCurrentLimit {45};
+    constexpr ctre::phoenix6::signals::NeutralModeValue kRollerMotorNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
+
+
+    constexpr units::ampere_t kRotationContinuousCurrentLimit = units::ampere_t{20.0};
+    constexpr units::ampere_t kRotationPeakCurrentLimit = units::ampere_t{25.0};
+    constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
+    constexpr bool kRotationEnableCurrentLimit = true;
 
 
     // Pneumatics:

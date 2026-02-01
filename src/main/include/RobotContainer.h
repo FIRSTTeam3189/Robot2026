@@ -32,7 +32,7 @@
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/LinearInterpolator.h"
-
+#include "util/InterpolatorData.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/shooterSubsystem/Turret.h"
@@ -51,7 +51,7 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/shooterConstants/TurretConstants.h"
 #include "Constants/shooterConstants/ArticulationConstants.h"
-
+#include "Constants/InterpolatorConstants.h"
 #include "Constants/VisionConstants.h"
 
 
@@ -109,6 +109,8 @@ class RobotContainer {
     frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
 
   Intake *m_intake = new Intake();
+
+  InterpolatorData *m_interpolatorData = new InterpolatorData(InterpolatorConstants::kInterpolatorDataFilePath); 
   
     // old m_constraints
   // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(

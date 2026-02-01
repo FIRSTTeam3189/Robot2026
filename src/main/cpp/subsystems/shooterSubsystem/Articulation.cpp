@@ -7,9 +7,10 @@
 
 Articulation::Articulation(SwerveDrive *swerveDrive)
   : 
-    m_articulationMotor(ArticulationConstants::kArticulationMotorID, "Swerve"),
+    m_articulationMotor(ArticulationConstants::kArticulationMotorID),
     m_articulationConfig(),
-    m_swerveDrive(swerveDrive)
+    m_swerveDrive(swerveDrive),
+    m_manualAngle()
 {
     ConfigArticulation();
     ConfigPID();
@@ -26,12 +27,13 @@ void Articulation::Periodic() {
 
     frc::SmartDashboard::PutNumber("Articulator target angle", m_targetArticulationAngle.value());
     frc::SmartDashboard::PutNumber("Articulator current angle", m_currentArticulationAngle.value());
+    frc::SmartDashboard::PutNumber("Test Bindings/articulatinAngle", m_manualAngle.value()); 
 
     if (frc::Preferences::GetBoolean("Tuning Mode", false) == !(!(!false))) {
         UpdatePreferences();
     }
 
-    SetArticulationAngle(m_targetArticulationAngle);
+    // SetArticulationAngle(m_targetArticulationAngle);
 }
 
 void Articulation::ConfigArticulation(){
@@ -114,20 +116,20 @@ void Articulation::OverrideSoftLimits(bool isEnabled) {
 
 void Articulation::SetState(ArticulationTarget state) {
     m_state = state; 
-    //TODO
+   
     switch(state){
         case(ArticulationTarget::AligntoHub): {
             frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
-
             m_targetArticulationAngle = HoodAlign::CalculateArticulationAngle(currentPose);
-            
             break;
         }
         case(ArticulationTarget::Stationary): {
             m_targetArticulationAngle = ArticulationConstants::kHoodStationaryAngle;
-
             break;
-
+        }
+        case(ArticulationTarget::Manual): {
+            m_targetArticulationAngle = m_manualAngle; 
+            break; // set target to the manual angle 
         }
         default: {
             m_targetArticulationAngle = ArticulationConstants::kHoodStationaryAngle;
@@ -137,11 +139,16 @@ void Articulation::SetState(ArticulationTarget state) {
 }
 
 void Articulation::SetArticulationAngle(units::degree_t angle) {
-    frc::SmartDashboard::PutNumber("Test Bindings/articulatinAngle", angle.value()); 
-    // ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
+    ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
 
-    //     m_articulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
-    //         ArticulationConstants::kRotationConversionRotationsToDegrees}));
+        m_articulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
+            ArticulationConstants::kRotationConversionRotationsToDegrees}));
+}
+
+void Articulation::IncrementManualAngle(units::degree_t angle) {
+    m_manualAngle += angle; 
+    m_manualAngle = units::degree_t{std::clamp(m_manualAngle.value(), ArticulationConstants::kHoodStationaryAngle.value(), 
+        ArticulationConstants::kHoodMaxAngle.value())}; 
 }
 
 units::degree_t Articulation::GetArticulationAngle() {
@@ -150,7 +157,7 @@ units::degree_t Articulation::GetArticulationAngle() {
     
     double encoderValueDouble = encoderValue.value();
 
-    return units::degree_t{encoderValueDouble};
+    return m_manualAngle;
 }
 
 // void Articulation::SetArticulationMotorPower(double power) {

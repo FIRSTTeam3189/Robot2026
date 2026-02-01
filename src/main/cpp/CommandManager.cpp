@@ -86,41 +86,53 @@ namespace CommandManager {
 
   frc2::CommandPtr IncrementFlywheelPower(Flywheel *flywheel) {
     return frc2::InstantCommand([flywheel](){
-      flywheel->IncrementPower(FlywheelConstants::kFlyWheelPowerIncrement); 
+      flywheel->SetFlyWheelTargetPower(flywheel->GetFlywheelTargetPower() + FlywheelConstants::kFlyWheelPowerIncrement); 
     }, {flywheel}).ToPtr();
   } 
 
   frc2::CommandPtr DecrementFlywheelPower(Flywheel *flywheel) {
     return frc2::InstantCommand([flywheel](){
-      flywheel->IncrementPower(FlywheelConstants::kFlyWheelPowerDecrement); 
+      flywheel->SetFlyWheelTargetPower(flywheel->GetFlywheelTargetPower() + FlywheelConstants::kFlyWheelPowerDecrement); 
     }, {flywheel}).ToPtr();
   } 
 
   frc2::CommandPtr ArticulationAngleUp(Articulation *articulation) {
-      frc2::InstantCommand([articulation]() {
-        articulation->SetArticulationAngle(articulation->GetArticulationAngle() + ArticulationConstants::kArticulationAngleIncrement);
+      return frc2::InstantCommand([articulation]() {
+        articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleIncrement);
       }, {articulation}).ToPtr();
   }
 
   frc2::CommandPtr ArticulationAngleDown(Articulation *articulation) {
-      frc2::InstantCommand([articulation]() {
-        articulation->SetArticulationAngle(articulation->GetArticulationAngle() + ArticulationConstants::kArticulationAngleDecrement);
+      return frc2::InstantCommand([articulation]() {
+        articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleDecrement);
       }, {articulation}).ToPtr();
   }
 
   frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel) {
-    frc2::ParallelCommandGroup(
+    return frc2::ParallelCommandGroup(
       frc2::InstantCommand([flywheel]() {
-        flywheel->ApplyFlywheelPowerIncrements(); 
+        flywheel->SetFlyWheelPowerTest(); 
       }, {flywheel}),
       frc2::SequentialCommandGroup(
         frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay),
         frc2::InstantCommand([loader]() {
           loader->SetShooterLoaderMotorPower(LoaderConstants::kLoaderMotorPower); 
-        }, {flywheel})
+        }, {loader})
       )
     ).ToPtr(); 
+    
   }
+
+  frc2::CommandPtr SetArticulationManual(Articulation *articulation) {
+    return SetArticulationAngle(articulation, ArticulationTarget::Manual).ToPtr(); 
+  }
+
+  // frc2::CommandPtr ExtendOrRetractIntake(Intake* intake) {
+
+  // }
+  //   frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL2Button(); });
+  // extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.8).ToPtr()); // 0.8 when set, nothign when retract
+  // extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr()); 
 
 
 

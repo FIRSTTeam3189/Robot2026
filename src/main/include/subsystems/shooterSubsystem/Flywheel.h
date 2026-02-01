@@ -24,12 +24,9 @@ class Flywheel : public frc2::SubsystemBase {
 
   void SetFlyWheelTargetPower(double power); 
 
-  void SetFlyWheelPowerTest(double power); 
+  void SetFlyWheelPowerTest(); 
 
-  double IncrementPower(double power); 
-
-  void ApplyFlywheelPowerIncrements(); 
-
+  double GetFlywheelTargetPower();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -40,10 +37,8 @@ class Flywheel : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   ctre::phoenix6::hardware::TalonFX m_flywheelMotor;
-
   ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
 
   double m_targetPower; 
-  double m_currentPower; 
-  
+
 };

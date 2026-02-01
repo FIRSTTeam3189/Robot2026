@@ -39,6 +39,9 @@ namespace AutoAlignConstants {
     constexpr frc::Pose2d kBlueHubPose {4.624_m, 4.036_m, frc::Rotation2d(0.0_deg)};
     constexpr frc::Pose2d kRedHubPose {11.909_m, 4.036_m, frc::Rotation2d(0.0_deg)};
 
+    constexpr units::meter_t kBlueNeutralZoneThreshold {4.000_m};
+    constexpr units::meter_t kRedNeutralZoneThreshold {12.550_m};
+
     // ! Not verified numbers 
     constexpr units::meter_t kHubHeight {1.524_m}; 
     constexpr units::meter_t kHoodHeight {0.6096_m}; 
@@ -62,8 +65,8 @@ namespace AutoAlignConstants {
     constexpr double kVelocityMultiplier {0.5}; 
 
     // 0 is 15, and max is 35 
-    const std::vector<double> kPowerInterpolatorAngles = {10, 15, 20, 25, 30, 35}; 
-    const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.51, 0.62, 0.8}; 
+    const std::vector<double> kPowerInterpolatorAngles = {20, 30, 40, 50}; 
+    const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.51, 0.8}; 
 
     //! need to be configured 
     constexpr units::degree_t kHoodDefaultAngle{15_deg};

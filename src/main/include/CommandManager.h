@@ -38,6 +38,8 @@ namespace CommandManager {
     frc2::CommandPtr ArticulationAngleUp(Articulation *articulation);
     frc2::CommandPtr ArticulationAngleDown(Articulation *articulation);
 
-    frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel); 
+    frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel);
+
+    frc2::CommandPtr SetArticulationManual(Articulation *articulation);
 
 };

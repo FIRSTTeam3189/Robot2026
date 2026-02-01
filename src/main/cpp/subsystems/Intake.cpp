@@ -2,11 +2,12 @@
 
 Intake::Intake() : 
 
- m_rollerMotor(IntakeConstants::kRollerMotorID, rev::spark::SparkMax::MotorType::kBrushless),
- m_rollerConfig(),
+ m_intakeRollerMotor(IntakeConstants::kRollerMotorID, "Swerve"),
+ m_intakeConfig(),
  m_intakeSolenoid(IntakeConstants::kSolenoidModule, IntakeConstants::kSolenoidType,
                   IntakeConstants::kSolenoidForwardChannel, IntakeConstants::kSolenoidReverseChannel),
  m_state(IntakeState::RetractIntake)
+
 
 {
     ConfigRollerMotor();
@@ -14,28 +15,31 @@ Intake::Intake() :
 }
 
 
+
 void Intake::ConfigRollerMotor() {
-    m_rollerConfig
-        .Inverted(IntakeConstants::kRollerMotorInverted)
-        .SmartCurrentLimit(IntakeConstants::kRollerMotorCurrentLimit)
-        .SetIdleMode(IntakeConstants::kRollerMotorIdleMode);
-    m_rollerMotor.Configure(m_rollerConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, 
-                            rev::spark::SparkBase::PersistMode::kPersistParameters);
+    m_intakeRollerMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
+
+    m_intakeConfig.MotorOutput.Inverted = IntakeConstants::kRollerMotorInverted;
+    m_intakeConfig.MotorOutput.NeutralMode = IntakeConstants::kRollerMotorNeutralMode;
+
+    
+    m_intakeRollerMotor.GetConfigurator().Apply(m_intakeConfig);
+    // m_shooterTurretMotor.SetPosition(0.0_tr);
 }
 
 
 void Intake::SetRollerPower(double power){
-    m_rollerMotor.Set(power);
+    m_intakeRollerMotor.Set(power);
 }
 
 void Intake::SetIntake(double power) {
     m_intakeSolenoid.Set(frc::DoubleSolenoid::kForward);
-    m_rollerMotor.Set(power);
+    m_intakeRollerMotor.Set(power);
 }
 
 void Intake::RetractIntake() {
     m_intakeSolenoid.Set(frc::DoubleSolenoid::kReverse);
-    m_rollerMotor.Set(0.0);
+    m_intakeRollerMotor.Set(0.0);
 }
 
 void Intake::SetState(IntakeState state, double rollerPower) {
@@ -68,7 +72,7 @@ IntakeState Intake::GetState(){
 // This method will be called once per scheduler run
 void Intake::Periodic() {
     
-    frc::SmartDashboard::PutNumber("Intake roller power", m_rollerMotor.Get());
+    frc::SmartDashboard::PutNumber("Intake roller power", m_intakeRollerMotor.Get());
     // frc::SmartDashboard::PutNumber("Intake State", static_cast<int>(m_state));
     // frc::SmartDashboard::PutNumber("Algae Intake rotation getAppliedOutput", m_rotationMotor.GetAppliedOutput());
 

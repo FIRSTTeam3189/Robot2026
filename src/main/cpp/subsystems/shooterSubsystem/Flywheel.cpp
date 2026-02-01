@@ -8,12 +8,15 @@ Flywheel::Flywheel()
   : 
     m_flywheelMotor(FlywheelConstants::kShooterFlywheelID, "Swerve"),
     m_flywheelConfig(),
-    m_targetPower(),
-    m_currentPower()
+    m_targetPower()
 {}
 
 // This method will be called once per scheduler run
-void Flywheel::Periodic() {}
+void Flywheel::Periodic() {
+
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower); 
+
+}
 
 
 void Flywheel::ConfigFlywheelMotor() {
@@ -27,21 +30,15 @@ void Flywheel::SetFlyWheelTargetPower(double power) {
     m_targetPower = power; 
 }
 
+double Flywheel::GetFlywheelTargetPower() {
+    return m_targetPower; 
+}
 
-void Flywheel::SetFlyWheelPowerTest(double power) {
-    frc::SmartDashboard::PutNumber("Power Interpolator/power", power); 
+
+void Flywheel::SetFlyWheelPowerTest() {
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", m_targetPower); 
 }
 
 void Flywheel::SetShooterFlywheelMotorPower(double power) {
-    m_flywheelMotor.Set(power);
-}
-
-void Flywheel::ApplyFlywheelPowerIncrements() {
-    frc::SmartDashboard::PutNumber("Test Bindings/applied power", m_currentPower); 
-    // m_flywheelMotor.Set(m_currentPower); 
-}   
-
-double Flywheel::IncrementPower(double power) {
-    frc::SmartDashboard::PutNumber("Test Bindings/power", m_currentPower); 
-    m_currentPower += power;
+    // m_flywheelMotor.Set(power);
 }

@@ -16,6 +16,11 @@
 
 #include "Constants/IntakeConstants.h"
 #include <frc/DoubleSolenoid.h>
+#include <frc/system/plant/LinearSystemId.h>
+#include <frc/estimator/KalmanFilter.h>
+#include <frc/controller/LinearQuadraticRegulator.h>
+#include <frc/system/LinearSystemLoop.h>
+#include <ctre/phoenix6/TalonFX.hpp>
 
 enum class IntakeState {ExtendIntake, RetractIntake};
 
@@ -41,8 +46,9 @@ class Intake : public frc2::SubsystemBase {
 
  private:
 
-  rev::spark::SparkMax m_rollerMotor;
-  rev::spark::SparkMaxConfig m_rollerConfig;
+  // rev::spark::SparkMax m_rollerMotor;
+  ctre::phoenix6::hardware::TalonFX m_intakeRollerMotor;
+  ctre::phoenix6::configs::TalonFXConfiguration m_intakeConfig {};
 
   frc::DoubleSolenoid m_intakeSolenoid;
 

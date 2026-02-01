@@ -27,8 +27,8 @@ namespace HoodAlign {
     }
 
     bool InNeutralZone(frc::Pose2d robotPose) {
-        double x = robotPose.X().value();
-        return x > AutoAlignConstants::kBlueHubPose.X().value() && x < AutoAlignConstants::kRedHubPose.X().value();
+        units::meter_t x = robotPose.X(); 
+        return x >= AutoAlignConstants::kBlueNeutralZoneThreshold && x <= AutoAlignConstants::kRedNeutralZoneThreshold; 
     }
 
     units::degree_t CalculateArticulationAngle(frc::Pose2d robotPose) {

@@ -54,6 +54,8 @@ class Articulation : public frc2::SubsystemBase {
   
   void RefreshAllSignals();
 
+  void IncrementManualAngle(units::degree_t angle);
+
   units::degree_t GetTargetAngle(); 
 
   void OverrideSoftLimits(bool isEnabled);
@@ -90,6 +92,8 @@ class Articulation : public frc2::SubsystemBase {
 
   units::degree_t m_targetArticulationAngle;
   units::degree_t m_currentArticulationAngle;
+
+  units::degree_t m_manualAngle; 
 
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_articulationAngle = m_articulationMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_articulationVelocity = m_articulationMotor.GetVelocity();
