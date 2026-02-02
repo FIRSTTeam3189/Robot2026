@@ -28,11 +28,10 @@
 #include "commands/utilCommands/SetArticulationAngle.h"
 #include "commands/mainCommands/SetIntakeAngleAndPower.h"
 
-#include "CommandManager.h"
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/LinearInterpolator.h"
-#include "util/InterpolatorData.h"
+#include "util/interpolatorDataUtils/InterpolatorData.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
 #include "subsystems/shooterSubsystem/Turret.h"
@@ -59,6 +58,8 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/util/PathPlannerLogging.h>
+
+#include "CommandManager.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

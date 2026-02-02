@@ -110,21 +110,38 @@ namespace CommandManager {
 
   frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel) {
     return frc2::ParallelCommandGroup(
-      frc2::InstantCommand([flywheel]() {
+      frc2::InstantCommand([flywheel]() { // startup flywheel with applied power 
         flywheel->SetFlyWheelPowerTest(); 
       }, {flywheel}),
       frc2::SequentialCommandGroup(
-        frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay),
+        frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay), // wait for flywheel 
         frc2::InstantCommand([loader]() {
-          loader->SetShooterLoaderMotorPower(LoaderConstants::kLoaderMotorPower); 
+          loader->SetShooterLoaderMotorPower(LoaderConstants::kLoaderMotorPower); // run loader 
         }, {loader})
       )
     ).ToPtr(); 
-    
   }
 
-  frc2::CommandPtr SetArticulationManual(Articulation *articulation) {
-    return SetArticulationAngle(articulation, ArticulationTarget::Manual).ToPtr(); 
+
+  frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
+                                        Flywheel *flywheel, Articulation *articulation) {
+    return frc2::InstantCommand([interpolatorData, swerveDrive, flywheel, articulation]() { // saves the point 
+      frc::Pose2d robotPose = swerveDrive->GetEstimatedPose(); 
+      interpolatorData->AddPoint(robotPose, TurretAlign::CalculateTargetPose(robotPose), 
+                                 articulation->GetArticulationAngle(), flywheel->GetFlywheelTargetPower());
+    }, {flywheel, swerveDrive, articulation}).ToPtr();  
+  }
+  
+  frc2::CommandPtr SaveAllInterpolationPoints(InterpolatorData *interpolatorData) {
+    return frc2::InstantCommand([interpolatorData]() {
+      interpolatorData->SaveToFile(); 
+    }).ToPtr(); 
+  }
+
+  frc2::CommandPtr RemoveLastInterpolationPoint(InterpolatorData *interpolatorData) {
+    return frc2::InstantCommand([interpolatorData]() {
+      interpolatorData->RemoveLastPoint(); 
+    }).ToPtr(); 
   }
 
   // frc2::CommandPtr ExtendOrRetractIntake(Intake* intake) {

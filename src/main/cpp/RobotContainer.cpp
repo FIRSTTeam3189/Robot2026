@@ -72,8 +72,6 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL2Button(); });
   extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, IntakeConstants::kRollerIntakePower).ToPtr()); // 0.8 when set, nothign when retract
   extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr());  // idk bro
-  
-
 
 }
 
@@ -144,8 +142,6 @@ void RobotContainer::SetDriveCoast() {
   m_swerveDrive->SetBrakeMode(BrakeMode::Coast);
 }
 
-
-
 void RobotContainer::PrintActiveCommands() {
   // frc::SmartDashboard::PutString("Current command/swerve", m_swerveDrive->GetCurrentCommand()->GetName());
   // frc::SmartDashboard::PutString("Current command/coral elevator", m_coralElevator->GetCurrentCommand()->GetName());
@@ -163,6 +159,14 @@ void RobotContainer::ConfigureTestBindings() {
   frc2::Trigger shootFuelButton([this](){ return m_test.GetR1Button(); });
   shootFuelButton.OnTrue(CommandManager::RunFlywheelAndLoader(m_loader, m_flywheel));
 
+  frc2::Trigger addInterpolationPoint([this]() { return m_test.GetCrossButton(); });
+  addInterpolationPoint.OnTrue(CommandManager::AddInterpolatorPoint(m_interpolatorData, m_swerveDrive, m_flywheel, m_articulation));
+
+  frc2::Trigger removeInterpolationPoint([this]() { return m_test.GetTriangleButton(); });
+  removeInterpolationPoint.OnTrue(CommandManager::RemoveLastInterpolationPoint(m_interpolatorData));
+
+  frc2::Trigger saveAllInterpolationPoints([this]() { return m_test.GetCreateButton(); }); 
+  saveAllInterpolationPoints.OnTrue(CommandManager::SaveAllInterpolationPoints(m_interpolatorData));
 }
 
 Turret* RobotContainer::GetShooterSubsystem() {
