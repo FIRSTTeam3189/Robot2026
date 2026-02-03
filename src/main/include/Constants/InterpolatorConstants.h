@@ -4,6 +4,6 @@
 
 namespace InterpolatorConstants {
 
-    const std::string kInterpolatorDataFilePath = ""; 
+    const std::string kInterpolatorDataFilePath = "/home/lvuser/data/InterpolatorData.json"; 
 
 };

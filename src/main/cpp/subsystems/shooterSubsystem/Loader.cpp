@@ -7,7 +7,7 @@
 
 
 Loader::Loader() :
-    m_ShooterLoaderMotor(LoaderConstants::kShooterLoaderID, "swerve"),
+    m_ShooterLoaderMotor(LoaderConstants::kShooterLoaderID),
 
     m_shooterLoaderConfig(){
         ConfigLoaderMotor();
@@ -20,12 +20,11 @@ void Loader::ConfigLoaderMotor() {
     m_shooterLoaderConfig.MotorOutput.NeutralMode = LoaderConstants::kLoaderNeutralMode;
 
     m_ShooterLoaderMotor.GetConfigurator().Apply(m_shooterLoaderConfig);
-    m_ShooterLoaderMotor.SetPosition(0.0_tr);
 }
 
 void Loader::SetShooterLoaderMotorPower(double power) {
     frc::SmartDashboard::PutNumber("Test Bindings/loaderPower", power); 
-    // m_ShooterLoaderMotor.Set(power);
+    m_ShooterLoaderMotor.Set(power);
 }
 
 

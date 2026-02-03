@@ -35,10 +35,10 @@ void InterpolatorData::SaveToFile()
 
     json j = ReadFromFile();
     std::vector<Shotpoint> savedDataPoints = GetDataPointsList(j);
-    m_dataPoints.insert(m_dataPoints.end(), std::begin(savedDataPoints), std::end(savedDataPoints));
+    savedDataPoints.insert(savedDataPoints.end(), std::begin(m_dataPoints), std::end(m_dataPoints));
 
     j["shots"] = json::array();
-    for (const auto& shot : m_dataPoints) {
+    for (const auto& shot : savedDataPoints) {
 
         json shotJson = shot.ToJson();
         j["shots"].push_back(shotJson);
@@ -46,15 +46,20 @@ void InterpolatorData::SaveToFile()
     }
 
     std::ofstream file(m_filename);
-    file << j.dump(4);
-    file.close();
+
+    if (file.is_open()) {
+        file << j.dump(4);
+        file.close();
+    }
 }
 
 json InterpolatorData::ReadFromFile()
 
 {
+    namespace fs = std::filesystem; 
+
     std::ifstream file(m_filename);
-    if (!file.is_open())
+    if (!file.is_open() || fs::is_empty(m_filename))
     {
         return json{
             {"shots", json::array()}
@@ -62,9 +67,11 @@ json InterpolatorData::ReadFromFile()
     }
     json j;
     file >> j;
-    file.close();
-    return j;
 
+    file.close();
+    fs::remove(m_filename); 
+
+    return j;
 }
 
 

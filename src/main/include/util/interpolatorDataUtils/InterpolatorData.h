@@ -3,12 +3,12 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #include "util/interpolatorDataUtils/Shotpoint.h"
 #include "util/Vector2d.h"
 
 using json = nlohmann::json;
-
 
 class InterpolatorData {
 

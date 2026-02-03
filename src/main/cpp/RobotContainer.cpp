@@ -64,14 +64,22 @@ void RobotContainer::ConfigureDriverBindings() {
   pointRightButton.OnTrue(CommandManager::PointTurretRight(m_turret));
 
 
-  frc2::Trigger slowDownButton([this](){ return m_bill.GetL1Button(); });
-  slowDownButton.OnTrue(CommandManager::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill));
-  slowDownButton.OnFalse(CommandManager::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill));
+  // frc2::Trigger slowDownButton([this](){ return m_bill.GetL1Button(); });
+  // slowDownButton.OnTrue(CommandManager::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill));
+  // slowDownButton.OnFalse(CommandManager::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill));
 
 
   frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL2Button(); });
   extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, IntakeConstants::kRollerIntakePower).ToPtr()); // 0.8 when set, nothign when retract
   extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr());  // idk bro
+
+  frc2::Trigger runLoaderForward([this](){ return m_bill.GetR1Button(); });
+  runLoaderForward.OnTrue(CommandManager::RunLoaderForward(m_loader)); 
+  runLoaderForward.OnFalse(CommandManager::ResetLoader(m_loader)); 
+
+  frc2::Trigger runLoaderBackward([this](){ return m_bill.GetL1Button(); });
+  runLoaderBackward.OnTrue(CommandManager::RunLoaderBackward(m_loader)); 
+  runLoaderBackward.OnFalse(CommandManager::ResetLoader(m_loader)); 
 
 }
 

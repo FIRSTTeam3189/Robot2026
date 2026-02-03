@@ -29,6 +29,7 @@
 
 #include "util/LinearInterpolator.h"
 #include "util/alignUtils/HoodAlign.h"
+#include "util/alignUtils/AutoAlign.h"
 
 #include <algorithm>
 #include <cmath> 

@@ -19,7 +19,7 @@ void SetIntakeRollerMotor::Execute() {}
 
 // Called once the command ends or is interrupted.
 void SetIntakeRollerMotor::End(bool interrupted) {
-  m_intake->SetRollerPower(0.0);
+  
 }
 
 // Returns true when the command should end.

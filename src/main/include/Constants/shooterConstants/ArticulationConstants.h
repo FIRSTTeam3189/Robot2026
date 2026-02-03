@@ -17,7 +17,8 @@
 enum ArticulationTarget {
     AligntoHub,
     Stationary,
-    Manual
+    Manual,
+    FixedAlign
 }; 
 //Articulation Constants
 

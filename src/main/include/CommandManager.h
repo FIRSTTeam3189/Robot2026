@@ -89,6 +89,14 @@ namespace CommandManager {
 
     frc2::CommandPtr ArticulationAngleUp(Articulation *articulation);
     frc2::CommandPtr ArticulationAngleDown(Articulation *articulation);
+    frc2::CommandPtr SetArticulationToFixedState(Articulation* articulation); 
+
+    frc2::CommandPtr SetTurretAndArticulationManual(Articulation *articulation, Turret *turret); 
+
+    frc2::CommandPtr RunLoaderForward(Loader *loader);
+    frc2::CommandPtr RunLoaderBackward(Loader *loader);
+    frc2::CommandPtr ResetLoader(Loader *loader);
+
 
     frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel);
       
@@ -97,4 +105,7 @@ namespace CommandManager {
     frc2::CommandPtr SaveAllInterpolationPoints(InterpolatorData *interpolatorData);
     frc2::CommandPtr RemoveLastInterpolationPoint(InterpolatorData *interpolatorData);
 
+    frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints);
+
+    frc2::CommandPtr EmptyCommand(); 
 };

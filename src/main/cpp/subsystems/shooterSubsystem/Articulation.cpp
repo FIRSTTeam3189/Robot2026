@@ -131,6 +131,18 @@ void Articulation::SetState(ArticulationTarget state) {
             m_targetArticulationAngle = m_manualAngle; 
             break; // set target to the manual angle 
         }
+        case(ArticulationTarget::FixedAlign): {
+            frc::Pose2d pathfindingPose = AutoAlign::GetClosestRobotPose(m_swerveDrive->GetEstimatedPose());
+            int index = AutoAlign::GetIndexOfPathfindingPose(pathfindingPose); 
+
+            frc::SmartDashboard::PutNumber("articulation state/pathfind pose index", index); 
+            frc::SmartDashboard::PutNumber("articulation state/articulation angle", AutoAlignConstants::kBlueArticulationAngles[index]);
+
+            m_targetArticulationAngle = units::degree_t{AutoAlignConstants::kBlueArticulationAngles[index]};
+
+            break;
+
+        }
         default: {
             m_targetArticulationAngle = ArticulationConstants::kHoodStationaryAngle;
 

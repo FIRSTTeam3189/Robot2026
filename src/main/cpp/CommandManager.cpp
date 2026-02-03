@@ -46,6 +46,7 @@ namespace CommandManager {
     return SetTurretAngle(turret, TurretTarget::PointFerryRight).ToPtr();
   }
 
+
   frc2::CommandPtr SlowDownSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill) {
     return frc2::InstantCommand([swerveDrive, bill, driveState]{
       *driveState = DriveState::SlowDownSwerves;
@@ -59,6 +60,7 @@ namespace CommandManager {
       swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
     },{swerveDrive}).ToPtr();
   }
+  
 
   frc2::CommandPtr IntakePowerForward(Intake *intake){
     return SetIntakeRollerMotor(intake, IntakeConstants::kRollerIntakePower).ToPtr();
@@ -96,6 +98,7 @@ namespace CommandManager {
     }, {flywheel}).ToPtr();
   } 
 
+
   frc2::CommandPtr ArticulationAngleUp(Articulation *articulation) {
       return frc2::InstantCommand([articulation]() {
         articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleIncrement);
@@ -107,6 +110,31 @@ namespace CommandManager {
         articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleDecrement);
       }, {articulation}).ToPtr();
   }
+
+  frc2::CommandPtr SetArticulationToFixedState(Articulation* articulation) {
+    return SetArticulationAngle(articulation, ArticulationTarget::FixedAlign).ToPtr();
+  }
+
+  frc2::CommandPtr SetTurretAndArticulationManual(Articulation *articulation, Turret *turret) {
+    return frc2::SequentialCommandGroup(
+      SetArticulationAngle(articulation, ArticulationTarget::FixedAlign),
+      SetTurretAngle(turret, TurretTarget::PointStraight)
+    ).ToPtr();
+  }
+
+
+  frc2::CommandPtr RunLoaderForward(Loader *loader) {
+    return SetShooterLoaderPower(loader, 0.4).ToPtr();
+  }
+
+  frc2::CommandPtr RunLoaderBackward(Loader *loader) {
+    return SetShooterLoaderPower(loader, -0.4).ToPtr();
+  }
+
+  frc2::CommandPtr ResetLoader(Loader *loader) {
+    return SetShooterLoaderPower(loader, 0.0).ToPtr();
+  }
+
 
   frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel) {
     return frc2::ParallelCommandGroup(
@@ -121,7 +149,6 @@ namespace CommandManager {
       )
     ).ToPtr(); 
   }
-
 
   frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                         Flywheel *flywheel, Articulation *articulation) {
@@ -142,6 +169,17 @@ namespace CommandManager {
     return frc2::InstantCommand([interpolatorData]() {
       interpolatorData->RemoveLastPoint(); 
     }).ToPtr(); 
+  }
+
+
+  frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints) {
+    return frc2::cmd::RunOnce([swerveDrive, constraints](){
+      frc2::CommandScheduler::GetInstance().Schedule(AutoAlign::AutoAlignToPose(swerveDrive, constraints));
+    });
+  }
+
+  frc2::CommandPtr EmptyCommand() {
+    return frc2::InstantCommand([](){}).ToPtr(); 
   }
 
   // frc2::CommandPtr ExtendOrRetractIntake(Intake* intake) {
