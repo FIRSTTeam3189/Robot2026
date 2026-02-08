@@ -57,8 +57,8 @@ namespace AutoAlignConstants {
     constexpr units::meter_t kMidpointOnFieldRed {14.381_m};
 
     // don't add a k (*-*)
-    constexpr units::degree_t FerryAngleLeft {45_deg};
-    constexpr units::degree_t FerryAngleRight {135_deg};
+    constexpr units::degree_t TurretAngleLeft {45_deg};
+    constexpr units::degree_t TurretAngleRight {135_deg};
 
     const Vector2d kTurretOffset(0.11, 0.0); 
 

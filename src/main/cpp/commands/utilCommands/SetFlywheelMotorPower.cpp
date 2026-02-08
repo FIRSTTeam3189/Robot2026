@@ -12,11 +12,11 @@ SetFlywheelMotorPower::SetFlywheelMotorPower(Flywheel *flywheel, double power)
 }
 
 void SetFlywheelMotorPower::Execute() {
-    m_flywheel->SetShooterFlywheelMotorPower(m_power);
+    m_flywheel->SetFlywheelMotorPower(m_power);
 }
 
 void SetFlywheelMotorPower::End(bool interrupted) {
-    m_flywheel->SetShooterFlywheelMotorPower(0.0);
+    m_flywheel->SetFlywheelMotorPower(0.0);
 }
 
 bool SetFlywheelMotorPower::IsFinished() {

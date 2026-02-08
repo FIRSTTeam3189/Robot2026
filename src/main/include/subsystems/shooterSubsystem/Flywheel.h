@@ -20,13 +20,13 @@ class Flywheel : public frc2::SubsystemBase {
 
   void ConfigFlywheelMotor();
 
-  void SetShooterFlywheelMotorPower(double power);
+  void SetFlywheelMotorPower(double power);
+  void SetFlywheelMotorPower(); 
 
   void SetFlyWheelTargetPower(double power); 
-
-  void SetFlyWheelPowerTest(); 
-
+  
   double GetFlywheelTargetPower();
+  
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

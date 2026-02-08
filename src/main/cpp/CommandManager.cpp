@@ -39,11 +39,11 @@ namespace CommandManager {
   }
 
   frc2::CommandPtr PointTurretLeft(Turret *turret) {
-    return SetTurretAngle(turret, TurretTarget::PointFerryLeft).ToPtr();
+    return SetTurretAngle(turret, TurretTarget::Point45Deg).ToPtr();
   }
 
   frc2::CommandPtr PointTurretRight(Turret *turret) {
-    return SetTurretAngle(turret, TurretTarget::PointFerryRight).ToPtr();
+    return SetTurretAngle(turret, TurretTarget::Point135Deg).ToPtr();
   }
 
 
@@ -61,6 +61,15 @@ namespace CommandManager {
     },{swerveDrive}).ToPtr();
   }
   
+  frc2::CommandPtr ClimbAlignSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill) {
+    return frc2::InstantCommand([swerveDrive, driveState, bill]{
+      if swerveDrive
+      *driveState = DriveState::ClimbAlign; 
+      swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
+    },{swerveDrive}).ToPtr();
+
+  }
+
 
   frc2::CommandPtr IntakePowerForward(Intake *intake){
     return SetIntakeRollerMotor(intake, IntakeConstants::kRollerIntakePower).ToPtr();
@@ -98,7 +107,6 @@ namespace CommandManager {
     }, {flywheel}).ToPtr();
   } 
 
-
   frc2::CommandPtr ArticulationAngleUp(Articulation *articulation) {
       return frc2::InstantCommand([articulation]() {
         articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleIncrement);
@@ -135,20 +143,33 @@ namespace CommandManager {
     return SetShooterLoaderPower(loader, 0.0).ToPtr();
   }
 
-
   frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel) {
     return frc2::ParallelCommandGroup(
       frc2::InstantCommand([flywheel]() { // startup flywheel with applied power 
-        flywheel->SetFlyWheelPowerTest(); 
+        flywheel->SetFlywheelMotorPower(); 
       }, {flywheel}),
       frc2::SequentialCommandGroup(
         frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay), // wait for flywheel 
         frc2::InstantCommand([loader]() {
-          loader->SetShooterLoaderMotorPower(LoaderConstants::kLoaderMotorPower); // run loader 
+          loader->SetLoaderMotorPower(LoaderConstants::kLoaderMotorPower); // run loader 
         }, {loader})
       )
     ).ToPtr(); 
   }
+
+  // frc2::CommandPtr RunFlywheelAndLoaderTest(Loader *loader, Flywheel *flywheel) {
+  //   return frc2::ParallelCommandGroup(
+  //     frc2::InstantCommand([flywheel]() { // startup flywheel with applied power 
+  //       flywheel->SetFlywheelMotorPower(); 
+  //     }, {flywheel}),
+  //     frc2::SequentialCommandGroup(
+  //       frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay), // wait for flywheel 
+  //       frc2::InstantCommand([loader]() {
+  //         loader->SetLoaderMotorPower(LoaderConstants::kLoaderMotorPower); // run loader 
+  //       }, {loader})
+  //     )
+  //   ).ToPtr(); 
+  // }
 
   frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                         Flywheel *flywheel, Articulation *articulation) {

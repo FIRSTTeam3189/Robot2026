@@ -41,6 +41,8 @@ void Robot::RobotPeriodic() {
  */
 void Robot::DisabledInit() {
   m_container.SetAllBrake();
+  // Safety in case we forget to save 
+  m_container.GetInterpolatorData()->SaveToFile(); 
   // m_container.SetElevatorCoast();
   // m_container.SetDriveCoast();
   // m_container.SetAlgaeCoast();

@@ -86,6 +86,7 @@ class RobotContainer {
   void PrintActiveCommands();
 
   Turret* GetShooterSubsystem(); 
+  InterpolatorData* GetInterpolatorData(); 
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed

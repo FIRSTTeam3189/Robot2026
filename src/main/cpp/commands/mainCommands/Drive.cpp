@@ -86,7 +86,24 @@ void Drive::Execute(){
         rot = GetDesiredRotationalVelocity() * SwerveDriveConstants::kSlowModeSwerveDriveRotMultiplier;
       }
       break;
+    case(DriveState::ClimbAlign) : 
+      {
+        if (frc::DriverStation::GetAlliance()) {
+          if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
+            rot = units::angular_velocity::radians_per_second_t{
+              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), 
+                                                                       SwerveDriveConstants::kClimbAlignRotBlue.value()))
+              * SwerveDriveConstants::kMaxAngularVelocity};
+          } else {
+            rot = units::angular_velocity::radians_per_second_t{
+              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), 
+                                                                       SwerveDriveConstants::kClimbAlignRotRed.value()))
+              * SwerveDriveConstants::kMaxAngularVelocity};
+          }
+        }
 
+        break;
+      }
     default:
       rot = units::angular_velocity::radians_per_second_t{0.0};
       break;

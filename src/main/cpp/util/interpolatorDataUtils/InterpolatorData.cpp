@@ -1,20 +1,23 @@
 #include "util/interpolatorDataUtils/InterpolatorData.h"
 
-InterpolatorData::InterpolatorData(const std::string &file)
-    : m_filename(file)
+InterpolatorData::InterpolatorData(const std::string &filename)
+    : m_filename(filename)
 
 {
     json j = ReadFromFile();
+    bool readFile = false; 
     if (j.contains("shots"))
     {
+        readFile = true; 
         m_dataPoints = GetDataPointsList(j);
     }
+
+    frc::SmartDashboard::PutBoolean("Interpolator Data/file read", readFile); 
 
 }
 
 void InterpolatorData::AddPoint(frc::Pose2d robotPose, frc::Pose2d targetPose, units::degree_t hoodAngle, double flywheelPower)
 {
-
     Vector2d robotToTarget(robotPose, targetPose); 
     double distance = robotToTarget.Length(); 
 
@@ -27,18 +30,18 @@ void InterpolatorData::RemoveLastPoint()
     {
         m_dataPoints.pop_back();
     }
-
 }
 
 void InterpolatorData::SaveToFile()
 {
 
-    json j = ReadFromFile();
-    std::vector<Shotpoint> savedDataPoints = GetDataPointsList(j);
-    savedDataPoints.insert(savedDataPoints.end(), std::begin(m_dataPoints), std::end(m_dataPoints));
-
+    // not actually needed 
+    // json j = ReadFromFile();
+    // std::vector<Shotpoint> savedDataPoints = GetDataPointsList(j);
+    // savedDataPoints.insert(savedDataPoints.end(), m_dataPoints.begin(), m_dataPoints.end()));
+    json j; 
     j["shots"] = json::array();
-    for (const auto& shot : savedDataPoints) {
+    for (const Shotpoint& shot : m_dataPoints) {
 
         json shotJson = shot.ToJson();
         j["shots"].push_back(shotJson);
@@ -54,7 +57,6 @@ void InterpolatorData::SaveToFile()
 }
 
 json InterpolatorData::ReadFromFile()
-
 {
     namespace fs = std::filesystem; 
 
@@ -65,6 +67,7 @@ json InterpolatorData::ReadFromFile()
             {"shots", json::array()}
         };
     }
+
     json j;
     file >> j;
 
@@ -74,13 +77,12 @@ json InterpolatorData::ReadFromFile()
     return j;
 }
 
-
 std::vector<Shotpoint> InterpolatorData::GetDataPointsList(json j)
 {
     std::vector<Shotpoint> shotpoints; 
 
     for (json shot : j["shots"]) {
-        shotpoints.push_back(Shotpoint::ToShotpoint(j)); 
+        shotpoints.push_back(Shotpoint::ToShotpoint(shot)); 
     }
 
     return shotpoints;

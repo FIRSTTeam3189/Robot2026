@@ -16,11 +16,11 @@ void SetShooterLoaderPower::Initialize() {
 }
 
 void SetShooterLoaderPower::Execute() {
-    m_loader->SetShooterLoaderMotorPower(m_power);
+    m_loader->SetLoaderMotorPower(m_power);
 }
 
 void SetShooterLoaderPower::End(bool interrupted) {
-    m_loader->SetShooterLoaderMotorPower(0.0);
+    m_loader->SetLoaderMotorPower(0.0);
 }
 
 bool SetShooterLoaderPower::IsFinished() {

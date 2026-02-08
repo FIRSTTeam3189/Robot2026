@@ -76,6 +76,7 @@ namespace CommandManager {
 
     frc2::CommandPtr SlowDownSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
     frc2::CommandPtr DefaultSwerveSpeed(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
+    frc2::CommandPtr ClimbAlignSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
 
     frc2::CommandPtr IntakePowerForward(Intake *Intake);
     frc2::CommandPtr IntakePowerReverse(Intake *Intake);
@@ -97,11 +98,11 @@ namespace CommandManager {
     frc2::CommandPtr RunLoaderBackward(Loader *loader);
     frc2::CommandPtr ResetLoader(Loader *loader);
 
-
     frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel);
       
     frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                           Flywheel *flywheel, Articulation *articulation); 
+    // frc2::CommandPtr RunFlywheelAndLoaderTest(Loader *loader, Flywheel *flywheel);
     frc2::CommandPtr SaveAllInterpolationPoints(InterpolatorData *interpolatorData);
     frc2::CommandPtr RemoveLastInterpolationPoint(InterpolatorData *interpolatorData);
 

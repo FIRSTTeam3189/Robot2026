@@ -47,6 +47,9 @@ namespace SwerveDriveConstants {
     // constexpr frc::Pose2d kBlueResetPose {7.572_m, 4.026_m, frc::Rotation2d{0.0_deg}};
     constexpr frc::Pose2d kRedResetPose {4.904_m, 6.1_m, frc::Rotation2d{0.0_deg}};
 
+    constexpr units::degree_t kClimbAlignRotBlue {90_deg};
+    constexpr units::degree_t kClimbAlignRotRed {-90_deg}; 
+
     constexpr units::hertz_t kRefreshRate = units::hertz_t {100};
 
     static frc::SwerveDriveKinematics<4> kKinematics {

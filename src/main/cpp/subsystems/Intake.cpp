@@ -24,7 +24,7 @@ void Intake::ConfigRollerMotor() {
 
     
     m_intakeRollerMotor.GetConfigurator().Apply(m_intakeConfig);
-    // m_shooterTurretMotor.SetPosition(0.0_tr);
+    // m_turretMotor.SetPosition(0.0_tr);
 }
 
 

@@ -42,7 +42,7 @@ class Turret : public frc2::SubsystemBase {
   frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction);
 
   // PUBLIC control methods (commands call these)
-  void SetShooterRotationMotorPower(double power);
+  void SetTurretRotationMotorPower(double power);
 
   enum class BrakeMode { Brake, Coast, Default };
   void SetRotationBrakeMode(BrakeMode mode);
@@ -71,7 +71,7 @@ class Turret : public frc2::SubsystemBase {
   
   private:
   // HARDWARE (subsystem owns motors)
-  ctre::phoenix6::hardware::TalonFX m_shooterTurretMotor;
+  ctre::phoenix6::hardware::TalonFX m_turretMotor;
   
   // CONFIG
   ctre::phoenix6::configs::TalonFXConfiguration m_shooterConfig {};
@@ -100,10 +100,10 @@ class Turret : public frc2::SubsystemBase {
   LinearInterpolator *m_powerInterpolator; 
   Articulation *m_articulation; 
  
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_shooterTurretMotor.GetPosition();
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_shooterTurretMotor.GetVelocity();
+  ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_turretMotor.GetPosition();
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_turretMotor.GetVelocity();
   std::vector<ctre::phoenix6::BaseStatusSignal*> m_allSignals;
 
-  void ConfigShooter();
+  void ConfigTurret();
 };
 

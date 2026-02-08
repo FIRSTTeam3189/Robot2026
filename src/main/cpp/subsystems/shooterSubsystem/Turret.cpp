@@ -6,7 +6,7 @@
 
 Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
   : 
-    m_shooterTurretMotor(TurretConstants::kShooterRotationID, "Swerve"),
+    m_turretMotor(TurretConstants::kShooterRotationID, "Swerve"),
     m_shooterConfig(),
     m_swerveDrive(swerveDrive),
     m_state(TurretTarget::PointStraight),
@@ -16,7 +16,7 @@ Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
     m_powerInterpolator(new LinearInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers)),
     m_articulation(articulation) 
 {
-    ConfigShooter();
+    ConfigTurret();
     ConfigPID();
     
     m_allSignals.emplace_back(&m_rotationAngle);
@@ -40,22 +40,16 @@ void Turret::Periodic() {
     SetTurretAngle(m_targetRotationAngle);
 }
 
-
-
 units::degree_t Turret::GetCurrentTargetAngle() {
     return m_targetRotationAngle;
 }
-
-
 
 void Turret::RefreshAllSignals() {
     frc::SmartDashboard::PutString("Turret signal status", ctre::phoenix6::BaseStatusSignal::WaitForAll(0.02_s, m_allSignals).GetName());
 }
 
-
-
-void Turret::ConfigShooter() {
-    m_shooterTurretMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
+void Turret::ConfigTurret() {
+    m_turretMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
 
     m_shooterConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = TurretConstants::kSoftLimitEnabledForward;
     m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = TurretConstants::kSoftLimitEnabledReverse;
@@ -83,10 +77,10 @@ void Turret::ConfigShooter() {
     m_shooterConfig.MotionMagic.MotionMagicCruiseVelocity = TurretConstants::kMotionMagicMaxVelocity;
     m_shooterConfig.MotionMagic.MotionMagicAcceleration = TurretConstants::kMotionMagicMaxAcceleration;
     m_shooterConfig.MotionMagic.MotionMagicJerk = TurretConstants::kMotionMagicMaxJerk;
-
-    
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
-    // m_shooterTurretMotor.SetPosition(0.0_tr);
+        
+         
+    m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
+    // m_turretMotor.SetPosition(0.0_tr);
 }
 
 
@@ -121,13 +115,13 @@ void Turret::UpdatePreferences() {
     // m_rampRate = frc2::sysid::ramp_rate_t{frc::Preferences::GetDouble("ramprate", frc2::sysid::ramp_rate_t{0.0})};
     m_targetRotationAngle = units::degree_t{frc::Preferences::GetDouble(m_rotationTargetKey, m_targetRotationAngle.value())};
 
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+    m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
 }
 
 void Turret::OverrideSoftLimits(bool isEnabled) {
     m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = isEnabled;
     frc::SmartDashboard::PutBoolean("Turret soft limit enabled: ", isEnabled);
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+    m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
 }
 
 
@@ -156,13 +150,13 @@ void Turret::SetState(TurretTarget state) {
             m_targetPower = 0.0;
             break;
         }
-        case (TurretTarget::PointFerryLeft): {
-            m_targetRotationAngle = AutoAlignConstants::FerryAngleLeft;
+        case (TurretTarget::Point45Deg): {
+            m_targetRotationAngle = AutoAlignConstants::TurretAngleLeft;
             m_targetPower = 0.0;
             break;  
         }     
-        case (TurretTarget::PointFerryRight): {
-            m_targetRotationAngle = AutoAlignConstants::FerryAngleRight;
+        case (TurretTarget::Point135Deg): {
+            m_targetRotationAngle = AutoAlignConstants::TurretAngleRight;
             m_targetPower = 0.0;
             break;
         }   
@@ -178,9 +172,9 @@ void Turret::SetTurretAngle(units::degree_t angle) {
     ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
 
     if ((m_state == TurretTarget::PointStraight) && ((m_currentRotationAngle.value() < 90.05) && (m_currentRotationAngle.value() > 89.95))) {
-        m_shooterTurretMotor.Set(0);
+        m_turretMotor.Set(0);
     } else {
-        m_shooterTurretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
+        m_turretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
             TurretConstants::kRotationConversionRotationsToDegrees}));
     }
 }
@@ -197,8 +191,8 @@ units::degree_t Turret::GetTurretAngle() {
     return units::degree_t{encoderValueDouble};
 }
 
-void Turret::SetShooterRotationMotorPower(double power) {
-    m_shooterTurretMotor.Set(power);
+void Turret::SetTurretRotationMotorPower(double power) {
+    m_turretMotor.Set(power);
 }
 
 
@@ -220,7 +214,7 @@ void Turret::SetRotationBrakeMode(Turret::BrakeMode mode) {
             break;
     }
 
-    m_shooterTurretMotor.GetConfigurator().Apply(m_shooterConfig);
+    m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
 }
 
 

@@ -34,11 +34,11 @@ double Flywheel::GetFlywheelTargetPower() {
     return m_targetPower; 
 }
 
-
-void Flywheel::SetFlyWheelPowerTest() {
+void Flywheel::SetFlywheelMotorPower(double power) {
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", m_targetPower); 
+    m_flywheelMotor.Set(power);
 }
 
-void Flywheel::SetShooterFlywheelMotorPower(double power) {
-    // m_flywheelMotor.Set(power);
+void Flywheel::SetFlywheelMotorPower() {
+    SetFlywheelMotorPower(m_targetPower); 
 }

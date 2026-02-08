@@ -14,8 +14,8 @@
 enum class TurretTarget {
     AlignHub,
     PointStraight,
-    PointFerryLeft,
-    PointFerryRight,
+    Point45Deg,
+    Point135Deg,
 };
 
 //Turret Constants
@@ -42,6 +42,8 @@ namespace TurretConstants {
     constexpr double kShooterGearRatio {1.0};
     constexpr double kRotationConversionRotationsToDegrees {1.0/0.3571428571 * 2};
     // constexpr double kRotationConversionRotationsToDegrees {4.0};
+    
+    //constexpr double kRotationConversionRotationsToDegrees {(1/(((264/48) * (5)) / 360))}
 
     // constexpr double kRotationConversionDegreesToRotations {1.0 / kRotationConversionRotationsToDegrees};
     constexpr double kShooterPower {1.0};

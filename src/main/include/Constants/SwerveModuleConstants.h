@@ -10,12 +10,14 @@
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
 
+#include "Constants/SwerveModuleConstants.h"
+
 #define PI 3.14159265358979323846
 
                                                                                                            
-// #define SWERVEMODULECONSTANTS2025
+#define ROBOTCONSTANTS2025
 
-#ifdef SWERVEMODULECONSTANTS2025
+#ifdef ROBOTCONSTANTS2025
 // 2025
     inline namespace SwerveModuleConstants {
         // Sensor IDs for motors + encoders - labeled on robot

@@ -7,24 +7,24 @@
 
 
 Loader::Loader() :
-    m_ShooterLoaderMotor(LoaderConstants::kShooterLoaderID),
+    m_loaderMotor(LoaderConstants::kShooterLoaderID),
 
-    m_shooterLoaderConfig(){
+    m_loaderConfig(){
         ConfigLoaderMotor();
     }
 
 void Loader::ConfigLoaderMotor() {
-    m_ShooterLoaderMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
+    m_loaderMotor.GetConfigurator().Apply(ctre::phoenix6::configs::TalonFXConfiguration({}));
 
-    m_shooterLoaderConfig.MotorOutput.Inverted = LoaderConstants::kLoaderMotorInverted;
-    m_shooterLoaderConfig.MotorOutput.NeutralMode = LoaderConstants::kLoaderNeutralMode;
+    m_loaderConfig.MotorOutput.Inverted = LoaderConstants::kLoaderMotorInverted;
+    m_loaderConfig.MotorOutput.NeutralMode = LoaderConstants::kLoaderNeutralMode;
 
-    m_ShooterLoaderMotor.GetConfigurator().Apply(m_shooterLoaderConfig);
+    m_loaderMotor.GetConfigurator().Apply(m_loaderConfig);
 }
 
-void Loader::SetShooterLoaderMotorPower(double power) {
+void Loader::SetLoaderMotorPower(double power) {
     frc::SmartDashboard::PutNumber("Test Bindings/loaderPower", power); 
-    m_ShooterLoaderMotor.Set(power);
+    m_loaderMotor.Set(power);
 }
 
 

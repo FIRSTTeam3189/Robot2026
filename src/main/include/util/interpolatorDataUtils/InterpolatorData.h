@@ -5,6 +5,8 @@
 #include <vector>
 #include <filesystem>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "util/interpolatorDataUtils/Shotpoint.h"
 #include "util/Vector2d.h"
 
@@ -14,7 +16,7 @@ class InterpolatorData {
 
     public:
 
-        explicit InterpolatorData(const std::string& file);
+        explicit InterpolatorData(const std::string& filename);
 
         void AddPoint(frc::Pose2d robotPose, frc::Pose2d targetPose, units::degree_t hoodAngle, double flywheelPower);
 
