@@ -163,6 +163,24 @@ void RobotContainer::ConfigureTestBindings() {
 
   frc2::Trigger climbButton([this]() { return m_test.GetTriangleButton(); });
   climbButton.OnTrue(CommandManager::Climb(m_climber, m_intake));
+
+  frc2::Trigger startSignalButton([this]() { return m_test.GetSquareButton();});
+  startSignalButton.OnTrue(CommandManager::StartSignals());
+
+  frc2::Trigger stopSignalButton([this]() { return m_test.GetCrossButton(); });
+  stopSignalButton.OnTrue(CommandManager::StopSignals());
+
+  frc2::Trigger quasistaticForwardButton([this]() { return m_test.GetL1Button(); });
+  quasistaticForwardButton.OnTrue(CommandManager::QuasistaticForward(m_turret));
+
+  frc2::Trigger quasistaticReverseButton([this]() { return m_test.GetR1Button(); });
+  quasistaticForwardButton.OnTrue(CommandManager::QuasistaticReverse(m_turret));
+
+  frc2::Trigger dynamicForwardButton([this]() { return m_test.GetL2Button(); });
+  dynamicForwardButton.OnTrue(CommandManager::DynamicForward(m_turret));
+
+  frc2::Trigger dynamicReverseButton([this]() { return m_test.GetR2Button(); });
+  dynamicReverseButton.OnTrue(CommandManager::DynamicReverse(m_turret));
 }
 
 Turret* RobotContainer::GetShooterSubsystem() {
