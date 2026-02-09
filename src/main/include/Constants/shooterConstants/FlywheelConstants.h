@@ -14,12 +14,12 @@
 
 //Turret Constants
 namespace FlywheelConstants {
-    constexpr int kShooterFlywheelID{18};
+    constexpr int kShooterFlywheelID{21};
 
     constexpr double kFlyWheelPowerIncrement {0.05}; 
     constexpr double kFlyWheelPowerDecrement {-0.05}; 
 
-    constexpr units::second_t kFlywheelRunDelay {4.0_s}; 
+    constexpr units::second_t kFlywheelRunDelay {2.0_s}; 
     
     constexpr bool kFlywheelMotorInverted {true};
     constexpr ctre::phoenix6::signals::NeutralModeValue kFlywheelNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Coast};

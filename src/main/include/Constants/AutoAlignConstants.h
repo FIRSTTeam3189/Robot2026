@@ -77,8 +77,6 @@ namespace AutoAlignConstants {
     constexpr units::degree_t kHoodMaximumAngle{50_deg};
 
     constexpr units::meter_t kHubWidth {1.2_m}; 
-
-
-
+    
     
 }

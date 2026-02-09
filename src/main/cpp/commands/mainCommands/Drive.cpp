@@ -41,7 +41,7 @@ void Drive::Execute(){
   }
 
   bool fieldRelative = true;
-  double joystickX = 0.0, joystickY = 0.0;
+  triple joystickX = 0.0, joystickY = 0.0;
   m_allianceSide = frc::DriverStation::GetAlliance();
 
    if (m_allianceSide) {
@@ -69,7 +69,7 @@ void Drive::Execute(){
   // frc::SmartDashboard::PutNumber("Y speed", ySpeed.value());
   units::radians_per_second_t rot;
 
-   // For now, just heading control, but added switch statement in case of new additions
+   // For now, just heading control, but added switch statement in case of new additions                                                                              
    switch (m_driveState) {
     case(DriveState::HeadingControl) :
       rot = GetDesiredRotationalVelocity();

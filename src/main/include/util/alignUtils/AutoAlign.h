@@ -27,7 +27,7 @@ Pathfinding to pose to go there
 
 TODO: REV UP MOTOR
 
-Flow: Hold trigger -> aligns + ramps up (the shooter motor command internally should check RPM and run loader command when ready)
+Flow: Hold trigger -> aligns + ramps up (the shooter motor command internally should check RPM and run Kicker command when ready)
 
 */
 

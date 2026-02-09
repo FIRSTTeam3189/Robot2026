@@ -20,10 +20,7 @@ enum class TurretTarget {
 
 //Turret Constants
 namespace TurretConstants {
-    constexpr int kShooterFlywheelID{18};
-    constexpr int kShooterLoaderID{21};
-    constexpr int kShooterRotationID{20};
-    constexpr int kRotationEncoderID{35};
+    constexpr int kShooterRotationID{24};
 
     constexpr double kRotationAngleTolerance {1.0};
 
@@ -33,21 +30,18 @@ namespace TurretConstants {
     constexpr units::turn_t kBottomSoftLimit {0.0_tr}; 
     constexpr units::turn_t kRotationOffset {0.0_tr};
 
-    //default values for flywheel, use SysId to get real values
-    constexpr auto kFlywheelKv = 0.023_V / 1_rad_per_s; 
-    constexpr auto kFlywheelKa = 0.001_V / 1_rad_per_s_sq;
-    constexpr double kFlywheelQelms = 8.0; // qelms. Velocity error tolerance, in radians per second. Decrease this to more heavily penalize state excursion, or make the controller behave more aggressively.
-    constexpr double kFlywheelRelms = 12.0; // relms. Control effort (voltage) tolerance. Decrease this to more heavily penalize control effort, or make the controller less aggressive. 12 is a good starting point because that is the (approximate) maximum voltage of a battery.
-
     constexpr double kShooterGearRatio {1.0};
+
     constexpr double kRotationConversionRotationsToDegrees {1.0/0.3571428571 * 2};
+
+    //! for v1
     // constexpr double kRotationConversionRotationsToDegrees {4.0};
+    
     
     //constexpr double kRotationConversionRotationsToDegrees {(1/(((264/48) * (5)) / 360))}
 
     // constexpr double kRotationConversionDegreesToRotations {1.0 / kRotationConversionRotationsToDegrees};
-    constexpr double kShooterPower {1.0};
-    constexpr double kResetShooterPower {-1.0};
+
 
     constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
     constexpr double kVRotation {0.15}; // Volts applied per meter per second
@@ -68,5 +62,4 @@ namespace TurretConstants {
     constexpr bool kRotationMotorInverted {true};
     constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 
-    constexpr double kShooterRotationalGearRatio {0.0};
 }

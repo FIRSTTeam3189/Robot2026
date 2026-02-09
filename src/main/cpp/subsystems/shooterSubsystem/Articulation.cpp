@@ -33,7 +33,8 @@ void Articulation::Periodic() {
         UpdatePreferences();
     }
 
-    // SetArticulationAngle(m_targetArticulationAngle);
+    units::degree_t clampedTargetArticulationAngle = std::clamp(m_targetArticulationAngle, ArticulationConstants::kHoodStationaryAngle, (ArticulationConstants::kHoodMaxAngle - 5.0_deg));
+    SetArticulationAngle(clampedTargetArticulationAngle);
 }
 
 void Articulation::ConfigArticulation(){
@@ -141,11 +142,21 @@ void Articulation::SetState(ArticulationTarget state) {
             m_targetArticulationAngle = units::degree_t{AutoAlignConstants::kBlueArticulationAngles[index]};
 
             break;
-
+        }
+        case(ArticulationTarget::Degrees20): {
+            m_targetArticulationAngle = 20.0_deg; 
+            break;
+        }
+        case(ArticulationTarget::Degrees30): {
+            m_targetArticulationAngle = 30.0_deg; 
+            break;
+        }
+        case(ArticulationTarget::Degrees40): {
+            m_targetArticulationAngle = 40.0_deg; 
+            break;
         }
         default: {
             m_targetArticulationAngle = ArticulationConstants::kHoodStationaryAngle;
-
         }
     }
 }

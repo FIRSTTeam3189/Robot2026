@@ -11,13 +11,22 @@
 #include <units/angular_velocity.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkClosedLoopController.h>
+
 //Turret Constants
 namespace LoaderConstants {
-    constexpr int kShooterLoaderID{21};
+    constexpr int kLoaderID{23};
 
-    constexpr double kLoaderMotorPower {0.75}; 
+    constexpr int kLoaderCurrentLimit {45};
+
+    constexpr double kLoadFuelPower {0.75}; 
+    constexpr double kReverseRollerPower {-0.5};
 
     constexpr bool kLoaderMotorInverted {true};
-    constexpr ctre::phoenix6::signals::NeutralModeValue kLoaderNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 
+    constexpr units::second_t kLoaderDelay {0.5_s}; 
+    
+    constexpr rev::spark::SparkBaseConfig::IdleMode kRotationNeutralMode {rev::spark::SparkBaseConfig::IdleMode::kBrake};
 }

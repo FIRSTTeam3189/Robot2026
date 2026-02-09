@@ -21,7 +21,7 @@
 
 #include "commands/mainCommands/Drive.h"
 #include "commands/utilCommands/SetFlywheelMotorPower.h"
-#include "commands/utilCommands/SetShooterLoaderPower.h"
+#include "commands/utilCommands/SetShooterKickerPower.h"
 #include "commands/utilCommands/SetShooterRotationPower.h"
 #include "commands/utilCommands/SetTurretAngle.h"
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
@@ -38,8 +38,9 @@
 #include "subsystems/PhotonVision.h"
 #include "subsystems/Intake.h"
 #include "subsystems/shooterSubsystem/Articulation.h"
-#include "subsystems/shooterSubsystem/Loader.h"
+#include "subsystems/shooterSubsystem/Kicker.h"
 #include "subsystems/shooterSubsystem/Flywheel.h"
+#include "subsystems/shooterSubsystem/Loader.h"
 
 
 
@@ -50,6 +51,7 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/shooterConstants/TurretConstants.h"
 #include "Constants/shooterConstants/ArticulationConstants.h"
+#include "Constants/shooterConstants/KickerConstants.h"
 #include "Constants/InterpolatorConstants.h"
 #include "Constants/VisionConstants.h"
 
@@ -100,9 +102,10 @@ class RobotContainer {
   SwerveDrive *m_swerveDrive = new SwerveDrive(m_poseEstimator);
   
   Loader *m_loader = new Loader(); 
-  Flywheel *m_flywheel = new Flywheel(); 
+  Kicker *m_kicker = new Kicker(); 
   Articulation *m_articulation = new Articulation(m_swerveDrive);
-  Turret *m_turret = new Turret(m_swerveDrive, m_articulation);
+  Turret *m_turret = new Turret(m_swerveDrive);
+  Flywheel *m_flywheel = new Flywheel(m_articulation); 
 
   PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonCamera3, 

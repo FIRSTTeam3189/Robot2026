@@ -18,13 +18,16 @@ enum ArticulationTarget {
     AligntoHub,
     Stationary,
     Manual,
-    FixedAlign
+    FixedAlign,
+    Degrees20,
+    Degrees30,
+    Degrees40
 }; 
 //Articulation Constants
 
 namespace ArticulationConstants {
 
-    constexpr int kArticulationMotorID{45};
+    constexpr int kArticulationMotorID{20};
 
     constexpr double kRotationAngleTolerance {1.0};
     constexpr bool kSoftLimitEnabledForward{false};
@@ -51,10 +54,10 @@ namespace ArticulationConstants {
     constexpr double kResetShooterPower {-1.0};
 
 
-    constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.15}; // Volts applied per meter per second
+    constexpr double kSRotation {0.02}; // Static voltage applied to overcome friction
+    constexpr double kVRotation {0.085}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {0.7}; // Volts applied per meter error    
+    constexpr double kPRotation {0.2}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 

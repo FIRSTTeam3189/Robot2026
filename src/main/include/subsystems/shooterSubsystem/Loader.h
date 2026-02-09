@@ -4,15 +4,22 @@
 
 #pragma once
 
+
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/phoenix6/TalonFX.hpp>
-#include "Constants/shooterConstants/LoaderConstants.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+
+#include "Constants/shooterConstants/LoaderConstants.h"
+
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkClosedLoopController.h>
+
 
 
 class Loader : public frc2::SubsystemBase {
  public:
   Loader();
+
   void SetLoaderMotorPower(double power);
 
   /**
@@ -23,9 +30,8 @@ class Loader : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  ctre::phoenix6::hardware::TalonFX m_loaderMotor;
-
-  ctre::phoenix6::configs::TalonFXConfiguration m_loaderConfig {};
+  rev::spark::SparkMax m_loaderMotor;
+  rev::spark::SparkMaxConfig m_loaderConfig {};
 
   void ConfigLoaderMotor();
 

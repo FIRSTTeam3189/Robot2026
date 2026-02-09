@@ -53,15 +53,40 @@ namespace TurretAlign {
         double robotRotation = robotPose.Rotation().Degrees().value(); 
         Vector2d robotHeading(robotRotation); // assuming robot Heading = turret default Heading 
 
+        // Calculate the offset of the turret based on the robot's heading 
+        // Effectively set the length of the turretOffsetWithHeading to the magnitude of the turretOffset 
+        Vector2d turretOffsetWithHeading = robotHeading.Normalize() * turretOffset.Length();;
+
         // Get the poses as vectors 
-        Vector2d turretVec = Vector2d(robotPose) + turretOffset; 
+        Vector2d turretVec = Vector2d(robotPose) + turretOffsetWithHeading; 
         Vector2d targetVec(targetPose); 
 
         Vector2d turretToTarget = targetVec - turretVec; 
 
         double errorAngle = turretToTarget.SignedAngle(robotHeading);
 
-        double targetAngle = std::clamp(errorAngle + 90, 0.0, 180.0);
+        frc::SmartDashboard::PutNumber("Turret Align/error", errorAngle); 
+
+        double targetAngle = std::clamp(errorAngle + 90, -90.0, 270.0);
+        
+        if (targetAngle < 0) {
+            targetAngle += 360; 
+        }
+
+        frc::SmartDashboard::PutNumber("Turret Align/before adjusting", targetAngle); 
+        // check if the targetAngle is within an unreachable range of angles, 225-315 exclusive
+        if (targetAngle > 225.0 && targetAngle < 315.0) {
+            // check if the targetAngle is closer to 225 than 270 
+            if (std::abs(targetAngle - 225.0) < std::abs(targetAngle - 315.0)) {
+                targetAngle = 225.0; 
+            } else {
+                targetAngle = -45.0; 
+            }
+        } else if (targetAngle >= 315.0) {
+            targetAngle = targetAngle - 360; 
+        }
+        frc::SmartDashboard::PutNumber("Turret Align/after adjusting", targetAngle); 
+
 
         frc::Pose2d endTargetPose = frc::Pose2d{units::meter_t{turretToTarget.x} + robotPose.X(), units::meter_t{turretToTarget.y} + robotPose.Y(), 
             frc::Rotation2d(0.0_deg)};

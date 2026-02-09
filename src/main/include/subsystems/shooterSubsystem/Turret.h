@@ -21,13 +21,10 @@
 #include <ctre/phoenix6/StatusSignal.hpp>
 
 #include "subsystems/SwerveDrive.h"
-#include "subsystems/shooterSubsystem/Articulation.h"
-
 
 #include "Constants/shooterConstants/TurretConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
-#include "util/LinearInterpolator.h"
 #include "util/alignUtils/TurretAlign.h"
 
 #include <algorithm>
@@ -35,7 +32,7 @@
 
 class Turret : public frc2::SubsystemBase {
  public:
-  Turret(SwerveDrive* swerveDrive, Articulation* articulation);
+  Turret(SwerveDrive* swerveDrive);
 
   // SysId helpers (return commands that run the SysId routines)
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
@@ -66,8 +63,6 @@ class Turret : public frc2::SubsystemBase {
   void SetState(TurretTarget state);
 
   Vector2d GetRobotVelocity(); 
-
-  ~Turret(); 
   
   private:
   // HARDWARE (subsystem owns motors)
@@ -97,8 +92,6 @@ class Turret : public frc2::SubsystemBase {
   units::degree_t m_currentRotationAngle;
 
   double m_targetPower;
-  LinearInterpolator *m_powerInterpolator; 
-  Articulation *m_articulation; 
  
   ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_turretMotor.GetPosition();
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_turretMotor.GetVelocity();

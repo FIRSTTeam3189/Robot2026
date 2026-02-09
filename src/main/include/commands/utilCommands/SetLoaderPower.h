@@ -4,24 +4,36 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
-#include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
+#include <frc2/command/CommandHelper.h>
+
 #include "subsystems/shooterSubsystem/Loader.h"
 
-class SetShooterLoaderPower : public frc2::CommandHelper<frc2::Command, SetShooterLoaderPower> {
+/**
+ * An example command.
+ *
+ * <p>Note that this extends CommandHelper, rather extending Command
+ * directly; this is crucially important, or else the decorator functions in
+ * Command will *not* work!
+ */
+class SetLoaderPower
+    : public frc2::CommandHelper<frc2::Command, SetLoaderPower> {
  public:
-  explicit SetShooterLoaderPower(Loader* loader, double power);
-
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
+      explicit SetLoaderPower(Loader* loader, double power);
+  /* You should consider using the more terse Command factories API instead
+   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
+
   void Initialize() override;
+
   void Execute() override;
+
   void End(bool interrupted) override;
+
   bool IsFinished() override;
 
- private:
+
+private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   Loader* m_loader;

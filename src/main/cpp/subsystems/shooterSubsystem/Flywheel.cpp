@@ -4,8 +4,10 @@
 
 #include "subsystems/shooterSubsystem/Flywheel.h"
 
-Flywheel::Flywheel() 
+Flywheel::Flywheel(Articulation *articulation) 
   : 
+    m_articulation(articulation),
+    m_powerInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers),
     m_flywheelMotor(FlywheelConstants::kShooterFlywheelID, "Swerve"),
     m_flywheelConfig(),
     m_targetPower()
@@ -14,8 +16,12 @@ Flywheel::Flywheel()
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
 
-    frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower); 
+    double hoodAngle = m_articulation->GetTargetAngle().value(); 
+    m_targetPower = m_powerInterpolator.Predict(hoodAngle); 
 
+    frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
+    
 }
 
 

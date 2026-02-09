@@ -63,13 +63,14 @@ namespace CommandManager {
   
   frc2::CommandPtr ClimbAlignSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill) {
     return frc2::InstantCommand([swerveDrive, driveState, bill]{
-      if swerveDrive
-      *driveState = DriveState::ClimbAlign; 
+      if(*driveState == DriveState::ClimbAlign){
+        *driveState = DriveState::HeadingControl;
+      } else {
+        *driveState = DriveState::ClimbAlign; 
+      }
       swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
     },{swerveDrive}).ToPtr();
-
   }
-
 
   frc2::CommandPtr IntakePowerForward(Intake *intake){
     return SetIntakeRollerMotor(intake, IntakeConstants::kRollerIntakePower).ToPtr();
@@ -130,46 +131,40 @@ namespace CommandManager {
     ).ToPtr();
   }
 
-
-  frc2::CommandPtr RunLoaderForward(Loader *loader) {
-    return SetShooterLoaderPower(loader, 0.4).ToPtr();
+  
+  frc2::CommandPtr RunKickerForward(Kicker *kicker) {
+    return SetShooterKickerPower(kicker, 0.4).ToPtr();
   }
 
-  frc2::CommandPtr RunLoaderBackward(Loader *loader) {
-    return SetShooterLoaderPower(loader, -0.4).ToPtr();
+  frc2::CommandPtr RunKickerBackward(Kicker *kicker) {
+    return SetShooterKickerPower(kicker, -0.4).ToPtr();
   }
 
-  frc2::CommandPtr ResetLoader(Loader *loader) {
-    return SetShooterLoaderPower(loader, 0.0).ToPtr();
+  frc2::CommandPtr ResetKicker(Kicker *kicker) {
+    return SetShooterKickerPower(kicker, 0.0).ToPtr();
   }
 
-  frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel) {
-    return frc2::ParallelCommandGroup(
-      frc2::InstantCommand([flywheel]() { // startup flywheel with applied power 
-        flywheel->SetFlywheelMotorPower(); 
-      }, {flywheel}),
-      frc2::SequentialCommandGroup(
-        frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay), // wait for flywheel 
-        frc2::InstantCommand([loader]() {
-          loader->SetLoaderMotorPower(LoaderConstants::kLoaderMotorPower); // run loader 
-        }, {loader})
-      )
-    ).ToPtr(); 
+  frc2::CommandPtr Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation) {
+    return frc2::SequentialCommandGroup(
+      SetArticulationAngle(articulation, ArticulationTarget::Degrees30),
+      frc2::ParallelDeadlineGroup(
+          frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay),
+          SetFlywheelMotorPower(flywheel, 0.4)
+        ),
+      SetLoaderPower(loader, LoaderConstants::kLoadFuelPower),
+      SetShooterKickerPower(kicker, KickerConstants::kKickerMotorPower)
+    ).ToPtr();
   }
+    
 
-  // frc2::CommandPtr RunFlywheelAndLoaderTest(Loader *loader, Flywheel *flywheel) {
-  //   return frc2::ParallelCommandGroup(
-  //     frc2::InstantCommand([flywheel]() { // startup flywheel with applied power 
-  //       flywheel->SetFlywheelMotorPower(); 
-  //     }, {flywheel}),
-  //     frc2::SequentialCommandGroup(
-  //       frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay), // wait for flywheel 
-  //       frc2::InstantCommand([loader]() {
-  //         loader->SetLoaderMotorPower(LoaderConstants::kLoaderMotorPower); // run loader 
-  //       }, {loader})
-  //     )
-  //   ).ToPtr(); 
-  // }
+  frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation) {
+    return frc2::SequentialCommandGroup(
+      SetFlywheelMotorPower(flywheel, 0.0), 
+      SetLoaderPower(loader, 0.0),
+      SetArticulationAngle(articulation, ArticulationTarget::Stationary),
+      SetShooterKickerPower(kicker, 0.0)
+    ).ToPtr();
+  }
 
   frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                         Flywheel *flywheel, Articulation *articulation) {
@@ -192,7 +187,6 @@ namespace CommandManager {
     }).ToPtr(); 
   }
 
-
   frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints) {
     return frc2::cmd::RunOnce([swerveDrive, constraints](){
       frc2::CommandScheduler::GetInstance().Schedule(AutoAlign::AutoAlignToPose(swerveDrive, constraints));
@@ -209,7 +203,5 @@ namespace CommandManager {
   //   frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL2Button(); });
   // extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, 0.8).ToPtr()); // 0.8 when set, nothign when retract
   // extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr()); 
-
-
 
 };

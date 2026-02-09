@@ -19,7 +19,8 @@
 
 #include "commands/mainCommands/Drive.h"
 #include "commands/utilCommands/SetFlywheelMotorPower.h"
-#include "commands/utilCommands/SetShooterLoaderPower.h"
+#include "commands/utilCommands/SetLoaderPower.h"
+#include "commands/utilCommands/SetShooterKickerPower.h"
 #include "commands/utilCommands/SetShooterRotationPower.h"
 #include "commands/utilCommands/SetTurretAngle.h"
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
@@ -32,12 +33,14 @@
 #include "util/interpolatorDataUtils/InterpolatorData.h"
 
 #include "subsystems/PoseEstimatorHelper.h"
-#include "subsystems/shooterSubsystem/Turret.h"
 #include "subsystems/PhotonVision.h"
 #include "subsystems/Intake.h"
 #include "subsystems/shooterSubsystem/Articulation.h"
-#include "subsystems/shooterSubsystem/Loader.h"
+#include "subsystems/shooterSubsystem/Turret.h"
+#include "subsystems/shooterSubsystem/Kicker.h"
 #include "subsystems/shooterSubsystem/Flywheel.h"
+#include "subsystems/shooterSubsystem/Loader.h"
+
 
 
 
@@ -48,6 +51,8 @@
 #include "Constants/SwerveDriveConstants.h"
 #include "Constants/shooterConstants/TurretConstants.h"
 #include "Constants/shooterConstants/ArticulationConstants.h"
+#include "Constants/shooterConstants/LoaderConstants.h"
+#include "Constants/shooterConstants/KickerConstants.h"
 #include "Constants/InterpolatorConstants.h"
 #include "Constants/VisionConstants.h"
 
@@ -56,8 +61,6 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/util/PathPlannerLogging.h>
-
-
 
 
 namespace CommandManager {
@@ -94,15 +97,16 @@ namespace CommandManager {
 
     frc2::CommandPtr SetTurretAndArticulationManual(Articulation *articulation, Turret *turret); 
 
-    frc2::CommandPtr RunLoaderForward(Loader *loader);
-    frc2::CommandPtr RunLoaderBackward(Loader *loader);
-    frc2::CommandPtr ResetLoader(Loader *loader);
+    frc2::CommandPtr RunKickerForward(Kicker *Kicker);
+    frc2::CommandPtr RunKickerBackward(Kicker *Kicker);
+    frc2::CommandPtr ResetKicker(Kicker *Kicker);
 
-    frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel);
+    frc2::CommandPtr Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
+    frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
       
     frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                           Flywheel *flywheel, Articulation *articulation); 
-    // frc2::CommandPtr RunFlywheelAndLoaderTest(Loader *loader, Flywheel *flywheel);
+    // frc2::CommandPtr RunFlywheelAndLoaderTest(Kicker *Kicker, Flywheel *flywheel);
     frc2::CommandPtr SaveAllInterpolationPoints(InterpolatorData *interpolatorData);
     frc2::CommandPtr RemoveLastInterpolationPoint(InterpolatorData *interpolatorData);
 

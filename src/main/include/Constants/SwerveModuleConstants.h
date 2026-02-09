@@ -9,6 +9,7 @@
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
+#include "Constants/GlobalConstants.h"
 
 #include "Constants/SwerveModuleConstants.h"
 
@@ -16,7 +17,6 @@
 
                                                                                                            
 #define ROBOTCONSTANTS2025
-
 #ifdef ROBOTCONSTANTS2025
 // 2025
     inline namespace SwerveModuleConstants {

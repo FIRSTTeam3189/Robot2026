@@ -4,7 +4,7 @@
 
 #include "subsystems/shooterSubsystem/Turret.h"
 
-Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
+Turret::Turret(SwerveDrive* swerveDrive)
   : 
     m_turretMotor(TurretConstants::kShooterRotationID, "Swerve"),
     m_shooterConfig(),
@@ -12,9 +12,7 @@ Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
     m_state(TurretTarget::PointStraight),
     m_turretField(),
     m_targetField(),
-    m_velocityField(),
-    m_powerInterpolator(new LinearInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers)),
-    m_articulation(articulation) 
+    m_velocityField()
 {
     ConfigTurret();
     ConfigPID();
@@ -134,11 +132,6 @@ void Turret::SetState(TurretTarget state) {
             frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
             frc::Pose2d targetPose = TurretAlign::CalculateTargetPose(currentPose);
 
-            double hoodAngle = m_articulation->GetTargetAngle().value(); 
-            m_targetPower = m_powerInterpolator->Predict(hoodAngle); 
-
-            frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
-
             targetPose = TurretAlign::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), m_targetField); 
 
             m_targetRotationAngle = units::degree_t{TurretAlign::GetTargetAngle(currentPose, targetPose, AutoAlignConstants::kTurretOffset,
@@ -169,6 +162,7 @@ void Turret::SetState(TurretTarget state) {
 }
 
 void Turret::SetTurretAngle(units::degree_t angle) {
+    // double angleDouble = angle.value() + 45; // from -45 to 225 to 0 to 270 
     ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
 
     if ((m_state == TurretTarget::PointStraight) && ((m_currentRotationAngle.value() < 90.05) && (m_currentRotationAngle.value() > 89.95))) {
@@ -234,10 +228,4 @@ Vector2d Turret::GetRobotVelocity() {
 
     
     return {fieldRelativeSpeeds.vx.value(), fieldRelativeSpeeds.vy.value()}; 
-}
-
-
-
-Turret::~Turret() {
-    delete m_powerInterpolator;
 }
