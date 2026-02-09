@@ -4,19 +4,22 @@
 
 #include "commands/mainCommands/SetIntakeAngleAndPower.h"
 
-SetIntakeAngleAndPower::SetIntakeAngleAndPower(Intake *intake, double power) :
-m_intake(intake), m_power(power) {
-  AddRequirements(intake);
+SetIntakeAngleAndPower::SetIntakeAngleAndPower(Intake *intake, Climber* climber, double power) :
+m_intake(intake), m_climber(climber), m_power(power) {
+  AddRequirements({intake, climber});
 }
 
 // Called when the command is initially scheduled.
 void SetIntakeAngleAndPower::Initialize() {
-  frc::SmartDashboard::PutNumber("Intake State", static_cast<int>(m_intake->GetState()));
-  if (m_intake->GetState() == IntakeState::ExtendIntake){
-    m_intake->SetState(IntakeState::RetractIntake, m_power);
-  } else {
-    m_intake->SetState(IntakeState::ExtendIntake, m_power);
+  if (m_climber->GetState() == ClimberState::DEFAULT) {
+    frc::SmartDashboard::PutNumber("Intake State", static_cast<int>(m_intake->GetState()));
+    if (m_intake->GetState() == IntakeState::ExtendIntake){
+      m_intake->SetState(IntakeState::RetractIntake, m_power);
+    } else {
+      m_intake->SetState(IntakeState::ExtendIntake, m_power);
+    }
   }
+
 }
 
 // Called repeatedly when this Command is scheduled to run

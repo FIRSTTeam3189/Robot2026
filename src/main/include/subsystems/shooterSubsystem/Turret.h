@@ -29,6 +29,9 @@
 
 #include "util/LinearInterpolator.h"
 #include "util/alignUtils/TurretAlign.h"
+#include <frc2/command/sysid/SysIdRoutine.h>
+#include <ctre/phoenix6/SignalLogger.hpp>
+#include <ctre/phoenix6/controls/VoltageOut.hpp>
 
 #include <algorithm>
 #include <cmath> 
@@ -72,6 +75,7 @@ class Turret : public frc2::SubsystemBase {
   private:
   // HARDWARE (subsystem owns motors)
   ctre::phoenix6::hardware::TalonFX m_shooterTurretMotor;
+  ctre::phoenix6::controls::VoltageOut m_voltReq;
   
   // CONFIG
   ctre::phoenix6::configs::TalonFXConfiguration m_shooterConfig {};
@@ -95,6 +99,7 @@ class Turret : public frc2::SubsystemBase {
 
   units::degree_t m_targetRotationAngle;
   units::degree_t m_currentRotationAngle;
+  frc2::sysid::SysIdRoutine m_sysIdRoutine;
 
   double m_targetPower;
   LinearInterpolator *m_powerInterpolator; 

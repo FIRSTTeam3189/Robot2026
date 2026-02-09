@@ -7,10 +7,11 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
 #include "subsystems/Intake.h"
+#include "subsystems/Climber.h"
 
 class SetIntakeAngleAndPower : public frc2::CommandHelper<frc2::Command, SetIntakeAngleAndPower> {
  public:
-  explicit SetIntakeAngleAndPower(Intake* intake, double power);
+  explicit SetIntakeAngleAndPower(Intake* intake, Climber* climber, double power);
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -24,6 +25,7 @@ class SetIntakeAngleAndPower : public frc2::CommandHelper<frc2::Command, SetInta
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   Intake* m_intake;
+  Climber* m_climber;
   double m_power;
 
 };

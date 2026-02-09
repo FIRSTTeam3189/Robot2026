@@ -14,7 +14,26 @@ Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
     m_targetField(),
     m_velocityField(),
     m_powerInterpolator(new LinearInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers)),
-    m_articulation(articulation) 
+    m_articulation(articulation),
+    m_voltReq(0_V),
+    m_sysIdRoutine(
+    frc2::sysid::Config{
+        frc2::sysid::ramp_rate_t{0.5},  // Use default ramp rate (1 V/s)
+        4_V,           // Reduce dynamic step voltage to 4 to prevent brownout
+        std::nullopt,  // Use default timeout (10 s)
+                        // Log state with Phoenix SignalLogger class
+        [](frc::sysid::State state)
+        {
+            ctre::phoenix6::SignalLogger::WriteString("state", frc::sysid::SysIdRoutineLog::StateEnumToString(state));
+        }
+    },
+    frc2::sysid::Mechanism{
+        // Set motor voltage directly using a Voltage control so the motor actually receives the commanded volts.
+        [this](units::volt_t volts) { m_shooterTurretMotor.SetControl(ctre::phoenix6::controls::VoltageOut{volts}); },
+        [](auto) {},
+        this
+    }
+    )
 {
     ConfigShooter();
     ConfigPID();
@@ -23,6 +42,15 @@ Turret::Turret(SwerveDrive* swerveDrive, Articulation* articulation)
     m_allSignals.emplace_back(&m_rotationVelocity);
 }
 
+frc2::CommandPtr Turret::SysIdQuasistatic(frc2::sysid::Direction direction)
+{
+   return m_sysIdRoutine.Quasistatic(direction);
+}
+
+frc2::CommandPtr Turret::SysIdDynamic(frc2::sysid::Direction direction)
+{
+   return m_sysIdRoutine.Dynamic(direction);
+}
 
 // This method will be called once per scheduler run
 void Turret::Periodic() {
@@ -37,7 +65,7 @@ void Turret::Periodic() {
         UpdatePreferences();
     }
 
-    SetTurretAngle(m_targetRotationAngle);
+    // SetTurretAngle(m_targetRotationAngle);
 }
 
 

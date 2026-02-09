@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/WaitCommand.h>
@@ -25,6 +23,7 @@
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
 #include "commands/utilCommands/SetArticulationAngle.h"
 #include "commands/mainCommands/SetIntakeAngleAndPower.h"
+#include "commands/utilCommands/SetClimberState.h"
 
 
 #include "util/alignUtils/AutoAlign.h"
@@ -53,6 +52,7 @@
 
 
 
+
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/util/PathPlannerLogging.h>
@@ -61,6 +61,12 @@
 
 
 namespace CommandManager {
+ 	frc2::CommandPtr StartSignals();
+    frc2::CommandPtr StopSignals();
+    frc2::CommandPtr QuasistaticForward(Turret *turret);
+    frc2::CommandPtr QuasistaticReverse(Turret *turret);
+    frc2::CommandPtr DynamicForward(Turret *turret);
+    frc2::CommandPtr DynamicReverse(Turret *turret);
 
     frc2::CommandPtr ResetPose(SwerveDrive *swerveDrive);
 
@@ -89,23 +95,13 @@ namespace CommandManager {
 
     frc2::CommandPtr ArticulationAngleUp(Articulation *articulation);
     frc2::CommandPtr ArticulationAngleDown(Articulation *articulation);
-    frc2::CommandPtr SetArticulationToFixedState(Articulation* articulation); 
 
-    frc2::CommandPtr SetTurretAndArticulationManual(Articulation *articulation, Turret *turret); 
-
-    frc2::CommandPtr RunLoaderForward(Loader *loader);
-    frc2::CommandPtr RunLoaderBackward(Loader *loader);
-    frc2::CommandPtr ResetLoader(Loader *loader);
-
+    // frc2::CommandPtr RunClimber(Climber *climber);
+    // frc2::CommandPtr RunClimberBase(Climber *climber, units::time::second_t climbTime);
+    frc2::CommandPtr Climb(Climber *climber, Intake *intake);
 
     frc2::CommandPtr RunFlywheelAndLoader(Loader *loader, Flywheel *flywheel);
-      
-    frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
-                                          Flywheel *flywheel, Articulation *articulation); 
-    frc2::CommandPtr SaveAllInterpolationPoints(InterpolatorData *interpolatorData);
-    frc2::CommandPtr RemoveLastInterpolationPoint(InterpolatorData *interpolatorData);
 
-    frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints);
+    frc2::CommandPtr SetArticulationManual(Articulation *articulation);
 
-    frc2::CommandPtr EmptyCommand(); 
 };

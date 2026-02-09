@@ -27,7 +27,12 @@
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
 #include "commands/utilCommands/SetArticulationAngle.h"
 #include "commands/mainCommands/SetIntakeAngleAndPower.h"
+#include "subsystems/Climber.h"
 
+// Include the climber before this statement
+// CommandManager.h and RobotContainer.h include each other
+// and causes weird issues with includes after this statement :)
+#include "CommandManager.h" 
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/LinearInterpolator.h"
@@ -43,6 +48,7 @@
 
 
 
+
 // #include "subsystems/Limelight.h"
 
 #include "Constants/OperatorConstants.h"
@@ -52,14 +58,13 @@
 #include "Constants/shooterConstants/ArticulationConstants.h"
 #include "Constants/InterpolatorConstants.h"
 #include "Constants/VisionConstants.h"
+#include "Constants/ClimberConstants.h"
 
 
 
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/util/PathPlannerLogging.h>
-
-#include "CommandManager.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -102,6 +107,8 @@ class RobotContainer {
   Flywheel *m_flywheel = new Flywheel(); 
   Articulation *m_articulation = new Articulation(m_swerveDrive);
   Turret *m_turret = new Turret(m_swerveDrive, m_articulation);
+  Climber *m_climber = new Climber();
+
 
   PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonCamera3, 
@@ -129,4 +136,3 @@ class RobotContainer {
   void CreateAutoPaths();
   void RegisterAutoCommands();
 };
-
