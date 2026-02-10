@@ -2,6 +2,7 @@
 
 
 
+
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/WaitCommand.h>
@@ -26,7 +27,7 @@
 #include "commands/utilCommands/SetIntakeRollerMotor.h"
 #include "commands/utilCommands/SetArticulationAngle.h"
 #include "commands/mainCommands/SetIntakeAngleAndPower.h"
-
+#include "commands/utilCommands/SetIntakeManual.h"
 
 #include "util/alignUtils/AutoAlign.h"
 #include "util/LinearInterpolator.h"
@@ -61,6 +62,7 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/util/PathPlannerLogging.h>
+
 
 
 namespace CommandManager {
@@ -101,6 +103,11 @@ namespace CommandManager {
     frc2::CommandPtr RunKickerBackward(Kicker *Kicker);
     frc2::CommandPtr ResetKicker(Kicker *Kicker);
 
+    frc2::CommandPtr RunLoaderForward(Loader *loader);
+    frc2::CommandPtr RunLoaderBackward(Loader *loader);
+    frc2::CommandPtr ResetLoader(Loader *loader);
+
+
     frc2::CommandPtr Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
     frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
       
@@ -111,6 +118,9 @@ namespace CommandManager {
     frc2::CommandPtr RemoveLastInterpolationPoint(InterpolatorData *interpolatorData);
 
     frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints);
+
+    frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake);
+    frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake);
 
     frc2::CommandPtr EmptyCommand(); 
 };

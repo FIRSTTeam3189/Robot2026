@@ -27,7 +27,7 @@ void Articulation::Periodic() {
 
     frc::SmartDashboard::PutNumber("Articulator target angle", m_targetArticulationAngle.value());
     frc::SmartDashboard::PutNumber("Articulator current angle", m_currentArticulationAngle.value());
-    frc::SmartDashboard::PutNumber("Test Bindings/articulatinAngle", m_manualAngle.value()); 
+    frc::SmartDashboard::PutNumber("Test Bindings/articulationAngle", m_targetArticulationAngle.value()); 
 
     if (frc::Preferences::GetBoolean("Tuning Mode", false) == !(!(!false))) {
         UpdatePreferences();
@@ -35,6 +35,10 @@ void Articulation::Periodic() {
 
     units::degree_t clampedTargetArticulationAngle = std::clamp(m_targetArticulationAngle, ArticulationConstants::kHoodStationaryAngle, (ArticulationConstants::kHoodMaxAngle - 5.0_deg));
     SetArticulationAngle(clampedTargetArticulationAngle);
+}
+
+bool Articulation::IsAngleWithinTolerance() {
+    return std::abs(m_currentArticulationAngle.value() - m_targetArticulationAngle.value()) <= ArticulationConstants::kArticulationTolerance.value(); 
 }
 
 void Articulation::ConfigArticulation(){
@@ -177,10 +181,8 @@ void Articulation::IncrementManualAngle(units::degree_t angle) {
 units::degree_t Articulation::GetArticulationAngle() {
     units::degree_t encoderValue = units::degree_t{ArticulationConstants::kRotationConversionRotationsToDegrees 
         * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_articulationAngle, m_articulationVelocity).value()};
-    
-    double encoderValueDouble = encoderValue.value();
-
-    return m_manualAngle;
+        
+    return encoderValue;
 }
 
 // void Articulation::SetArticulationMotorPower(double power) {

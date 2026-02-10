@@ -29,5 +29,5 @@ void SetIntakeAngleAndPower::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool SetIntakeAngleAndPower::IsFinished() {
-  return false;
+  return true;
 }

@@ -84,12 +84,20 @@ namespace CommandManager {
     return SetIntakeRollerMotor(intake, 0.0).ToPtr();
   }
 
+  frc2::CommandPtr IntakeForwardManual(Intake *intake){
+    return SetIntakeManual(intake, IntakeState::ExtendIntake, IntakeConstants::kRollerIntakePower).ToPtr();
+  }
+
+  frc2::CommandPtr IntakeBackwardManual(Intake *intake){
+    return SetIntakeManual(intake, IntakeState::RetractIntake, 0.0).ToPtr();
+  }
+
   frc2::CommandPtr FlywheelPowerForward(Flywheel *flywheel){
-    return SetFlywheelMotorPower(flywheel, 0.8).ToPtr();
+    return SetFlywheelMotorPower(flywheel, 0.4).ToPtr();
   }
 
   frc2::CommandPtr FlywheelPowerReverse(Flywheel *flywheel){
-    return SetFlywheelMotorPower(flywheel, -0.8).ToPtr();
+    return SetFlywheelMotorPower(flywheel, -0.4).ToPtr();
   }
 
   frc2::CommandPtr ResetFlywheelPower(Flywheel *flywheel){
@@ -130,7 +138,6 @@ namespace CommandManager {
       SetTurretAngle(turret, TurretTarget::PointStraight)
     ).ToPtr();
   }
-
   
   frc2::CommandPtr RunKickerForward(Kicker *kicker) {
     return SetShooterKickerPower(kicker, 0.4).ToPtr();
@@ -142,6 +149,18 @@ namespace CommandManager {
 
   frc2::CommandPtr ResetKicker(Kicker *kicker) {
     return SetShooterKickerPower(kicker, 0.0).ToPtr();
+  }
+
+  frc2::CommandPtr RunLoaderForward(Loader *loader) {
+    return SetLoaderPower(loader, 0.4).ToPtr();
+  }
+
+  frc2::CommandPtr RunLoaderBackward(Loader *loader) {
+    return SetLoaderPower(loader, -0.4).ToPtr();
+  }
+
+  frc2::CommandPtr ResetLoader(Loader *loader) {
+    return SetLoaderPower(loader, 0.0).ToPtr();
   }
 
   frc2::CommandPtr Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation) {
@@ -191,6 +210,27 @@ namespace CommandManager {
     return frc2::cmd::RunOnce([swerveDrive, constraints](){
       frc2::CommandScheduler::GetInstance().Schedule(AutoAlign::AutoAlignToPose(swerveDrive, constraints));
     });
+  }
+
+  frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake) {
+    return frc2::SequentialCommandGroup(
+      SetIntakeManual(intake, IntakeState::ExtendIntake, IntakeConstants::kRollerIntakePower),
+      frc2::ParallelDeadlineGroup(
+          frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay),
+          SetFlywheelMotorPower(flywheel, 0.4)
+        ),
+      SetLoaderPower(loader, LoaderConstants::kLoadFuelPower),
+      SetShooterKickerPower(kicker, KickerConstants::kKickerMotorPower)
+    ).ToPtr();
+  }
+
+  frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake) {
+    return frc2::SequentialCommandGroup(
+      SetFlywheelMotorPower(flywheel, 0.0), 
+      SetLoaderPower(loader, 0.0),
+      SetShooterKickerPower(kicker, 0.0),
+      SetIntakeManual(intake, IntakeState::RetractIntake, 0.0)
+    ).ToPtr();
   }
 
   frc2::CommandPtr EmptyCommand() {

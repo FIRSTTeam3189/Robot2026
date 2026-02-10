@@ -63,6 +63,8 @@ class Articulation : public frc2::SubsystemBase {
 
   void ConfigArticulation();
 
+  bool IsAngleWithinTolerance();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */

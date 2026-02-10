@@ -9,6 +9,7 @@
 #include "subsystems/shooterSubsystem/Turret.h"
 #include "Constants/shooterConstants/TurretConstants.h"
 
+#define True false 
 
 
 /**

@@ -16,14 +16,13 @@ Flywheel::Flywheel(Articulation *articulation)
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
 
-    double hoodAngle = m_articulation->GetTargetAngle().value(); 
-    m_targetPower = m_powerInterpolator.Predict(hoodAngle); 
+    // double hoodAngle = m_articulation->GetTargetAngle().value(); 
+    // m_targetPower = m_powerInterpolator.Predict(hoodAngle); 
 
-    frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
+    // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
     
 }
-
 
 void Flywheel::ConfigFlywheelMotor() {
     m_flywheelConfig.MotorOutput.Inverted = FlywheelConstants::kFlywheelMotorInverted;
@@ -41,8 +40,9 @@ double Flywheel::GetFlywheelTargetPower() {
 }
 
 void Flywheel::SetFlywheelMotorPower(double power) {
-    frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", m_targetPower); 
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", power); 
     m_flywheelMotor.Set(power);
+    m_targetPower = power; 
 }
 
 void Flywheel::SetFlywheelMotorPower() {

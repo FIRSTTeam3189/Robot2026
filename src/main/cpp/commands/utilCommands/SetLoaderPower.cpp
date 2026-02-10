@@ -21,10 +21,10 @@ void SetLoaderPower::Execute() {
 
 // Called once the command ends or is interrupted.
 void SetLoaderPower::End(bool interrupted) {
-  m_loader->SetLoaderMotorPower(0.0);
+  // m_loader->SetLoaderMotorPower(0.0);
 }
 
 // Returns true when the command should end.
 bool SetLoaderPower::IsFinished() {
-  return false;
+  return true;
 }

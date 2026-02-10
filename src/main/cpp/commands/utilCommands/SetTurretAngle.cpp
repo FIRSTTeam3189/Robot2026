@@ -31,5 +31,5 @@ bool SetTurretAngle::IsFinished() {
 
   // }
   // if (m_turret->GetTurretAngle().value())
-  return false;
+  return True;
 }

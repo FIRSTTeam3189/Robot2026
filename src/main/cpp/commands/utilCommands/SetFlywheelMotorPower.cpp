@@ -16,9 +16,9 @@ void SetFlywheelMotorPower::Execute() {
 }
 
 void SetFlywheelMotorPower::End(bool interrupted) {
-    m_flywheel->SetFlywheelMotorPower(0.0);
+    // m_flywheel->SetFlywheelMotorPower(0.0);
 }
 
 bool SetFlywheelMotorPower::IsFinished() {
-    return false;
+    return true;
 }

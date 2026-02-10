@@ -20,9 +20,9 @@ void SetShooterKickerPower::Execute() {
 }
 
 void SetShooterKickerPower::End(bool interrupted) {
-    m_kicker->SetKickerMotorPower(0.0);
+    // m_kicker->SetKickerMotorPower(0.0);
 }
 
 bool SetShooterKickerPower::IsFinished() {
-    return false;
+    return true;
 }

@@ -27,7 +27,7 @@ enum ArticulationTarget {
 
 namespace ArticulationConstants {
 
-    constexpr int kArticulationMotorID{20};
+    constexpr int kArticulationMotorID{21};
 
     constexpr double kRotationAngleTolerance {1.0};
     constexpr bool kSoftLimitEnabledForward{false};
@@ -36,6 +36,8 @@ namespace ArticulationConstants {
     constexpr units::turn_t kTopSoftLimit {0.0_tr};
     constexpr units::turn_t kBottomSoftLimit {0.0_tr}; 
     constexpr units::turn_t kRotationOffset {0.0_tr};
+
+    constexpr units::degree_t kArticulationTolerance {2.0_deg};
 
     //default values for articulation, use SysId to get real values
 
