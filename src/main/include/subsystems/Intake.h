@@ -53,6 +53,7 @@ class Intake : public frc2::SubsystemBase {
   frc::DoubleSolenoid m_intakeSolenoid;
 
   IntakeState m_state;
+  double m_desiredPower;
 
 };
 

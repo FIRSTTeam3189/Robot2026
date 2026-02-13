@@ -47,14 +47,25 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureDriverBindings() {
   // Bill controls
 
+  // functional
   frc2::Trigger resetPoseButton([this](){ return m_bill.GetTouchpadButton(); });
   resetPoseButton.OnTrue(CommandManager::ResetPose(m_swerveDrive));
 
-  // frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
-  // alignToHubButton.OnTrue(CommandManager::AlignToHub(m_turret, m_articulation));
-  // alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
+  // frc2::Trigger nomNomMode([this](){ return m_bill.GetCircleButton(); });
+  // nomNomMode.OnTrue(CommandManager::NomNomModeOn(m_flywheel, m_kicker, m_loader, m_intake, m_articulation));
+  // nomNomMode.OnFalse(CommandManager::NomNomModeOff(m_flywheel, m_kicker, m_loader, m_intake));
+  
+  // frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
+  // shootFuelButton.OnTrue(CommandManager::Shoot(m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
+  // shootFuelButton.OnFalse(CommandManager::ShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
 
-  // works
+  frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
+  alignToHubButton.OnTrue(CommandManager::AlignToHub(m_turret, m_articulation));
+  alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
+
+  //-----------------------------------------------------------------------------------------------------------------
+
+  // manual control buttons
   frc2::Trigger moveTurretRight([this]() { return m_bill.GetPOV() == 90; }); 
   moveTurretRight.OnTrue(CommandManager::TurretPowerForward(m_turret));
   moveTurretRight.OnFalse(CommandManager::ResetTurretPower(m_turret));
@@ -63,19 +74,16 @@ void RobotContainer::ConfigureDriverBindings() {
   moveTurretLeft.OnTrue(CommandManager::TurretPowerReverse(m_turret));
   moveTurretLeft.OnFalse(CommandManager::ResetTurretPower(m_turret));
 
-  // frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
-  // pointStraightButton.OnTrue(CommandManager::PointTurretStraight(m_turret));
+  frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
+  pointStraightButton.OnTrue(CommandManager::PointTurretStraight(m_turret));
 
-  // frc2::Trigger pointLeftButton([this](){ return m_bill.GetCircleButton(); });
-  // pointLeftButton.OnTrue(CommandManager::PointTurretLeft(m_turret));
+  frc2::Trigger pointLeftButton([this](){ return m_bill.GetR1Button(); });
+  pointLeftButton.OnTrue(CommandManager::PointTurretLeft(m_turret));
 
-  // frc2::Trigger pointRightButton([this](){ return m_bill.GetCrossButton(); });
-  // pointRightButton.OnTrue(CommandManager::PointTurretRight(m_turret));
+  frc2::Trigger pointRightButton([this](){ return m_bill.GetL2Button(); });
+  pointRightButton.OnTrue(CommandManager::PointTurretRight(m_turret));
 
   // works
-  frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
-  shootFuelButton.OnTrue(CommandManager::Shoot(m_flywheel, m_kicker, m_loader, m_articulation));
-  shootFuelButton.OnFalse(CommandManager::ShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
 
   // frc2::Trigger slowDownButton([this](){ return m_bill.GetL1Button(); });
   // slowDownButton.OnTrue(CommandManager::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill));
@@ -86,7 +94,7 @@ void RobotContainer::ConfigureDriverBindings() {
 
   frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL1Button(); });
   extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, IntakeConstants::kRollerIntakePower).ToPtr()); // 0.8 when set, nothing when retract
-  extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr());  // idk bro
+  // extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr());  // idk bro
 
   // works
   frc2::Trigger runKickerMotor([this](){ return m_bill.GetSquareButton(); });
@@ -104,28 +112,6 @@ void RobotContainer::ConfigureDriverBindings() {
   runFlywheelMotor.OnFalse(CommandManager::ResetFlywheelPower(m_flywheel));
 
 
-
-
-
-
-
-  frc2::Trigger nomNomMode([this](){ return m_bill.GetCircleButton(); });
-  nomNomMode.OnTrue(CommandManager::NomNomModeOn(m_flywheel, m_kicker, m_loader, m_intake));
-  nomNomMode.OnFalse(CommandManager::NomNomModeOff(m_flywheel, m_kicker, m_loader, m_intake));
-
-
-
-
-
-
-
-  // frc2::Trigger RunKickerForward([this](){ return m_bill.GetR1Button(); });
-  // RunKickerForward.OnTrue(CommandManager::RunKickerForward(m_kicker)); 
-  // RunKickerForward.OnFalse(CommandManager::ResetKicker(m_kicker)); 
-
-  // frc2::Trigger RunKickerBackward([this](){ return m_bill.GetL1Button(); });
-  // RunKickerBackward.OnTrue(CommandManager::RunKickerBackward(m_kicker)); 
-  // RunKickerBackward.OnFalse(CommandManager::ResetKicker(m_kicker)); 
 
 }
 

@@ -20,7 +20,7 @@ Loader::Loader() :
 
 void Loader::ConfigLoaderMotor() {
     rev::spark::SparkBaseConfig defaultConfig = rev::spark::SparkBaseConfig{};
-    m_loaderMotor.Configure(defaultConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
+    // m_loaderMotor.Configure(defaultConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
 
     m_loaderConfig
         .Inverted(LoaderConstants::kLoaderMotorInverted)

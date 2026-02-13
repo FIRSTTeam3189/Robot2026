@@ -83,7 +83,7 @@ namespace CommandManager {
     frc2::CommandPtr DefaultSwerveSpeed(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
     frc2::CommandPtr ClimbAlignSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
 
-    frc2::CommandPtr IntakePowerForward(Intake *Intake);
+    SetIntakeRollerMotor IntakePowerForward(Intake *Intake);
     frc2::CommandPtr IntakePowerReverse(Intake *Intake);
     frc2::CommandPtr ResetIntakePower(Intake *Intake);
 
@@ -108,7 +108,7 @@ namespace CommandManager {
     frc2::CommandPtr ResetLoader(Loader *loader);
 
 
-    frc2::CommandPtr Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
+    frc2::SequentialCommandGroup Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
     frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
       
     frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
@@ -119,7 +119,7 @@ namespace CommandManager {
 
     frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints);
 
-    frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake);
+    frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation);
     frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake);
 
     frc2::CommandPtr EmptyCommand(); 

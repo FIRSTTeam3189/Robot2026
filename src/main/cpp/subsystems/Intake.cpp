@@ -30,20 +30,24 @@ void Intake::ConfigRollerMotor() {
 
 void Intake::SetRollerPower(double power){
     m_intakeRollerMotor.Set(power);
+    m_desiredPower = power;
 }
 
 void Intake::SetIntake(double power) {
     m_intakeSolenoid.Set(frc::DoubleSolenoid::kForward);
     m_intakeRollerMotor.Set(power);
+    m_desiredPower = power;
 }
 
 void Intake::RetractIntake() {
     m_intakeSolenoid.Set(frc::DoubleSolenoid::kReverse);
     m_intakeRollerMotor.Set(0.0);
+    m_desiredPower = 0.0;
 }
 
 void Intake::SetState(IntakeState state, double rollerPower) {
     m_state = state;
+    m_desiredPower = rollerPower;
     // Figure out target angle then set rotation to this angle
 
 
@@ -72,7 +76,8 @@ IntakeState Intake::GetState(){
 // This method will be called once per scheduler run
 void Intake::Periodic() {
     
-    frc::SmartDashboard::PutNumber("Intake roller power", m_intakeRollerMotor.Get());
+    frc::SmartDashboard::PutNumber("Intake roller power (actual)", m_intakeRollerMotor.Get());
+    frc::SmartDashboard::PutNumber("Intake roller power (desired)", m_desiredPower);
     // frc::SmartDashboard::PutNumber("Intake State", static_cast<int>(m_state));
     // frc::SmartDashboard::PutNumber("Algae Intake rotation getAppliedOutput", m_rotationMotor.GetAppliedOutput());
 
