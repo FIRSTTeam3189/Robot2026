@@ -72,6 +72,14 @@ namespace CommandManager {
     },{swerveDrive}).ToPtr();
   }
 
+  frc2::CommandPtr SwerveAlign(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill) {
+      return frc2::InstantCommand([swerveDrive, driveState, bill]() {
+        *driveState = DriveState::SwerveAlign;
+        swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
+      }, {swerveDrive}).ToPtr(); 
+  }
+  
+
   frc2::CommandPtr IntakePowerForward(Intake *intake){
     return SetIntakeRollerMotor(intake, IntakeConstants::kRollerIntakePower).ToPtr();
   }
@@ -155,10 +163,41 @@ namespace CommandManager {
       SetShooterKickerPower(kicker, KickerConstants::kKickerMotorPower)
     ).ToPtr();
   }
-    
 
   frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation) {
     return frc2::SequentialCommandGroup(
+      SetFlywheelMotorPower(flywheel, 0.0), 
+      SetLoaderPower(loader, 0.0),
+      SetArticulationAngle(articulation, ArticulationTarget::Stationary),
+      SetShooterKickerPower(kicker, 0.0)
+    ).ToPtr();
+  }
+
+
+  frc2::CommandPtr ShootWithSwerveAlign(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation,
+                                        SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill) {
+    return frc2::SequentialCommandGroup(
+      frc2::InstantCommand([swerveDrive, driveState, bill]() {
+        *driveState = DriveState::SwerveAlign;
+        swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
+      }),
+      SetArticulationAngle(articulation, ArticulationTarget::Degrees30),
+      frc2::ParallelDeadlineGroup(
+          frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay),
+          SetFlywheelMotorPower(flywheel, 0.4)
+        ),
+      SetLoaderPower(loader, LoaderConstants::kLoadFuelPower),
+      SetShooterKickerPower(kicker, KickerConstants::kKickerMotorPower)
+    ).ToPtr();
+  }
+
+  frc2::CommandPtr EndShootWithSwerveAlign(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation,
+                                        SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill) {
+    return frc2::SequentialCommandGroup(
+      frc2::InstantCommand([swerveDrive, driveState, bill]() {
+        *driveState = DriveState::HeadingControl;
+        swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
+      }),
       SetFlywheelMotorPower(flywheel, 0.0), 
       SetLoaderPower(loader, 0.0),
       SetArticulationAngle(articulation, ArticulationTarget::Stationary),

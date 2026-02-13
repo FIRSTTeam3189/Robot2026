@@ -27,7 +27,7 @@
 #include "Constants/AutoConstants.h"
 
 
-enum class DriveState { HeadingControl, ArbitraryAngleAlign, SlowDownSwerves, ClimbAlign } ;
+enum class DriveState { HeadingControl, ArbitraryAngleAlign, SlowDownSwerves, ClimbAlign, SwerveAlign } ;
 
 struct SwerveModules {
   frc::Translation2d m_frontLeftLocation;

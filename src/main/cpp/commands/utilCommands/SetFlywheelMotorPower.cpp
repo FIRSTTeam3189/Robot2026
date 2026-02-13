@@ -20,5 +20,5 @@ void SetFlywheelMotorPower::End(bool interrupted) {
 }
 
 bool SetFlywheelMotorPower::IsFinished() {
-    return false;
+    return true;
 }

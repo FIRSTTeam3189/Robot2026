@@ -71,6 +71,11 @@ void Drive::Execute(){
 
    // For now, just heading control, but added switch statement in case of new additions                                                                              
    switch (m_driveState) {
+    case(DriveState::SwerveAlign) :
+      rot = units::angular_velocity::radians_per_second_t{
+              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), TurretAlign::GetRobotDesiredAngle(m_swerveDrive->GetEstimatedPose())))
+              * SwerveDriveConstants::kMaxAngularVelocity};
+      break; 
     case(DriveState::HeadingControl) :
       rot = GetDesiredRotationalVelocity();
       break;

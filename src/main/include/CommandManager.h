@@ -81,6 +81,8 @@ namespace CommandManager {
     frc2::CommandPtr DefaultSwerveSpeed(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
     frc2::CommandPtr ClimbAlignSwerves(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
 
+    frc2::CommandPtr SwerveAlign(SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill);
+
     frc2::CommandPtr IntakePowerForward(Intake *Intake);
     frc2::CommandPtr IntakePowerReverse(Intake *Intake);
     frc2::CommandPtr ResetIntakePower(Intake *Intake);
@@ -103,7 +105,12 @@ namespace CommandManager {
 
     frc2::CommandPtr Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
     frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
-      
+
+    frc2::CommandPtr ShootWithSwerveAlign(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation,
+                                          SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill); 
+    frc2::CommandPtr EndShootWithSwerveAlign(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation,
+                                             SwerveDrive *swerveDrive, DriveState *driveState, frc::PS5Controller *bill); 
+
     frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                           Flywheel *flywheel, Articulation *articulation); 
     // frc2::CommandPtr RunFlywheelAndLoaderTest(Kicker *Kicker, Flywheel *flywheel);

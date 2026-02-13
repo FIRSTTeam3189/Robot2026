@@ -24,5 +24,5 @@ void SetShooterKickerPower::End(bool interrupted) {
 }
 
 bool SetShooterKickerPower::IsFinished() {
-    return false;
+    return true;
 }

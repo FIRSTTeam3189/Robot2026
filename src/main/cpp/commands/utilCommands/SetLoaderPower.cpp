@@ -26,5 +26,5 @@ void SetLoaderPower::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool SetLoaderPower::IsFinished() {
-  return false;
+  return true;
 }

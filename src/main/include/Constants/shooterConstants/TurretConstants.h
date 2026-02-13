@@ -20,7 +20,7 @@ enum class TurretTarget {
 
 //Turret Constants
 namespace TurretConstants {
-    constexpr int kShooterRotationID{24};
+    constexpr int kShooterRotationID{20};
 
     constexpr double kRotationAngleTolerance {1.0};
 
