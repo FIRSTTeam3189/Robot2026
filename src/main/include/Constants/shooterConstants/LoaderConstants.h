@@ -17,14 +17,14 @@
 
 //Turret Constants
 namespace LoaderConstants {
-    constexpr int kLoaderID{23};
+    constexpr int kLoaderID{30};
 
     constexpr int kLoaderCurrentLimit {45};
 
     constexpr double kLoadFuelPower {0.75}; 
     constexpr double kReverseRollerPower {-0.5};
 
-    constexpr bool kLoaderMotorInverted {true};
+    constexpr bool kLoaderMotorInverted {false};
 
     constexpr units::second_t kLoaderDelay {0.5_s}; 
     

@@ -5,9 +5,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 
-
 #include "subsystems/shooterSubsystem/Loader.h"
-
 
 
 Loader::Loader() :
@@ -19,16 +17,15 @@ Loader::Loader() :
 
 
 void Loader::ConfigLoaderMotor() {
-    rev::spark::SparkBaseConfig defaultConfig = rev::spark::SparkBaseConfig{};
-    // m_loaderMotor.Configure(defaultConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
 
     m_loaderConfig
         .Inverted(LoaderConstants::kLoaderMotorInverted)
         .SmartCurrentLimit(LoaderConstants::kLoaderCurrentLimit)
         .SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kBrake);
         
-    // Set to factory default
+    // // Set to factory default
     m_loaderMotor.Configure(m_loaderConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
+    // frc::SmartDashboard::PutBoolean("configurerd loaderrr motor", true); 
 }
 
 void Loader::SetLoaderMotorPower(double power) {
@@ -37,4 +34,7 @@ void Loader::SetLoaderMotorPower(double power) {
 }
 
 // This method will be called once per scheduler run
-void Loader::Periodic() {}
+void Loader::Periodic() {
+    // frc::SmartDashboard::PutBoolean(m_loaderConfig.)
+
+}

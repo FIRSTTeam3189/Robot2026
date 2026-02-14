@@ -11,7 +11,10 @@ Flywheel::Flywheel(Articulation *articulation)
     m_flywheelMotor(FlywheelConstants::kShooterFlywheelID, "Swerve"),
     m_flywheelConfig(),
     m_targetPower()
-{}
+{
+
+    ConfigFlywheelMotor();
+}
 
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
@@ -27,6 +30,7 @@ void Flywheel::Periodic() {
 void Flywheel::ConfigFlywheelMotor() {
     m_flywheelConfig.MotorOutput.Inverted = FlywheelConstants::kFlywheelMotorInverted;
     m_flywheelConfig.MotorOutput.NeutralMode = FlywheelConstants::kFlywheelNeutralMode;
+    m_flywheelConfig.OpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(1.0_s);
 
     m_flywheelMotor.GetConfigurator().Apply(m_flywheelConfig);
 }
@@ -39,10 +43,26 @@ double Flywheel::GetFlywheelTargetPower() {
     return m_targetPower; 
 }
 
+// void Flywheel::SetFlywheelMotorPower(double power) {
+//     frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", power); 
+//     m_flywheelMotor.Set(power);
+//     m_targetPower = power; 
+// }
+
 void Flywheel::SetFlywheelMotorPower(double power) {
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", power); 
+    // int numRampUpPoints = 500;
+    // double stepSize = power / numRampUpPoints;
+    // double appliedPower = 0.0;
+
+    // for (int i = 0; i< 500; i++){
+    //     m_flywheelMotor.Set(appliedPower);
+    //     appliedPower += stepSize;
+    // }
+
+    // m_targetPower = power; 
+
     m_flywheelMotor.Set(power);
-    m_targetPower = power; 
 }
 
 void Flywheel::SetFlywheelMotorPower() {

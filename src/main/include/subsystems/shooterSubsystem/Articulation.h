@@ -45,6 +45,8 @@ class Articulation : public frc2::SubsystemBase {
 
   void SetArticulationAngle(units::degree_t angle);
 
+  void SetArticulationMotorPower(double power);
+
   void SetState(ArticulationTarget state); 
 
   units::degree_t GetArticulationAngle();

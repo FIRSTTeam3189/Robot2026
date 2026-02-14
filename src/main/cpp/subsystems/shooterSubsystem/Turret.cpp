@@ -6,7 +6,7 @@
 
 Turret::Turret(SwerveDrive* swerveDrive)
   : 
-    m_turretMotor(TurretConstants::kShooterRotationID, "Swerve"),
+    m_turretMotor(TurretConstants::kShooterRotationID),
     m_shooterConfig(),
     m_swerveDrive(swerveDrive),
     m_state(TurretTarget::PointStraight),
@@ -35,7 +35,7 @@ void Turret::Periodic() {
         UpdatePreferences();
     }
 
-    SetTurretAngle(m_targetRotationAngle);
+    // SetTurretAngle(m_targetRotationAngle);
 }
 
 units::degree_t Turret::GetCurrentTargetAngle() {

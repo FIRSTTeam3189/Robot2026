@@ -74,7 +74,7 @@ namespace ArticulationConstants {
     constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
 
     constexpr bool kRotationEnableCurrentLimit = true;
-    constexpr bool kRotationMotorInverted {true};
+    constexpr bool kRotationMotorInverted {false};
 
     constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 

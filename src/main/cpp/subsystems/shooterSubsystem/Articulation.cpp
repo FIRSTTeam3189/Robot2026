@@ -7,7 +7,7 @@
 
 Articulation::Articulation(SwerveDrive *swerveDrive)
   : 
-    m_articulationMotor(ArticulationConstants::kArticulationMotorID),
+    m_articulationMotor(ArticulationConstants::kArticulationMotorID, "Swerve"),
     m_articulationConfig(),
     m_swerveDrive(swerveDrive),
     m_manualAngle()
@@ -34,7 +34,7 @@ void Articulation::Periodic() {
     }
 
     units::degree_t clampedTargetArticulationAngle = std::clamp(m_targetArticulationAngle, ArticulationConstants::kHoodStationaryAngle, (ArticulationConstants::kHoodMaxAngle - 5.0_deg));
-    SetArticulationAngle(clampedTargetArticulationAngle);
+    // SetArticulationAngle(clampedTargetArticulationAngle);
 }
 
 bool Articulation::IsAngleWithinTolerance() {
@@ -185,9 +185,9 @@ units::degree_t Articulation::GetArticulationAngle() {
     return encoderValue;
 }
 
-// void Articulation::SetArticulationMotorPower(double power) {
-//     m_articulationMotor.Set(power);
-// }
+void Articulation::SetArticulationMotorPower(double power) {
+    m_articulationMotor.Set(power);
+}
 
 void Articulation::SetArticulationBrakeMode(Articulation::BrakeMode mode) {
     switch (mode) {

@@ -2,7 +2,7 @@
 
 Intake::Intake() : 
 
- m_intakeRollerMotor(IntakeConstants::kRollerMotorID, "Swerve"),
+ m_intakeRollerMotor(IntakeConstants::kRollerMotorID),
  m_intakeConfig(),
  m_intakeSolenoid(IntakeConstants::kSolenoidModule, IntakeConstants::kSolenoidType,
                   IntakeConstants::kSolenoidForwardChannel, IntakeConstants::kSolenoidReverseChannel),

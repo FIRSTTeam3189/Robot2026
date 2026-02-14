@@ -16,11 +16,11 @@ namespace CommandManager {
   }
 
   frc2::CommandPtr TurretPowerForward(Turret *turret) {
-    return SetShooterRotationPower(turret, 0.2).ToPtr(); 
+    return SetShooterRotationPower(turret, 0.175).ToPtr(); 
   }
 
   frc2::CommandPtr TurretPowerReverse(Turret *turret) {
-    return SetShooterRotationPower(turret, -0.2).ToPtr(); 
+    return SetShooterRotationPower(turret, -0.175).ToPtr(); 
   }
 
   frc2::CommandPtr ResetTurretPower(Turret *turret) {
@@ -93,11 +93,11 @@ namespace CommandManager {
   }
 
   frc2::CommandPtr FlywheelPowerForward(Flywheel *flywheel){
-    return SetFlywheelMotorPower(flywheel, 0.4).ToPtr();
+    return SetFlywheelMotorPower(flywheel, -0.3).ToPtr();
   }
 
   frc2::CommandPtr FlywheelPowerReverse(Flywheel *flywheel){
-    return SetFlywheelMotorPower(flywheel, -0.4).ToPtr();
+    return SetFlywheelMotorPower(flywheel, 0.3).ToPtr();
   }
 
   frc2::CommandPtr ResetFlywheelPower(Flywheel *flywheel){
@@ -165,10 +165,10 @@ namespace CommandManager {
 
   frc2::SequentialCommandGroup Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation) {
     return frc2::SequentialCommandGroup(
-      SetArticulationAngle(articulation, ArticulationTarget::Degrees30),
+      // SetArticulationAngle(articulation, ArticulationTarget::Degrees30),
 
       frc2::SequentialCommandGroup(
-        SetFlywheelMotorPower(flywheel, 0.4),
+        SetFlywheelMotorPower(flywheel, -0.9),
         frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay)
       ),
       frc2::ParallelCommandGroup(
@@ -183,7 +183,7 @@ namespace CommandManager {
     return frc2::SequentialCommandGroup(
       SetFlywheelMotorPower(flywheel, 0.0), 
       SetLoaderPower(loader, 0.0),
-      SetArticulationAngle(articulation, ArticulationTarget::Stationary),
+      // SetArticulationAngle(articulation, ArticulationTarget::Stationary),
       SetShooterKickerPower(kicker, 0.0)
     ).ToPtr();
   }
