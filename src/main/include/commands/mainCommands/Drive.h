@@ -49,4 +49,7 @@ class Drive
   std::string m_rotationPKey;
   std::string m_rotationIKey;
   std::string m_rotationDKey;
+  bool m_swerveAlignLocked;
+  units::degree_t m_swerveAlignTargetAngle;
+
 };

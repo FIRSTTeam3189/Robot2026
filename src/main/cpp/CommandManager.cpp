@@ -78,7 +78,6 @@ namespace CommandManager {
         swerveDrive->SetDefaultCommand(Drive(bill, swerveDrive, *driveState));
       }, {swerveDrive}).ToPtr(); 
   }
-  
 
   frc2::CommandPtr IntakePowerForward(Intake *intake){
     return SetIntakeRollerMotor(intake, IntakeConstants::kRollerIntakePower).ToPtr();

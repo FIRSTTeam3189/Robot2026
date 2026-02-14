@@ -119,18 +119,36 @@ namespace TurretAlign {
         return targetAngle; // where 90 is the turret's default position  
     }
 
-    bool InvalidTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset) {
-        double targetAngle = GetRawAngle(robotPose, targetPose, turretOffset); 
-        return targetAngle > 270 && targetAngle < 315; 
+    bool InvalidTargetAngle(frc::Pose2d robotPose, Vector2d turretOffset) {
+        double targetAngle = GetRawAngle(robotPose, CalculateTargetPose(robotPose), turretOffset);
+        frc::SmartDashboard::PutNumber("turret desired angle invalid", targetAngle);
+        frc::SmartDashboard::PutBoolean("Is turret valid?", !(targetAngle > 270 && targetAngle < 315));
+        return targetAngle > 223 && targetAngle < 315;
     }
+
+    // triple GetRobotDesiredAngle(frc::Pose2d robotPose) {
+    //     double robotAngle = robotPose.Rotation().Degrees().value();
+    //     Vector2d robotHeading(robotAngle);
+    //     Vector2d robotVec(robotPose);
+    //     Vector2d targetVec = CalculateTargetPose(robotPose);
+    //     // Vector2d robotToTarget = targetVec - robotVec;
+    //     Vector2d robotToTarget = targetVec;
+    //     return robotToTarget.SignedAngle(robotHeading);
+    // }
 
     triple GetRobotDesiredAngle(frc::Pose2d robotPose) {
-        double robotAngle = robotPose.Rotation().Degrees().value(); 
-        Vector2d robotHeading(robotAngle); 
-        Vector2d robotVec(robotPose); 
-        Vector2d targetVec = CalculateTargetPose(robotPose); 
-        Vector2d robotToTarget = targetVec - robotVec; 
-        return robotToTarget.SignedAngle(robotHeading); 
-    }
+        double poseX = CalculateTargetPose(robotPose).X().value() - robotPose.X().value();
+        double poseY = CalculateTargetPose(robotPose).Y().value() - robotPose.Y().value();
 
-};
+        double angle = std::atan2(poseY, poseX);
+
+        double desiredAngle = angle * (180/ M_PI);
+
+        if (TurretAlign::InvalidTargetAngle(robotPose, AutoAlignConstants::kTurretOffset)) {
+            return desiredAngle;
+        } else {
+            return robotPose.Rotation().Degrees().value();
+        }
+        }
+    }
+;

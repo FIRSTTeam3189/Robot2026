@@ -43,12 +43,19 @@ namespace TurretConstants {
     // constexpr double kRotationConversionDegreesToRotations {1.0 / kRotationConversionRotationsToDegrees};
 
 
-    constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.15}; // Volts applied per meter per second
-    constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {0.7}; // Volts applied per meter error    
+    // constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
+    // constexpr double kVRotation {0.15}; // Volts applied per meter per second
+    // constexpr double kARotation {0.0}; // Volts applied per meter per second squared
+    // constexpr double kPRotation {0.7}; // Volts applied per meter error    
+    // constexpr double kIRotation {0.0}; // Volts applied per meter integral error
+    // constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
+
+    constexpr double kSRotation {0.10724}; // Static voltage applied to overcome friction
+    constexpr double kVRotation {0.11365}; // Volts applied per meter per second
+    constexpr double kARotation {0.0013311}; // Volts applied per meter per second squared
+    constexpr double kPRotation {-5.0104}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
-    constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
+    constexpr double kDRotation {0.0082091}; // Volts applied per meter velocity error
 
     constexpr units::turns_per_second_t kMotionMagicMaxVelocity {70_tr / 1.0_s}; // rotations per second
     constexpr auto kMotionMagicMaxAcceleration {750_tr / 1.0_s / 1.0_s}; // rotations per second squared
