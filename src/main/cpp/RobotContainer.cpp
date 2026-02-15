@@ -63,8 +63,6 @@ void RobotContainer::ConfigureDriverBindings() {
   alignToHubButton.OnTrue(CommandManager::AlignToHub(m_turret, m_articulation));
   alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
 
-  //-----------------------------------------------------------------------------------------------------------------
-
   // manual control buttons
   frc2::Trigger moveTurretRight([this]() { return m_bill.GetPOV() == 90; }); 
   moveTurretRight.OnTrue(CommandManager::TurretPowerForward(m_turret));
