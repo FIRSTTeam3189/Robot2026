@@ -47,7 +47,8 @@ namespace ArticulationConstants {
 
     constexpr double kShooterGearRatio {1.0};
 
-    constexpr double kRotationConversionRotationsToDegrees {1.0/0.3571428571 * 2};
+    // 1 rotation of the motor is 18 degrees 
+    constexpr double kRotationConversionRotationsToDegrees {18.0};
 
     // constexpr double kRotationConversionRotationsToDegrees {4.0};
     // constexpr double kRotationConversionDegreesToRotations {1.0 / kRotationConversionRotationsToDegrees};
@@ -56,10 +57,10 @@ namespace ArticulationConstants {
     constexpr double kResetShooterPower {-1.0};
 
 
-    constexpr double kSRotation {0.02}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.085}; // Volts applied per meter per second
+    constexpr double kSRotation {0.25}; // Static voltage applied to overcome friction
+    constexpr double kVRotation {0.35}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {0.2}; // Volts applied per meter error    
+    constexpr double kPRotation {2.0}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 
@@ -74,7 +75,7 @@ namespace ArticulationConstants {
     constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
 
     constexpr bool kRotationEnableCurrentLimit = true;
-    constexpr bool kRotationMotorInverted {false};
+    constexpr bool kRotationMotorInverted {true};
 
     constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 

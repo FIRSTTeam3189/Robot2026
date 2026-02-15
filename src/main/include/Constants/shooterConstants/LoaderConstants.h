@@ -21,7 +21,7 @@ namespace LoaderConstants {
 
     constexpr int kLoaderCurrentLimit {45};
 
-    constexpr double kLoadFuelPower {0.75}; 
+    constexpr double kLoadFuelPower {0.50}; 
     constexpr double kReverseRollerPower {-0.5};
 
     constexpr bool kLoaderMotorInverted {false};

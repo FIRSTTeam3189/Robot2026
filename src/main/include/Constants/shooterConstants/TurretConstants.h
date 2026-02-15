@@ -32,21 +32,23 @@ namespace TurretConstants {
 
     constexpr double kShooterGearRatio {1.0};
 
-    constexpr double kRotationConversionRotationsToDegrees {1.0/0.3571428571 * 2};
+    // V0 gear ratio 
+    // constexpr double kRotationConversionRotationsToDegrees {1.0/0.3571428571 * 2};
+    
 
     //! for v1
     // constexpr double kRotationConversionRotationsToDegrees {4.0};
     
-    
-    //constexpr double kRotationConversionRotationsToDegrees {(1/(((264/48) * (5)) / 360))}
+    // V1 
+    constexpr double kRotationConversionRotationsToDegrees {(360 / ( 5.5 * 5 ))}; // 5.5 is num big gear / num small gear, 5 is internal ratio, and *2 idk gg
 
     // constexpr double kRotationConversionDegreesToRotations {1.0 / kRotationConversionRotationsToDegrees};
 
 
-    constexpr double kSRotation {0.03}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.15}; // Volts applied per meter per second
+    constexpr double kSRotation {0.0}; // Static voltage applied to overcome friction
+    constexpr double kVRotation {0.16}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {0.7}; // Volts applied per meter error    
+    constexpr double kPRotation {1.500}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 
@@ -59,7 +61,7 @@ namespace TurretConstants {
     constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
     constexpr bool kRotationEnableCurrentLimit = true;
 
-    constexpr bool kRotationMotorInverted {true};
+    constexpr bool kRotationMotorInverted {false};
     constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 
 }

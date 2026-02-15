@@ -45,10 +45,10 @@ namespace AutoAlignConstants {
 
     // ! Not verified numbers 
     constexpr units::meter_t kHubHeight {1.524_m}; 
-    constexpr units::meter_t kHoodHeight {0.6096_m}; 
+    constexpr units::meter_t kHoodHeight {0.549_m}; 
     constexpr units::meter_t kHoodAndHubHeightDiff = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
 
-    constexpr units::degree_t kHoodDegreeOffset {2.0_deg}; 
+    constexpr units::degree_t kHoodDegreeOffset {6.5_deg}; 
 
     constexpr frc::Pose2d kFerryLeftPose {3.07_m, 2.33_m, frc::Rotation2d(0.0_deg)};
     constexpr frc::Pose2d kFerryRightPose {3.07_m, 6.397_m, frc::Rotation2d(0.0_deg)};
@@ -60,13 +60,13 @@ namespace AutoAlignConstants {
     constexpr units::degree_t TurretAngleLeft {45_deg};
     constexpr units::degree_t TurretAngleRight {135_deg};
 
-    const Vector2d kTurretOffset(0.11, 0.0); 
+    const Vector2d kTurretOffset(0.15, 0.0); 
 
     constexpr double kMinimumVelocityMultiplier {0.1}; 
     constexpr double kVelocityMultiplier {0.5}; 
 
     // 0 is 15, and max is 35 
-    const std::vector<double> kPowerInterpolatorAngles = {20, 30, 40, 50}; 
+    const std::vector<double> kPowerInterpolatorDistances = {1.0, 1.5, 2.0, 2.5}; 
     const std::vector<double> kPowerInterpolatorPowers = {0.25, 0.34, 0.51, 0.8}; 
 
     //! need to be configured 

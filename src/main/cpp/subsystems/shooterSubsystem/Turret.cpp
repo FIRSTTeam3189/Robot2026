@@ -35,7 +35,7 @@ void Turret::Periodic() {
         UpdatePreferences();
     }
 
-    // SetTurretAngle(m_targetRotationAngle);
+    SetTurretAngle(m_targetRotationAngle);
 }
 
 units::degree_t Turret::GetCurrentTargetAngle() {

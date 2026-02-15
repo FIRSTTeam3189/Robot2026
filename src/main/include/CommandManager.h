@@ -97,6 +97,14 @@ namespace CommandManager {
     frc2::CommandPtr ArticulationAngleDown(Articulation *articulation);
     frc2::CommandPtr SetArticulationToFixedState(Articulation* articulation); 
 
+    frc2::CommandPtr RunArticulationForward(Articulation *articulation);
+    frc2::CommandPtr RunArticulationReverse(Articulation *articulation);
+    frc2::CommandPtr ResetArticulationPower(Articulation *articulation);
+    
+    frc2::CommandPtr Articulation20Degrees(Articulation *articulation);
+    frc2::CommandPtr Articulation30Degrees(Articulation *articulation);
+    frc2::CommandPtr Articulation40Degrees(Articulation *articulation);
+
     frc2::CommandPtr SetTurretAndArticulationManual(Articulation *articulation, Turret *turret); 
 
     frc2::CommandPtr RunKickerForward(Kicker *Kicker);

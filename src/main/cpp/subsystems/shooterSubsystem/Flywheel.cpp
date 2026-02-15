@@ -7,7 +7,7 @@
 Flywheel::Flywheel(Articulation *articulation) 
   : 
     m_articulation(articulation),
-    m_powerInterpolator(AutoAlignConstants::kPowerInterpolatorAngles, AutoAlignConstants::kPowerInterpolatorPowers),
+    m_powerInterpolator(AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers),
     m_flywheelMotor(FlywheelConstants::kShooterFlywheelID, "Swerve"),
     m_flywheelConfig(),
     m_targetPower()

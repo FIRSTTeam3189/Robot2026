@@ -61,7 +61,7 @@ void RobotContainer::ConfigureDriverBindings() {
 
   frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
   alignToHubButton.OnTrue(CommandManager::AlignToHub(m_turret, m_articulation));
-  alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
+  // alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
 
   //-----------------------------------------------------------------------------------------------------------------
 
@@ -77,8 +77,8 @@ void RobotContainer::ConfigureDriverBindings() {
   // frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
   // pointStraightButton.OnTrue(CommandManager::PointTurretStraight(m_turret));
 
-  frc2::Trigger pointLeftButton([this](){ return m_bill.GetR1Button(); });
-  pointLeftButton.OnTrue(CommandManager::PointTurretLeft(m_turret));
+  // frc2::Trigger pointLeftButton([this](){ return m_bill.GetR1Button(); });
+  // pointLeftButton.OnTrue(CommandManager::PointTurretLeft(m_turret));
 
   // frc2::Trigger pointRightButton([this](){ return m_bill.GetL2Button(); });
   // pointRightButton.OnTrue(CommandManager::PointTurretRight(m_turret));
@@ -109,21 +109,39 @@ void RobotContainer::ConfigureDriverBindings() {
   runIntakeMotor.OnTrue(CommandManager::IntakePowerForward(m_intake).ToPtr());
   runIntakeMotor.OnFalse(CommandManager::ResetIntakePower(m_intake));
 
-  // works
-  frc2::Trigger runKickerMotor([this](){ return m_bill.GetSquareButton(); });
-  runKickerMotor.OnTrue(CommandManager::RunKickerForward(m_kicker)); 
-  runKickerMotor.OnFalse(CommandManager::ResetKicker(m_kicker));
+  // // works
+  // frc2::Trigger runKickerMotor([this](){ return m_bill.GetSquareButton(); });
+  // runKickerMotor.OnTrue(CommandManager::RunKickerForward(m_kicker)); 
+  // runKickerMotor.OnFalse(CommandManager::ResetKicker(m_kicker));
 
-  // works
-  frc2::Trigger runLoaderMotor([this](){ return m_bill.GetTriangleButton(); });
-  runLoaderMotor.OnTrue(CommandManager::RunLoaderForward(m_loader)); 
-  runLoaderMotor.OnFalse(CommandManager::ResetLoader(m_loader));
+  // // works
+  // frc2::Trigger runLoaderMotor([this](){ return m_bill.GetTriangleButton(); });
+  // runLoaderMotor.OnTrue(CommandManager::RunLoaderForward(m_loader)); 
+  // runLoaderMotor.OnFalse(CommandManager::ResetLoader(m_loader));
 
-  // works
-  frc2::Trigger runFlywheelMotor([this](){ return m_bill.GetCrossButton(); });
-  runFlywheelMotor.OnTrue(CommandManager::FlywheelPowerForward(m_flywheel)); 
-  runFlywheelMotor.OnFalse(CommandManager::ResetFlywheelPower(m_flywheel));
+  // // works
+  // frc2::Trigger runFlywheelMotor([this](){ return m_bill.GetCrossButton(); });
+  // runFlywheelMotor.OnTrue(CommandManager::FlywheelPowerForward(m_flywheel)); 
+  // runFlywheelMotor.OnFalse(CommandManager::ResetFlywheelPower(m_flywheel));
 
+
+  // articulation 
+  frc2::Trigger setHoodAngle20([this]() { return m_bill.GetSquareButton(); }); 
+  setHoodAngle20.OnTrue(CommandManager::Articulation20Degrees(m_articulation)); 
+
+  frc2::Trigger setHoodAngle30([this]() { return m_bill.GetTriangleButton(); }); 
+  setHoodAngle30.OnTrue(CommandManager::Articulation30Degrees(m_articulation)); 
+
+  frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
+  setHoodAngle40.OnTrue(CommandManager::Articulation40Degrees(m_articulation)); 
+
+  frc2::Trigger runArticulationForward([this]() { return m_bill.GetR1Button(); }); 
+  runArticulationForward.OnTrue(CommandManager::RunArticulationForward(m_articulation)); 
+  runArticulationForward.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
+
+  frc2::Trigger runArticulationReverse([this]() { return m_bill.GetL2Button(); }); 
+  runArticulationReverse.OnTrue(CommandManager::RunArticulationReverse(m_articulation)); 
+  runArticulationReverse.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
 
 
 }

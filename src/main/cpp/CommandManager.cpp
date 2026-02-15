@@ -117,17 +117,45 @@ namespace CommandManager {
   } 
 
   frc2::CommandPtr ArticulationAngleUp(Articulation *articulation) {
-      return frc2::InstantCommand([articulation]() {
-        articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleIncrement);
-      }, {articulation}).ToPtr();
+    return frc2::InstantCommand([articulation]() {
+      articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleIncrement);
+    }, {articulation}).ToPtr();
   }
 
   frc2::CommandPtr ArticulationAngleDown(Articulation *articulation) {
-      return frc2::InstantCommand([articulation]() {
-        articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleDecrement);
-      }, {articulation}).ToPtr();
+    return frc2::InstantCommand([articulation]() {
+      articulation->IncrementManualAngle(ArticulationConstants::kArticulationAngleDecrement);
+    }, {articulation}).ToPtr();
   }
 
+  frc2::CommandPtr RunArticulationForward(Articulation *articulation) {
+    return frc2::InstantCommand([articulation]() {
+      articulation->SetArticulationMotorPower(0.1); 
+    }).ToPtr();
+  }
+    
+
+  frc2::CommandPtr RunArticulationReverse(Articulation *articulation) {
+    return frc2::InstantCommand([articulation]() {
+      articulation->SetArticulationMotorPower(-0.1); 
+    }).ToPtr();
+  }
+  frc2::CommandPtr ResetArticulationPower(Articulation *articulation) {
+    return frc2::InstantCommand([articulation]() {
+      articulation->SetArticulationMotorPower(0.0); 
+    }).ToPtr();
+  }
+
+  frc2::CommandPtr Articulation20Degrees(Articulation *articulation) {
+    return SetArticulationAngle(articulation, ArticulationTarget::Degrees20).ToPtr(); 
+  }
+  frc2::CommandPtr Articulation30Degrees(Articulation *articulation) {
+    return SetArticulationAngle(articulation, ArticulationTarget::Degrees30).ToPtr(); 
+  }
+  frc2::CommandPtr Articulation40Degrees(Articulation *articulation) {
+    return SetArticulationAngle(articulation, ArticulationTarget::Degrees40).ToPtr(); 
+  }
+ 
   frc2::CommandPtr SetArticulationToFixedState(Articulation* articulation) {
     return SetArticulationAngle(articulation, ArticulationTarget::FixedAlign).ToPtr();
   }
@@ -167,10 +195,14 @@ namespace CommandManager {
     return frc2::SequentialCommandGroup(
       // SetArticulationAngle(articulation, ArticulationTarget::Degrees30),
 
-      frc2::SequentialCommandGroup(
-        SetFlywheelMotorPower(flywheel, -0.9),
-        frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay)
+      frc2::ParallelCommandGroup(
+        frc2::SequentialCommandGroup(
+          SetFlywheelMotorPower(flywheel, -0.40),
+          frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay)
+        ),
+        SetLoaderPower(loader, -LoaderConstants::kLoadFuelPower)
       ),
+
       frc2::ParallelCommandGroup(
         SetLoaderPower(loader, LoaderConstants::kLoadFuelPower),
         SetShooterKickerPower(kicker, KickerConstants::kKickerMotorPower)

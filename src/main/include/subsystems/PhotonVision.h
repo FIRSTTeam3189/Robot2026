@@ -18,7 +18,7 @@
 
 class PhotonVision : public frc2::SubsystemBase {
  public:
-  PhotonVision(PoseEstimatorHelper *helper, std::string camera_name, units::meter_t xOffset, units::meter_t yOffset, frc::Rotation2d yawOffset);
+  PhotonVision(PoseEstimatorHelper *helper, std::string camera_name, units::meter_t xOffset, units::meter_t yOffset, frc::Rotation2d yawOffset, frc::Rotation2d pitchOffset, units::meter_t heightOffset);
   void SetTimestampOffset(units::second_t offset);
 
   /**
@@ -35,6 +35,11 @@ class PhotonVision : public frc2::SubsystemBase {
 
   std::string m_cameraName;
   std::string m_folderName;
+
+  frc::Rotation2d m_yawOffset; 
+  frc::Rotation2d m_pitchOffset;
+  units::meter_t m_heightOffset;
+
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

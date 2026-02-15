@@ -10,7 +10,8 @@ Articulation::Articulation(SwerveDrive *swerveDrive)
     m_articulationMotor(ArticulationConstants::kArticulationMotorID, "Swerve"),
     m_articulationConfig(),
     m_swerveDrive(swerveDrive),
-    m_manualAngle()
+    m_manualAngle(),
+    m_state(ArticulationTarget::Stationary)
 {
     ConfigArticulation();
     ConfigPID();
@@ -24,6 +25,7 @@ Articulation::Articulation(SwerveDrive *swerveDrive)
 void Articulation::Periodic() {
     RefreshAllSignals(); 
     m_currentArticulationAngle = GetArticulationAngle();
+    m_targetArticulationAngle = units::degree_t{std::round(m_targetArticulationAngle.value())}; 
 
     frc::SmartDashboard::PutNumber("Articulator target angle", m_targetArticulationAngle.value());
     frc::SmartDashboard::PutNumber("Articulator current angle", m_currentArticulationAngle.value());
@@ -34,7 +36,7 @@ void Articulation::Periodic() {
     }
 
     units::degree_t clampedTargetArticulationAngle = std::clamp(m_targetArticulationAngle, ArticulationConstants::kHoodStationaryAngle, (ArticulationConstants::kHoodMaxAngle - 5.0_deg));
-    // SetArticulationAngle(clampedTargetArticulationAngle);
+    SetArticulationAngle(clampedTargetArticulationAngle);
 }
 
 bool Articulation::IsAngleWithinTolerance() {
@@ -73,6 +75,8 @@ void Articulation::ConfigArticulation(){
     m_articulationConfig.MotionMagic.MotionMagicJerk = ArticulationConstants::kMotionMagicMaxJerk;
 
     m_articulationMotor.GetConfigurator().Apply(m_articulationConfig);
+
+    m_articulationMotor.SetPosition(0.0_tr);
 }
 
 
@@ -168,7 +172,9 @@ void Articulation::SetState(ArticulationTarget state) {
 void Articulation::SetArticulationAngle(units::degree_t angle) {
     ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
 
-        m_articulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
+    angle -= ArticulationConstants::kHoodStationaryAngle;
+
+    m_articulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
             ArticulationConstants::kRotationConversionRotationsToDegrees}));
 }
 
@@ -181,7 +187,9 @@ void Articulation::IncrementManualAngle(units::degree_t angle) {
 units::degree_t Articulation::GetArticulationAngle() {
     units::degree_t encoderValue = units::degree_t{ArticulationConstants::kRotationConversionRotationsToDegrees 
         * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_articulationAngle, m_articulationVelocity).value()};
-        
+    
+    frc::SmartDashboard::PutNumber("hood motor turns", ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_articulationAngle, m_articulationVelocity).value());
+    encoderValue += ArticulationConstants::kHoodStationaryAngle;
     return encoderValue;
 }
 

@@ -53,7 +53,7 @@ namespace HoodAlign {
 
         units::degree_t rawAngleToHubWithOffset = units::degree_t{(angle + AutoAlignConstants::kHoodDegreeOffset.value())};  // point a bit above hub
         units::degree_t targetHoodAngle = 90.0_deg - rawAngleToHubWithOffset; // convert to angle on other side of hood
-        targetHoodAngle -= AutoAlignConstants::kHoodDefaultAngle; // account for the normal (0 read from encoder) actually at 15 degrees
+        // targetHoodAngle -= AutoAlignConstants::kHoodDefaultAngle; // account for the normal (0 read from encoder) actually at 15 degrees
 
         frc::SmartDashboard::PutNumber("Auto Align/Hood Angle", targetHoodAngle.value());
 

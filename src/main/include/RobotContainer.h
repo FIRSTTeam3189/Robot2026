@@ -107,11 +107,14 @@ class RobotContainer {
   Turret *m_turret = new Turret(m_swerveDrive);
   Flywheel *m_flywheel = new Flywheel(m_articulation); 
 
-  PhotonVision *m_turrentCamera = new PhotonVision(m_poseEstimator, 
-    VisionConstants::kPhotonCamera3, 
-    VisionConstants::kPhotonTurretCameraXOffset, 
-    VisionConstants::kPhotonTurretCameraYOffset, 
-    frc::Rotation2d{VisionConstants::kPhotonTurretCameraYawOffset});
+  PhotonVision *m_turretCamera = new PhotonVision(m_poseEstimator, 
+    VisionConstants::kPhotonTurretFrontCamera, 
+    VisionConstants::kPhotonTurretFrontCameraXOffset, 
+    VisionConstants::kPhotonTurretFrontCameraYOffset, 
+    frc::Rotation2d{VisionConstants::kPhotonTurretFrontCameraYawOffset},
+    frc::Rotation2d{VisionConstants::kPhotonTurretFrontCameraPitchOffset},
+    VisionConstants::kPhotonTurretFrontCameraHeight
+  );
 
   Intake *m_intake = new Intake();
 
