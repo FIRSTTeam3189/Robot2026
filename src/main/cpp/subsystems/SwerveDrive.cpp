@@ -196,6 +196,11 @@ void SwerveDrive::Periodic() {
         // Update rotation S value
         m_rotationS = frc::Preferences::GetDouble(m_rotationSKey, SwerveDriveConstants::kSRot);
     }
+
+    frc::SmartDashboard::PutNumber("SWERVE DRIVE FL ANGLE: ", m_modules.m_frontLeft.GetRawAnglePower());
+    frc::SmartDashboard::PutNumber("SWERVE DRIVE FL DRIVE: ", m_modules.m_frontLeft.GetRawDrivePower());
+
+    
     UpdateEstimator();
     GetRobotRelativeSpeeds();
     RefreshAllSignals();

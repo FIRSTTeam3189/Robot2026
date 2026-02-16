@@ -130,6 +130,8 @@ class RobotContainer {
 
   DriveState m_driveState = DriveState::HeadingControl;
 
+  bool m_nomNomMode = false; 
+
   void ConfigureDriverBindings();
   void ConfigureCoDriverBindings();
   void ConfigureTestBindings();

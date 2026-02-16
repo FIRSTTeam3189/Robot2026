@@ -111,6 +111,10 @@ void Drive::Execute(){
   
 
   // frc::SmartDashboard::PutNumber("Robot desired rotation (rad per s)", rot.value());
+  frc::SmartDashboard::PutNumber("Swerve Drive Desired Speeds/X: ", xSpeed.value());
+  frc::SmartDashboard::PutNumber("Swerve Drive Desired Speeds/Y: ", ySpeed.value());
+  frc::SmartDashboard::PutNumber("Swerve Drive Desired Speeds/rot: ", rot.value());
+
   m_swerveDrive->Drive(xSpeed, ySpeed, rot, fieldRelative, frc::Translation2d{});
 }
 

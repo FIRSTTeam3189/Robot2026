@@ -93,7 +93,7 @@ namespace CommandManager {
   }
 
   frc2::CommandPtr FlywheelPowerForward(Flywheel *flywheel){
-    return SetFlywheelMotorPower(flywheel, -0.3).ToPtr();
+    return SetFlywheelMotorPower(flywheel, -0.15).ToPtr();
   }
 
   frc2::CommandPtr FlywheelPowerReverse(Flywheel *flywheel){
@@ -197,7 +197,7 @@ namespace CommandManager {
 
       frc2::ParallelCommandGroup(
         frc2::SequentialCommandGroup(
-          SetFlywheelMotorPower(flywheel, -0.40),
+          SetFlywheelMotorPower(flywheel, -0.95),
           frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay)
         ),
         SetLoaderPower(loader, -LoaderConstants::kLoadFuelPower)
@@ -246,11 +246,23 @@ namespace CommandManager {
       frc2::CommandScheduler::GetInstance().Schedule(AutoAlign::AutoAlignToPose(swerveDrive, constraints));
     });
   }
+  
+  frc2::CommandPtr NomNomMode(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, 
+                                Articulation *articulation, bool *nomNomMode) {
+    if (*nomNomMode == false) {
+      *nomNomMode = true; 
+      return NomNomModeOn(flywheel, kicker, loader, intake, articulation); 
+    } else {
+      *nomNomMode = false;
+      return NomNomModeOff(flywheel, kicker, loader, intake);  
+    }
+  }
 
-  frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation) {
+  frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation) {    
     return frc2::ParallelCommandGroup(
       Shoot(flywheel, kicker, loader, articulation), 
-      IntakePowerForward(intake)).ToPtr();
+      SetIntakeAngleAndPower(intake, IntakeConstants::kRollerIntakePower
+      )).ToPtr();
   }
 
   frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake) {

@@ -24,6 +24,10 @@ void Flywheel::Periodic() {
 
     // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel rpm", m_flywheelMotor.GetVelocity().GetValue().value());
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
+    // frc::SmartDashboard::PutNumber("Test Bindings/flywheel current",  m_flywheelMotor.GetSupplyCurrent().GetValue().value());
+   
     
 }
 
@@ -33,6 +37,7 @@ void Flywheel::ConfigFlywheelMotor() {
     m_flywheelConfig.OpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(1.0_s);
 
     m_flywheelMotor.GetConfigurator().Apply(m_flywheelConfig);
+    
 }
 
 void Flywheel::SetFlyWheelTargetPower(double power) {
@@ -50,7 +55,6 @@ double Flywheel::GetFlywheelTargetPower() {
 // }
 
 void Flywheel::SetFlywheelMotorPower(double power) {
-    frc::SmartDashboard::PutNumber("Test Bindings/flywheel current power", power); 
     // int numRampUpPoints = 500;
     // double stepSize = power / numRampUpPoints;
     // double appliedPower = 0.0;

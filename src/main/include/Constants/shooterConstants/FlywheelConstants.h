@@ -21,7 +21,7 @@ namespace FlywheelConstants {
 
     constexpr units::second_t kFlywheelRunDelay {0.75_s}; 
     
-    constexpr bool kFlywheelMotorInverted {false};
+    constexpr bool kFlywheelMotorInverted {true};
     constexpr ctre::phoenix6::signals::NeutralModeValue kFlywheelNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Coast};
 
 }

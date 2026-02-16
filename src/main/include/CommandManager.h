@@ -127,8 +127,11 @@ namespace CommandManager {
 
     frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints);
 
+    frc2::CommandPtr NomNomMode(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, 
+                                Articulation *articulation, bool *nomNomMode); 
     frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation);
     frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake);
+
 
     frc2::CommandPtr EmptyCommand(); 
 };

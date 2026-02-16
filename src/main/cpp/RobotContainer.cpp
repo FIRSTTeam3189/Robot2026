@@ -54,6 +54,9 @@ void RobotContainer::ConfigureDriverBindings() {
   // frc2::Trigger nomNomMode([this](){ return m_bill.GetCircleButton(); });
   // nomNomMode.OnTrue(CommandManager::NomNomModeOn(m_flywheel, m_kicker, m_loader, m_intake, m_articulation));
   // nomNomMode.OnFalse(CommandManager::NomNomModeOff(m_flywheel, m_kicker, m_loader, m_intake));
+  frc2::Trigger nomNomMode([this](){ return m_bill.GetCircleButton(); });
+  nomNomMode.OnTrue(CommandManager::NomNomMode(m_flywheel, m_kicker, m_loader, m_intake, m_articulation, &m_nomNomMode));
+  
   
   frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
   shootFuelButton.OnTrue(CommandManager::Shoot(m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
@@ -120,9 +123,9 @@ void RobotContainer::ConfigureDriverBindings() {
   // runLoaderMotor.OnFalse(CommandManager::ResetLoader(m_loader));
 
   // // works
-  // frc2::Trigger runFlywheelMotor([this](){ return m_bill.GetCrossButton(); });
-  // runFlywheelMotor.OnTrue(CommandManager::FlywheelPowerForward(m_flywheel)); 
-  // runFlywheelMotor.OnFalse(CommandManager::ResetFlywheelPower(m_flywheel));
+  frc2::Trigger runFlywheelMotor([this](){ return m_bill.GetCrossButton(); });
+  runFlywheelMotor.OnTrue(CommandManager::FlywheelPowerForward(m_flywheel)); 
+  runFlywheelMotor.OnFalse(CommandManager::ResetFlywheelPower(m_flywheel));
 
 
   // articulation 
@@ -132,8 +135,8 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger setHoodAngle30([this]() { return m_bill.GetTriangleButton(); }); 
   setHoodAngle30.OnTrue(CommandManager::Articulation30Degrees(m_articulation)); 
 
-  frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
-  setHoodAngle40.OnTrue(CommandManager::Articulation40Degrees(m_articulation)); 
+  // frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
+  // // setHoodAngle40.OnTrue(CommandManager::Articulation40Degrees(m_articulation)); 
 
   frc2::Trigger runArticulationForward([this]() { return m_bill.GetR1Button(); }); 
   runArticulationForward.OnTrue(CommandManager::RunArticulationForward(m_articulation)); 
