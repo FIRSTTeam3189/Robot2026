@@ -54,12 +54,12 @@ namespace VisionConstants {
 
     
 
-    const std::string kPhotonTurretFrontCamera {"Front Turret Camera"};
+    const std::string kPhotonTurretFrontCamera {"Front Cam"};
     constexpr units::meter_t kPhotonTurretFrontCameraXOffset {-0.3048_m}; 
     constexpr units::meter_t kPhotonTurretFrontCameraYOffset {-0.1778_m}; 
     constexpr units::meter_t kPhotonTurretFrontCameraZOffset {0.0_m};
     constexpr units::meter_t kPhotonTurretFrontCameraHeight {0.135_m};
-    constexpr units::degree_t kPhotonTurretFrontCameraPitchOffset {33.0_deg}; 
+    constexpr units::degree_t kPhotonTurretFrontCameraPitchOffset {36.0_deg}; 
     constexpr units::degree_t kPhotonTurretFrontCameraYawOffset {0.0_deg}; 
 
     const std::string kPhotonCamera2 {"Vision 2"};
@@ -69,11 +69,11 @@ namespace VisionConstants {
     constexpr units::degree_t kPhotonReefCameraPitchOffset {0.0_deg};  // don't care
     constexpr units::degree_t kPhotonReefCameraYawOffset {0.0_deg};
 
-    const std::string kPhotonCamera3 {"Turret Camera"};
+    const std::string kPhotonCamera3 {"Front"};
     constexpr units::meter_t kPhotonTurretCameraXOffset {0.23_m}; 
     constexpr units::meter_t kPhotonTurretCameraYOffset {0.046_m}; 
     constexpr units::meter_t kPhotonTurretCameraZOffset {0.0_m};
-    constexpr units::degree_t kPhotonTurretCameraPitchOffset {35.2_deg}; 
+    constexpr units::degree_t kPhotonTurretCameraPitchOffset {36_deg}; 
     constexpr units::degree_t kPhotonTurretCameraYawOffset {0.0_deg}; 
 
     constexpr int kBaudRate {115200};

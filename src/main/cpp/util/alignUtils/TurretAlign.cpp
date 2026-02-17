@@ -46,6 +46,11 @@ namespace TurretAlign {
         return targetPose;
     }
 
+    units::meter_t GetDistanceToTarget(frc::Pose2d robotPose) {
+        Vector2d robotToTarget(robotPose, CalculateTargetPose(robotPose)); 
+        return units::meter_t {robotToTarget.Length()};
+    }
+
     // returns angle from 180-0
     double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset, 
                           frc::Field2d &turretField, frc::Field2d &targetField) {

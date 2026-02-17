@@ -102,6 +102,7 @@ namespace CommandManager {
     frc2::CommandPtr ResetArticulationPower(Articulation *articulation);
     
     frc2::CommandPtr Articulation20Degrees(Articulation *articulation);
+    frc2::CommandPtr Articulation25Degrees(Articulation *articulation);
     frc2::CommandPtr Articulation30Degrees(Articulation *articulation);
     frc2::CommandPtr Articulation40Degrees(Articulation *articulation);
 

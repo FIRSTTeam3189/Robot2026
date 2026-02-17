@@ -65,6 +65,9 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger alignToHubButton([this](){ return m_bill.GetPOV() == 0; });
   alignToHubButton.OnTrue(CommandManager::AlignToHub(m_turret, m_articulation));
   // alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
+  
+  frc2::Trigger autoAlignToPose([this]() { return m_bill.GetR1Button(); });
+  autoAlignToPose.OnTrue(CommandManager::GoToClosestPose(m_swerveDrive, m_constraints)); 
 
   //-----------------------------------------------------------------------------------------------------------------
 
@@ -129,8 +132,8 @@ void RobotContainer::ConfigureDriverBindings() {
 
 
   // articulation 
-  frc2::Trigger setHoodAngle20([this]() { return m_bill.GetSquareButton(); }); 
-  setHoodAngle20.OnTrue(CommandManager::Articulation20Degrees(m_articulation)); 
+  frc2::Trigger setHoodAngle25([this]() { return m_bill.GetSquareButton(); }); 
+  setHoodAngle25.OnTrue(CommandManager::Articulation25Degrees(m_articulation)); 
 
   frc2::Trigger setHoodAngle30([this]() { return m_bill.GetTriangleButton(); }); 
   setHoodAngle30.OnTrue(CommandManager::Articulation30Degrees(m_articulation)); 
@@ -138,13 +141,13 @@ void RobotContainer::ConfigureDriverBindings() {
   // frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
   // // setHoodAngle40.OnTrue(CommandManager::Articulation40Degrees(m_articulation)); 
 
-  frc2::Trigger runArticulationForward([this]() { return m_bill.GetR1Button(); }); 
-  runArticulationForward.OnTrue(CommandManager::RunArticulationForward(m_articulation)); 
-  runArticulationForward.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
+  // frc2::Trigger runArticulationForward([this]() { return m_bill.GetR1Button(); }); 
+  // runArticulationForward.OnTrue(CommandManager::RunArticulationForward(m_articulation)); 
+  // runArticulationForward.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
 
-  frc2::Trigger runArticulationReverse([this]() { return m_bill.GetL2Button(); }); 
-  runArticulationReverse.OnTrue(CommandManager::RunArticulationReverse(m_articulation)); 
-  runArticulationReverse.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
+  // frc2::Trigger runArticulationReverse([this]() { return m_bill.GetL2Button(); }); 
+  // runArticulationReverse.OnTrue(CommandManager::RunArticulationReverse(m_articulation)); 
+  // runArticulationReverse.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
 
 
 }

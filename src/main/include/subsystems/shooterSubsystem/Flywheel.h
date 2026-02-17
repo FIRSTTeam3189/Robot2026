@@ -12,16 +12,18 @@
 #include <ctre/phoenix6/SignalLogger.hpp>
 #include <ctre/phoenix6/StatusSignal.hpp>
 
-#include "subsystems/shooterSubsystem/Articulation.h"
+#include "subsystems/SwerveDrive.h" 
 
 #include "Constants/shooterConstants/FlywheelConstants.h"
 #include "Constants/AutoAlignConstants.h"
 
 #include "util/LinearInterpolator.h"
+#include "util/alignUtils/TurretAlign.h"
+
 
 class Flywheel : public frc2::SubsystemBase {
  public:
-  Flywheel(Articulation *articulation);
+  Flywheel(SwerveDrive *swerveDrive);
 
   void ConfigFlywheelMotor();
 
@@ -41,7 +43,7 @@ class Flywheel : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  Articulation *m_articulation; 
+  SwerveDrive *m_swerveDrive; 
 
   LinearInterpolator m_powerInterpolator; 
 

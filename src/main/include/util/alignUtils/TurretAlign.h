@@ -34,6 +34,8 @@ namespace TurretAlign {
 
     frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose);
 
+    units::meter_t GetDistanceToTarget(frc::Pose2d robotPose);
+
     double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset, 
                           frc::Field2d &turretField, frc::Field2d &targetField); 
 

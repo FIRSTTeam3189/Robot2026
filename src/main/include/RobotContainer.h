@@ -105,7 +105,7 @@ class RobotContainer {
   Kicker *m_kicker = new Kicker(); 
   Articulation *m_articulation = new Articulation(m_swerveDrive);
   Turret *m_turret = new Turret(m_swerveDrive);
-  Flywheel *m_flywheel = new Flywheel(m_articulation); 
+  Flywheel *m_flywheel = new Flywheel(m_swerveDrive); 
 
   PhotonVision *m_turretCamera = new PhotonVision(m_poseEstimator, 
     VisionConstants::kPhotonTurretFrontCamera, 
@@ -121,9 +121,9 @@ class RobotContainer {
   InterpolatorData *m_interpolatorData = new InterpolatorData(InterpolatorConstants::kInterpolatorDataFilePath); 
   
     // old m_constraints
-  // pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
-  //   0.85_mps, 1.5_mps_sq,
-  //   270_deg_per_s, 360_deg_per_s_sq);
+  pathplanner::PathConstraints m_constraints = pathplanner::PathConstraints(
+    0.85_mps, 1.5_mps_sq,
+    270_deg_per_s, 360_deg_per_s_sq);
 
 
   frc::SendableChooser<frc2::Command*> m_chooser;

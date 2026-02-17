@@ -28,10 +28,11 @@ namespace CommandManager {
   }
 
   frc2::CommandPtr AlignToHub(Turret *turret, Articulation *articulation) {
-    return frc2::ParallelCommandGroup(
-      SetTurretAngle(turret, TurretTarget::AlignHub),
-      SetArticulationAngle(articulation, ArticulationTarget::AligntoHub)
-    ).ToPtr(); 
+    // return frc2::ParallelCommandGroup(
+    //   SetTurretAngle(turret, TurretTarget::AlignHub)
+    //   // SetArticulationAngle(articulation, ArticulationTarget::AligntoHub)
+    // ).ToPtr(); 
+    return SetTurretAngle(turret, TurretTarget::AlignHub).ToPtr(); 
   }
 
   frc2::CommandPtr PointTurretStraight(Turret *turret) {
@@ -149,6 +150,9 @@ namespace CommandManager {
   frc2::CommandPtr Articulation20Degrees(Articulation *articulation) {
     return SetArticulationAngle(articulation, ArticulationTarget::Degrees20).ToPtr(); 
   }
+    frc2::CommandPtr Articulation25Degrees(Articulation *articulation) {
+    return SetArticulationAngle(articulation, ArticulationTarget::Degrees25).ToPtr(); 
+  }
   frc2::CommandPtr Articulation30Degrees(Articulation *articulation) {
     return SetArticulationAngle(articulation, ArticulationTarget::Degrees30).ToPtr(); 
   }
@@ -194,15 +198,13 @@ namespace CommandManager {
   frc2::SequentialCommandGroup Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation) {
     return frc2::SequentialCommandGroup(
       // SetArticulationAngle(articulation, ArticulationTarget::Degrees30),
-
       frc2::ParallelCommandGroup(
         frc2::SequentialCommandGroup(
-          SetFlywheelMotorPower(flywheel, -0.95),
+          SetFlywheelMotorPower(flywheel, FlywheelConstants::kFlywheelShootPower),
           frc2::WaitCommand(FlywheelConstants::kFlywheelRunDelay)
         ),
         SetLoaderPower(loader, -LoaderConstants::kLoadFuelPower)
       ),
-
       frc2::ParallelCommandGroup(
         SetLoaderPower(loader, LoaderConstants::kLoadFuelPower),
         SetShooterKickerPower(kicker, KickerConstants::kKickerMotorPower)
@@ -220,11 +222,38 @@ namespace CommandManager {
     ).ToPtr();
   }
 
+  frc2::CommandPtr NomNomMode(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, 
+                                Articulation *articulation, bool *nomNomMode) {
+    if (*nomNomMode == false) {
+      *nomNomMode = true; 
+      return NomNomModeOn(flywheel, kicker, loader, intake, articulation); 
+    } else {
+      *nomNomMode = false;
+      return NomNomModeOff(flywheel, kicker, loader, intake);  
+    }
+  }
+
+  frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation) {    
+    return frc2::ParallelCommandGroup(
+      Shoot(flywheel, kicker, loader, articulation), 
+      SetIntakeAngleAndPower(intake, IntakeConstants::kRollerIntakePower)
+    ).ToPtr();
+  }
+
+  frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake) {
+    return frc2::SequentialCommandGroup(
+      SetFlywheelMotorPower(flywheel, 0.0), 
+      SetLoaderPower(loader, 0.0),
+      SetShooterKickerPower(kicker, 0.0),
+      SetIntakeManual(intake, IntakeState::RetractIntake, 0.0)
+    ).ToPtr();
+  }
+
   frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                         Flywheel *flywheel, Articulation *articulation) {
     return frc2::InstantCommand([interpolatorData, swerveDrive, flywheel, articulation]() { // saves the point 
       frc::Pose2d robotPose = swerveDrive->GetEstimatedPose(); 
-      interpolatorData->AddPoint(robotPose, TurretAlign::CalculateTargetPose(robotPose), 
+      interpolatorData->AddPoint(robotPose, TurretAlign::GetDistanceToTarget(robotPose), 
                                  articulation->GetArticulationAngle(), flywheel->GetFlywheelTargetPower());
     }, {flywheel, swerveDrive, articulation}).ToPtr();  
   }
@@ -245,33 +274,6 @@ namespace CommandManager {
     return frc2::cmd::RunOnce([swerveDrive, constraints](){
       frc2::CommandScheduler::GetInstance().Schedule(AutoAlign::AutoAlignToPose(swerveDrive, constraints));
     });
-  }
-  
-  frc2::CommandPtr NomNomMode(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, 
-                                Articulation *articulation, bool *nomNomMode) {
-    if (*nomNomMode == false) {
-      *nomNomMode = true; 
-      return NomNomModeOn(flywheel, kicker, loader, intake, articulation); 
-    } else {
-      *nomNomMode = false;
-      return NomNomModeOff(flywheel, kicker, loader, intake);  
-    }
-  }
-
-  frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation) {    
-    return frc2::ParallelCommandGroup(
-      Shoot(flywheel, kicker, loader, articulation), 
-      SetIntakeAngleAndPower(intake, IntakeConstants::kRollerIntakePower
-      )).ToPtr();
-  }
-
-  frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake) {
-    return frc2::SequentialCommandGroup(
-      SetFlywheelMotorPower(flywheel, 0.0), 
-      SetLoaderPower(loader, 0.0),
-      SetShooterKickerPower(kicker, 0.0),
-      SetIntakeManual(intake, IntakeState::RetractIntake, 0.0)
-    ).ToPtr();
   }
 
   frc2::CommandPtr EmptyCommand() {

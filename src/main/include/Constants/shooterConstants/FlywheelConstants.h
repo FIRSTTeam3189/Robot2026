@@ -19,6 +19,8 @@ namespace FlywheelConstants {
     constexpr double kFlyWheelPowerIncrement {0.05}; 
     constexpr double kFlyWheelPowerDecrement {-0.05}; 
 
+    constexpr double kFlywheelShootPower {-0.65}; 
+
     constexpr units::second_t kFlywheelRunDelay {0.75_s}; 
     
     constexpr bool kFlywheelMotorInverted {true};

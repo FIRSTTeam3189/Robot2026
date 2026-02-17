@@ -4,9 +4,9 @@
 
 #include "subsystems/shooterSubsystem/Flywheel.h"
 
-Flywheel::Flywheel(Articulation *articulation) 
+Flywheel::Flywheel(SwerveDrive *swerveDrive) 
   : 
-    m_articulation(articulation),
+    m_swerveDrive(swerveDrive),
     m_powerInterpolator(AutoAlignConstants::kPowerInterpolatorDistances, AutoAlignConstants::kPowerInterpolatorPowers),
     m_flywheelMotor(FlywheelConstants::kShooterFlywheelID, "Swerve"),
     m_flywheelConfig(),
@@ -19,13 +19,14 @@ Flywheel::Flywheel(Articulation *articulation)
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
 
+    double distanceToTarget = TurretAlign::GetDistanceToTarget(m_swerveDrive->GetEstimatedPose()).value(); 
     // double hoodAngle = m_articulation->GetTargetAngle().value(); 
     // m_targetPower = m_powerInterpolator.Predict(hoodAngle); 
 
     // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
-    frc::SmartDashboard::PutNumber("Test Bindings/flywheel rpm", m_flywheelMotor.GetVelocity().GetValue().value());
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
+    frc::SmartDashboard::PutNumber("Test Bindings/flywheel rpm", m_flywheelMotor.GetVelocity().GetValue().value());
     // frc::SmartDashboard::PutNumber("Test Bindings/flywheel current",  m_flywheelMotor.GetSupplyCurrent().GetValue().value());
    
     
@@ -64,7 +65,8 @@ void Flywheel::SetFlywheelMotorPower(double power) {
     //     appliedPower += stepSize;
     // }
 
-    // m_targetPower = power; 
+    // ! readded this idk why it was commented 
+    m_targetPower = power; 
 
     m_flywheelMotor.Set(power);
 }

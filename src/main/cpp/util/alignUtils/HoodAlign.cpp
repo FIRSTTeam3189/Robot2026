@@ -51,7 +51,8 @@ namespace HoodAlign {
         frc::SmartDashboard::PutNumber("Auto Align/Distance between robot and hub", radius.value()); 
         frc::SmartDashboard::PutNumber("Auto Align/Theta 2", angle);
 
-        units::degree_t rawAngleToHubWithOffset = units::degree_t{(angle + AutoAlignConstants::kHoodDegreeOffset.value())};  // point a bit above hub
+        units::degree_t rawAngleToHubScaled = units::degree_t{angle * AutoAlignConstants::kHoodDegreeMultiplier.value()}; // make bias towards hood being lower  
+        units::degree_t rawAngleToHubWithOffset = rawAngleToHubScaled + AutoAlignConstants::kHoodDegreeOffset;  // point a bit above hub
         units::degree_t targetHoodAngle = 90.0_deg - rawAngleToHubWithOffset; // convert to angle on other side of hood
         // targetHoodAngle -= AutoAlignConstants::kHoodDefaultAngle; // account for the normal (0 read from encoder) actually at 15 degrees
 

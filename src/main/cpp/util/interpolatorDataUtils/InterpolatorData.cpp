@@ -16,10 +16,9 @@ InterpolatorData::InterpolatorData(const std::string &filename)
 
 }
 
-void InterpolatorData::AddPoint(frc::Pose2d robotPose, frc::Pose2d targetPose, units::degree_t hoodAngle, double flywheelPower)
+void InterpolatorData::AddPoint(frc::Pose2d robotPose, units::meter_t distanceToTarget, units::degree_t hoodAngle, double flywheelPower)
 {
-    Vector2d robotToTarget(robotPose, targetPose); 
-    double distance = robotToTarget.Length(); 
+    double distance = distanceToTarget.value(); 
 
     m_dataPoints.push_back({robotPose, flywheelPower, hoodAngle.value(), distance});
 }

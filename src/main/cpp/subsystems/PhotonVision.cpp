@@ -43,26 +43,26 @@ void PhotonVision::Periodic() {
         
         frc::Pose3d tagPose3d = m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value();
         frc::Pose2d tagPose = tagPose3d.ToPose2d();
-        // frc::Pose2d cameraPose = photon::PhotonUtils::EstimateFieldToCamera(transform2d, m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d());
+        frc::Pose2d cameraPose = photon::PhotonUtils::EstimateFieldToCamera(transform2d, m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d());
         // frc::Pose2d visionEstimatedRobotPose = cameraPose.TransformBy(m_cameraToRobotTransform);
-        // frc::Pose2d visionEstimatedRobotPose = photon::PhotonUtils::EstimateFieldToRobot(
-        //     transform2d, 
-        //     m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), 
-        //     m_cameraToRobotTransform);
-
         frc::Pose2d visionEstimatedRobotPose = photon::PhotonUtils::EstimateFieldToRobot(
-            m_heightOffset, // camera height
-            tagPose3d.Z(),// tag height
+            transform2d, 
+            m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), 
+            m_cameraToRobotTransform);
 
-            m_pitchOffset.Radians(), // camera pitch
-            tagPose3d.Rotation().Y(), // target pitch
+        // frc::Pose2d visionEstimatedRobotPose = photon::PhotonUtils::EstimateFieldToRobot(
+        //     m_heightOffset, // camera height
+        //     tagPose3d.Z(),// tag height
 
-            tagPose3d.Rotation().Z(), // tag yaw
-            m_poseEstimator->GetEstimatedPose().Rotation(), // gyro angle
+        //     m_pitchOffset.Radians(), // camera pitch
+        //     tagPose3d.Rotation().Y(), // target pitch
 
-            m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), // field to target
-            m_cameraToRobotTransform // camera to robot
-        );
+        //     tagPose3d.Rotation().Z(), // tag yaw
+        //     m_poseEstimator->GetEstimatedPose().Rotation(), // gyro angle
+
+        //     m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), // field to target
+        //     m_cameraToRobotTransform // camera to robot
+        // );
         
         double xDistance = transform2d.X().value();
         double yDistance = transform2d.Y().value();

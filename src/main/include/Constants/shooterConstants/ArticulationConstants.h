@@ -20,6 +20,7 @@ enum ArticulationTarget {
     Manual,
     FixedAlign,
     Degrees20,
+    Degrees25,
     Degrees30,
     Degrees40
 }; 
