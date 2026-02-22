@@ -18,10 +18,11 @@ namespace FlywheelConstants {
 
     constexpr double kFlyWheelPowerIncrement {0.05}; 
     constexpr double kFlyWheelPowerDecrement {-0.05}; 
+    constexpr double kAutoStaticFlywheelPower {-0.5};
+    constexpr double kFlywheelFerryPower {-0.95}; 
+    constexpr double kFlywheelShootPower {-0.90}; 
 
-    constexpr double kFlywheelShootPower {-0.65}; 
-
-    constexpr units::second_t kFlywheelRunDelay {0.75_s}; 
+    constexpr units::second_t kFlywheelRunDelay {0.3_s}; 
     
     constexpr bool kFlywheelMotorInverted {true};
     constexpr ctre::phoenix6::signals::NeutralModeValue kFlywheelNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Coast};

@@ -19,7 +19,7 @@
 
 #include "util/LinearInterpolator.h"
 #include "util/alignUtils/TurretAlign.h"
-
+#include "util/alignUtils/HoodAlign.h"
 
 class Flywheel : public frc2::SubsystemBase {
  public:

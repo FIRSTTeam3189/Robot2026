@@ -31,6 +31,10 @@ void SetArticulationAngle::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool SetArticulationAngle::IsFinished() {
+  // if (abs(m_articulation->GetArticulationAngle().value() - m_articulation->GetTargetAngle().value()) < 1.5) {
+  //   m_articulation->SetArticulationMotorPower(0.0);
+  //   return true;
+  // }
 
   return false;
 

@@ -19,6 +19,7 @@ enum ArticulationTarget {
     Stationary,
     Manual,
     FixedAlign,
+    Degrees0,
     Degrees20,
     Degrees25,
     Degrees30,
@@ -58,10 +59,10 @@ namespace ArticulationConstants {
     constexpr double kResetShooterPower {-1.0};
 
 
-    constexpr double kSRotation {0.25}; // Static voltage applied to overcome friction
-    constexpr double kVRotation {0.35}; // Volts applied per meter per second
+    constexpr double kSRotation {0.375}; // Static voltage applied to overcome friction
+    constexpr double kVRotation {0.6}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {2.0}; // Volts applied per meter error    
+    constexpr double kPRotation {3.5}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 

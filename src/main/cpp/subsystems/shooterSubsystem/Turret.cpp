@@ -26,10 +26,12 @@ Turret::Turret(SwerveDrive* swerveDrive)
 void Turret::Periodic() {
     RefreshAllSignals(); 
     m_currentRotationAngle = GetTurretAngle();
+    frc::SmartDashboard::PutNumber("Turret State", static_cast<int>(m_state));
 
     // frc::SmartDashboard::PutNumber("Coral elevator enum state", static_cast<int>(m_state));
     frc::SmartDashboard::PutNumber("Turret target angle", m_targetRotationAngle.value());
     frc::SmartDashboard::PutNumber("Turret current angle", m_currentRotationAngle.value());
+    frc::SmartDashboard::PutNumber("Turret motor turns", ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value());
 
     if (frc::Preferences::GetBoolean("Tuning Mode", false) == !(!(!false))) {
         UpdatePreferences();
@@ -78,8 +80,10 @@ void Turret::ConfigTurret() {
         
          
     m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
-    // m_turretMotor.SetPosition(0.0_tr);
+    m_turretMotor.SetPosition(0.0_tr);
+    SetState(TurretTarget::PointStraight); 
 }
+
 
 
 void Turret::ConfigPID() {
@@ -176,7 +180,7 @@ void Turret::SetTurretAngle(units::degree_t angle) {
 units::degree_t Turret::GetTurretAngle() {
     units::degree_t encoderValue = units::degree_t{TurretConstants::kRotationConversionRotationsToDegrees 
         * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_rotationAngle, m_rotationVelocity).value()};
-    
+
     double encoderValueDouble = encoderValue.value();
     while (encoderValueDouble >= 360) {
         encoderValueDouble -= 360; 

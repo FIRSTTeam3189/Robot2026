@@ -82,7 +82,8 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
   // frc::SmartDashboard::PutData("Command scheduler", &frc2::CommandScheduler::GetInstance());
-
+  m_container.GetShooterSubsystem()->SetState(TurretTarget::AlignHub); 
+  m_container.GetHoodSubsystem()->SetState(ArticulationTarget::AligntoHub); 
   // m_container.PrintActiveCommands();
   
   // frc::SmartDashboard::PutBoolean("Auto command/is finished", m_autonomousCommand->IsFinished()); 
@@ -101,6 +102,9 @@ void Robot::TeleopInit() {
  */
 void Robot::TeleopPeriodic() {
   // m_container.PrintActiveCommands();
+  frc::SmartDashboard::PutNumber("Current Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
+  // m_container.GetShooterSubsystem()->SetState(TurretTarget::AlignHub); 
+  // m_container.GetHoodSubsystem()->SetState(ArticulationTarget::AligntoHub); 
 }
 
 /**

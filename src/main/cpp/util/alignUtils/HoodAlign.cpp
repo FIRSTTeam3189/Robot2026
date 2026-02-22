@@ -31,6 +31,22 @@ namespace HoodAlign {
         return x >= AutoAlignConstants::kBlueNeutralZoneThreshold && x <= AutoAlignConstants::kRedNeutralZoneThreshold; 
     }
 
+    bool InTrenchZone(frc::Pose2d robotPose) {
+        double x = robotPose.X().value();
+        double y = robotPose.Y().value(); 
+
+        bool inY = (y > AutoAlignConstants::kTrenchTop.value()) || (y < AutoAlignConstants::kTrenchBot.value()); 
+        if (frc::DriverStation::GetAlliance()) {
+            if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
+                return x > AutoAlignConstants::kBlueTrenchLeftX.value() && x < AutoAlignConstants::kBlueTrenchRightX.value() && inY; 
+            } else {
+                return x > AutoAlignConstants::kRedTrenchLeftX.value() && x < AutoAlignConstants::kRedTrenchRightX.value() && inY; 
+            }        
+        } 
+        // bad case 
+        return false; 
+    }
+
     units::degree_t CalculateArticulationAngle(frc::Pose2d robotPose) {
         frc::Pose2d hubPose = GetHubPose();
 
@@ -44,21 +60,32 @@ namespace HoodAlign {
         Vector2d robotToHub(robotPose, hubPose); 
         units::meter_t radius = units::meter_t{robotToHub.Length()}; 
 
-        // units::meter_t y = AutoAlignConstants::kHubHeight - AutoAlignConstants::kHoodHeight;
-
         double angle = std::atan((AutoAlignConstants::kHoodAndHubHeightDiff / radius).value()) * (180 / PI);
 
         frc::SmartDashboard::PutNumber("Auto Align/Distance between robot and hub", radius.value()); 
-        frc::SmartDashboard::PutNumber("Auto Align/Theta 2", angle);
+        frc::SmartDashboard::PutNumber("Auto Align/Angle from shooter to top of hub", angle);
 
-        units::degree_t rawAngleToHubScaled = units::degree_t{angle * AutoAlignConstants::kHoodDegreeMultiplier.value()}; // make bias towards hood being lower  
-        units::degree_t rawAngleToHubWithOffset = rawAngleToHubScaled + AutoAlignConstants::kHoodDegreeOffset;  // point a bit above hub
+        // units::degree_t rawAngleToHubScaled = units::degree_t{angle * AutoAlignConstants::kHoodDegreeMultiplier.value()}; // make bias towards hood being lower  
+        units::degree_t rawAngleToHubWithOffset = units::degree_t{angle + AutoAlignConstants::kHoodDegreeOffset.value()};  // point a bit above hub
         units::degree_t targetHoodAngle = 90.0_deg - rawAngleToHubWithOffset; // convert to angle on other side of hood
+        units::degree_t targetHoodAngleScaled = units::degree_t{targetHoodAngle.value() * AutoAlignConstants::kHoodDegreeMultiplier.value()}; // make bias towards hood being lower  
+
         // targetHoodAngle -= AutoAlignConstants::kHoodDefaultAngle; // account for the normal (0 read from encoder) actually at 15 degrees
+        
+        frc::SmartDashboard::PutNumber("Auto Align/Target Hood Angle with offset", targetHoodAngle.value());
+        frc::SmartDashboard::PutNumber("Auto Align/Target Hood Scaled Angle", targetHoodAngleScaled.value()); 
+        frc::SmartDashboard::PutNumber("Auto Align/Target Hood Angle without offset", (90.0 - angle));
 
-        frc::SmartDashboard::PutNumber("Auto Align/Hood Angle", targetHoodAngle.value());
+        //clamp it 
+        if (targetHoodAngleScaled > 30_deg) {
+            targetHoodAngleScaled = 30_deg;
+        }
 
-        return targetHoodAngle; 
+        if (InTrenchZone(robotPose)) {
+            return 0_deg; 
+        }
+
+        return targetHoodAngleScaled; 
         
     }   
 

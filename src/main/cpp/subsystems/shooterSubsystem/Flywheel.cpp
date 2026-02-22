@@ -19,10 +19,16 @@ Flywheel::Flywheel(SwerveDrive *swerveDrive)
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
 
-    double distanceToTarget = TurretAlign::GetDistanceToTarget(m_swerveDrive->GetEstimatedPose()).value(); 
-    // double hoodAngle = m_articulation->GetTargetAngle().value(); 
+    // double distanceToTarget = TurretAlign::GetDistanceToTarget(m_swerveDrive->GetEstimatedPose()).value(); 
     // m_targetPower = m_powerInterpolator.Predict(hoodAngle); 
 
+    frc::Pose2d robotPose = m_swerveDrive->GetEstimatedPose(); 
+    if (HoodAlign::InNeutralZone(robotPose)) {
+        m_targetPower = FlywheelConstants::kFlywheelFerryPower; 
+    } else {
+        double distanceToTarget = TurretAlign::GetDistanceToTarget(robotPose).value(); 
+        m_targetPower = m_powerInterpolator.Predict(distanceToTarget); 
+    }
     // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
     frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
@@ -72,5 +78,5 @@ void Flywheel::SetFlywheelMotorPower(double power) {
 }
 
 void Flywheel::SetFlywheelMotorPower() {
-    SetFlywheelMotorPower(m_targetPower); 
+    SetFlywheelMotorPower(-m_targetPower); 
 }

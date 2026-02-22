@@ -61,7 +61,7 @@ namespace SwerveDriveConstants {
         frc::Translation2d{-SwerveDriveConstants::kXDistanceFromCenter, +SwerveDriveConstants::kYDistanceFromCenter},
         frc::Translation2d{-SwerveDriveConstants::kXDistanceFromCenter, -SwerveDriveConstants::kYDistanceFromCenter}
     };
-    constexpr units::meters_per_second_t kMaxSpeed {5.0_mps};
+    constexpr units::meters_per_second_t kMaxSpeed {4.0_mps};
     constexpr units::radians_per_second_t kMaxAngularVelocity {3.5 * PI};
     constexpr double kActualMaxRotationalVelocity {4.0};
     constexpr units::radians_per_second_squared_t kMaxAngularAcceleration {2.0 * PI};

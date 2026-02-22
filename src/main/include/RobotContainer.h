@@ -87,7 +87,8 @@ class RobotContainer {
   void SetAllNormalBrakeMode();
   void PrintActiveCommands();
 
-  Turret* GetShooterSubsystem(); 
+  Turret* GetShooterSubsystem();  
+  Articulation* GetHoodSubsystem(); 
   InterpolatorData* GetInterpolatorData(); 
 
  private:

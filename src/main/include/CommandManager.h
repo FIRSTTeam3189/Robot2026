@@ -117,8 +117,14 @@ namespace CommandManager {
     frc2::CommandPtr ResetLoader(Loader *loader);
 
 
-    frc2::SequentialCommandGroup Shoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
+    frc2::SequentialCommandGroup Shoot(Turret *turret, Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
     frc2::CommandPtr ShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
+
+    frc2::SequentialCommandGroup AdvancedShoot(Turret *turret, Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
+
+
+    frc2::CommandPtr AutoShoot(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
+    frc2::CommandPtr AutoShootEnd(Flywheel *flywheel, Kicker *kicker, Loader *loader, Articulation *articulation);
       
     frc2::CommandPtr AddInterpolatorPoint(InterpolatorData *interpolatorData, SwerveDrive *swerveDrive, 
                                           Flywheel *flywheel, Articulation *articulation); 
@@ -128,9 +134,9 @@ namespace CommandManager {
 
     frc2::CommandPtr GoToClosestPose(SwerveDrive *swerveDrive, pathplanner::PathConstraints constraints);
 
-    frc2::CommandPtr NomNomMode(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, 
+    frc2::CommandPtr NomNomMode(Turret *turret, Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, 
                                 Articulation *articulation, bool *nomNomMode); 
-    frc2::CommandPtr NomNomModeOn(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation);
+    frc2::CommandPtr NomNomModeOn(Turret *turret, Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake, Articulation *articulation);
     frc2::CommandPtr NomNomModeOff(Flywheel *flywheel, Kicker *kicker, Loader *loader, Intake *intake);
 
 

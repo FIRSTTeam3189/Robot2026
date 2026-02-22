@@ -24,10 +24,10 @@ namespace TurretConstants {
 
     constexpr double kRotationAngleTolerance {1.0};
 
-    constexpr bool kSoftLimitEnabledForward{false};
-    constexpr bool kSoftLimitEnabledReverse{false};
-    constexpr units::turn_t kTopSoftLimit {0.0_tr};
-    constexpr units::turn_t kBottomSoftLimit {0.0_tr}; 
+    constexpr bool kSoftLimitEnabledForward{true};
+    constexpr bool kSoftLimitEnabledReverse{true};
+    constexpr units::turn_t kTopSoftLimit {18.0_tr};
+    constexpr units::turn_t kBottomSoftLimit {-4.5_tr}; 
     constexpr units::turn_t kRotationOffset {0.0_tr};
 
     constexpr double kShooterGearRatio {1.0};
@@ -48,7 +48,7 @@ namespace TurretConstants {
     constexpr double kSRotation {0.0}; // Static voltage applied to overcome friction
     constexpr double kVRotation {0.16}; // Volts applied per meter per second
     constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-    constexpr double kPRotation {1.500}; // Volts applied per meter error    
+    constexpr double kPRotation {2.25}; // Volts applied per meter error    
     constexpr double kIRotation {0.0}; // Volts applied per meter integral error
     constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 

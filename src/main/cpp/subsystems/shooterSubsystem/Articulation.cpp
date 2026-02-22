@@ -151,6 +151,10 @@ void Articulation::SetState(ArticulationTarget state) {
 
             break;
         }
+        case(ArticulationTarget::Degrees0): {
+            m_targetArticulationAngle = 0.0_deg; 
+            break;
+        }
         case(ArticulationTarget::Degrees20): {
             m_targetArticulationAngle = 20.0_deg; 
             break;

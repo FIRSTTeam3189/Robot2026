@@ -31,14 +31,16 @@ namespace TurretAlign {
                 if (robotPose.X() < AutoAlignConstants::kBlueHubPose.X()){
                     targetPose = AutoAlignConstants::kBlueHubPose;
                 } else {
-                    targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldBlue, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
+                    targetPose = AutoAlignConstants::kFerryBluePose; 
+                    // targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldBlue, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
                 }
 
             } else {
                 if (robotPose.X() > AutoAlignConstants::kRedHubPose.X()){
                     targetPose = AutoAlignConstants::kRedHubPose;
                 } else {
-                    targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldRed, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
+                    targetPose = AutoAlignConstants::kFerryRedPose;
+                    // targetPose = frc::Pose2d(AutoAlignConstants::kMidpointOnFieldRed, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
                 }
             }
         }
