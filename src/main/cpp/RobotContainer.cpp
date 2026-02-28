@@ -5,7 +5,7 @@
 #include "RobotContainer.h"
 
 RobotContainer::RobotContainer() {
-  (void)VisionConstants::kSyncBytes[0];
+  (void)constants::vision::kSyncBytes[0];
   RegisterAutoCommands();
   m_chooser = pathplanner::AutoBuilder::buildAutoChooser();
   
@@ -13,12 +13,12 @@ RobotContainer::RobotContainer() {
 
   // Grant default control of swerve drive to either bill (controller 0),
   // or test (controller 2), based on a constant
-  switch (SwerveDriveConstants::kActiveController) {
-    case(ActiveDriveController::OfficialDriver) :
-      m_swerveDrive->SetDefaultCommand(Drive(&m_bill, m_swerveDrive, m_driveState));
+  switch (constants::swerve::swerve_drive::kActiveController) {
+    case(constants::swerve::ActiveDriveController::OfficialDriver) :
+      m_swerveDrive->SetDefaultCommand(commands::main::Drive(&m_bill, m_swerveDrive, m_driveState));
       break;
-    case(ActiveDriveController::TestControls) :
-      m_swerveDrive->SetDefaultCommand(Drive(&m_test, m_swerveDrive, m_driveState));
+    case(constants::swerve::ActiveDriveController::TestControls) :
+      m_swerveDrive->SetDefaultCommand(commands::main::Drive(&m_test, m_swerveDrive, m_driveState));
       break;
     default :
       break;
@@ -34,13 +34,6 @@ RobotContainer::RobotContainer() {
   CreateAutoPaths();
 }
 
-// void RobotContainer::Pathfindbranches(frc::Pose2D pose, std::shared_ptr<pathplanner::PathPlannerPath> scorepath, std::shared_ptr<pathplanner::PathPlannerPath> retreatpath, string level) {
-//     std::move(pathplanner::AutoBuilder::pathfindToPose(pose)).AndThen(
-//     std::move(std::move(pathplanner::NamedCommands::getCommand(level))).WithDeadline(std::move(pathplanner::AutoBuilder::followPath(scorepath)))).AndThen(
-//     std::move(frc2::WaitCommand(1.0_s)).ToPtr()).AndThen(
-//     std::move(pathplanner::NamedCommands::getCommand("ScoreCoral")).WithDeadline(std::move(frc2::WaitCommand(1.0_s)).ToPtr())).AndThen(
-//     std::move(pathplanner::NamedCommands::getCommand("ResetElevator")).WithDeadline(std::move(pathplanner::AutoBuilder::followPath(m_retreatpath))))
-// }
 
 
 
@@ -49,111 +42,23 @@ void RobotContainer::ConfigureDriverBindings() {
 
   // functional
   frc2::Trigger resetPoseButton([this](){ return m_bill.GetTouchpadButton(); });
-  resetPoseButton.OnTrue(CommandManager::ResetPose(m_swerveDrive));
-
-  // frc2::Trigger nomNomMode([this](){ return m_bill.GetCircleButton(); });
-  // nomNomMode.OnTrue(CommandManager::NomNomModeOn(m_flywheel, m_kicker, m_loader, m_intake, m_articulation));
-  // nomNomMode.OnFalse(CommandManager::NomNomModeOff(m_flywheel, m_kicker, m_loader, m_intake));
-  // frc2::Trigger nomNomMode([this](){ return m_bill.GetCircleButton(); });
-  // nomNomMode.OnTrue(CommandManager::NomNomMode(m_turret, m_flywheel, m_kicker, m_loader, m_intake, m_articulation, &m_nomNomMode));
-  
+  resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive));
   
   frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
-  shootFuelButton.OnTrue(CommandManager::Shoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
-  shootFuelButton.OnFalse(CommandManager::ShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
+  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
+  shootFuelButton.OnFalse(actions::robot::ShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
 
-  // frc2::Trigger reverseKickerButton([this](){ return m_bill.GetCrossButton(); });
-  // reverseKickerButton.OnTrue(CommandManager::RunKickerBackward(m_kicker));
-  // reverseKickerButton.OnFalse(CommandManager::ResetKicker(m_kicker));
+  frc2::Trigger runFlywheelButton([this]() { return m_bill.GetTriangleButton();});
+  runFlywheelButton.OnTrue(actions::shooter::flywheel::FlywheelPowerForward(m_flywheel)); 
+  runFlywheelButton.OnFalse(actions::shooter::flywheel::ResetFlywheelPower(m_flywheel)); 
 
-
-
-  // frc2::Trigger alignToHubButton([this](){ return m_bill.GetTriangleButton(); });
-  // alignToHubButton.OnTrue(CommandManager::AlignToHub(m_turret, m_articulation));
-  // alignToHubButton.OnFalse(SetTurretAngle(m_turret, TurretTarget::PointStraight).ToPtr());
-  
-  // frc2::Trigger autoAlignToPose([this]() { return m_bill.GetR1Button(); });
-  // autoAlignToPose.OnTrue(CommandManager::GoToClosestPose(m_swerveDrive, m_constraints)); 
-
-  //-----------------------------------------------------------------------------------------------------------------
-
-  // manual control buttons
-  // frc2::Trigger moveTurretRight([this]() { return m_bill.GetPOV() == 90; }); 
-  // moveTurretRight.OnTrue(CommandManager::TurretPowerForward(m_turret));
-  // moveTurretRight.OnFalse(CommandManager::ResetTurretPower(m_turret));
-
-  // frc2::Trigger moveTurretLeft([this]() { return m_bill.GetPOV() == 270;}); 
-  // moveTurretLeft.OnTrue(CommandManager::TurretPowerReverse(m_turret));
-  // moveTurretLeft.OnFalse(CommandManager::ResetTurretPower(m_turret));
-
-  // frc2::Trigger pointStraightButton([this](){ return m_bill.GetR2Button(); });
-  // pointStraightButton.OnTrue(CommandManager::PointTurretStraight(m_turret));
-
-  // frc2::Trigger pointLeftButton([this](){ return m_bill.GetR1Button(); });
-  // pointLeftButton.OnTrue(CommandManager::PointTurretLeft(m_turret));
-
-  // frc2::Trigger pointRightButton([this](){ return m_bill.GetL2Button(); });
-  // pointRightButton.OnTrue(CommandManager::PointTurretRight(m_turret));
-
-  // frc2::Trigger runArticulationMotor([this](){ return m_bill.GetL2Button(); });
-  // runArticulationMotor.OnTrue(frc2::InstantCommand([this]{
-  //       m_articulation->SetArticulationMotorPower(0.2);
-  //     }, {m_articulation}).ToPtr());
-
-  // runArticulationMotor.OnFalse(frc2::InstantCommand([this]{
-  //       m_articulation->SetArticulationMotorPower(0.0);
-  //     }, {m_articulation}).ToPtr());
-
-  // works
-
-  // frc2::Trigger slowDownButton([this](){ return m_bill.GetL1Button(); });
-  // slowDownButton.OnTrue(CommandManageVr::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill));
-  // slowDownButton.OnFalse(CommandManager::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill));
-
-  // frc2::Trigger climbAlignSwervesButton([this](){ return m_bill.GetL1Button(); });
-  // climbAlignSwervesButton.OnTrue(CommandManager::ClimbAlignSwerves(m_swerveDrive, &m_driveState, &m_bill));
 
   frc2::Trigger extendOrRetractIntake([this](){ return m_bill.GetL1Button(); });
-  extendOrRetractIntake.OnTrue(SetIntakeAngleAndPower(m_intake, IntakeConstants::kRollerIntakePower).ToPtr()); // 0.8 when set, nothing when retract
-  // extendOrRetractIntake.OnFalse(frc2::InstantCommand([](){}, {m_intake}).ToPtr());  // idk bro
-
-  // frc2::Trigger runIntakeMotor([this]() { return m_bill.GetPSButton(); }); 
-  // runIntakeMotor.OnTrue(CommandManager::IntakePowerForward(m_intake).ToPtr());
-  // runIntakeMotor.OnFalse(CommandManager::ResetIntakePower(m_intake));
-
-  // // works
-  // frc2::Trigger runKickerMotor([this](){ return m_bill.GetSquareButton(); });
-  // runKickerMotor.OnTrue(CommandManager::RunKickerForward(m_kicker)); 
-  // runKickerMotor.OnFalse(CommandManager::ResetKicker(m_kicker));
-
-  // // works
-  // frc2::Trigger runLoaderMotor([this](){ return m_bill.GetTriangleButton(); });
-  // runLoaderMotor.OnTrue(CommandManager::RunLoaderForward(m_loader)); 
-  // runLoaderMotor.OnFalse(CommandManager::ResetLoader(m_loader));
-
-  // // works
-  // frc2::Trigger runFlywheelMotor([this](){ return m_bill.GetCrossButton(); });
-  // runFlywheelMotor.OnTrue(CommandManager::FlywheelPowerForward(m_flywheel)); 
-  // runFlywheelMotor.OnFalse(CommandManager::ResetFlywheelPower(m_flywheel));
-
-
-  // articulation 
-  // frc2::Trigger setHoodAngle25([this]() { return m_bill.GetSquareButton(); }); 
-  // setHoodAngle25.OnTrue(CommandManager::Articulation25Degrees(m_articulation)); 
-
-  // frc2::Trigger setHoodAngle30([this]() { return m_bill.GetTriangleButton(); }); 
-  // setHoodAngle30.OnTrue(CommandManager::Articulation30Degrees(m_articulation)); 
+  extendOrRetractIntake.OnTrue(commands::main::SetIntakeAngleAndPower(m_intake, constants::intake::kRollerIntakePower).ToPtr()); // 0.8 when set, nothing when retract
+ 
 
   frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
-  setHoodAngle40.OnTrue(CommandManager::Articulation40Degrees(m_articulation)); 
-
-  // frc2::Trigger runArticulationForward([this]() { return m_bill.GetR1Button(); }); 
-  // runArticulationForward.OnTrue(CommandManager::RunArticulationForward(m_articulation)); 
-  // runArticulationForward.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
-
-  // frc2::Trigger runArticulationReverse([this]() { return m_bill.GetL2Button(); }); 
-  // runArticulationReverse.OnTrue(CommandManager::RunArticulationReverse(m_articulation)); 
-  // runArticulationReverse.OnFalse(CommandManager::ResetArticulationPower(m_articulation)); 
+  setHoodAngle40.OnTrue(actions::shooter::articulation::Articulation40Degrees(m_articulation)); 
 
 
 }
@@ -166,8 +71,8 @@ void RobotContainer::RegisterAutoCommands() {
     for (int i = 0; i < 10; i++) {
       std::cout << "Auto started/ended\n"; }},{}).ToPtr());
 
-  pathplanner::NamedCommands::registerCommand("Front Auto Shoot", CommandManager::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Auto Shoot End", CommandManager::AutoShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
+  pathplanner::NamedCommands::registerCommand("Front Auto Shoot", actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::autonomous::AutoShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
 } 
 
 void RobotContainer::CreateAutoPaths() {
@@ -204,72 +109,62 @@ void RobotContainer::SetDrivePose(frc::Pose2d pose, bool justRotation) {
 }
 
 void RobotContainer::SetAllCoast() {
-  m_swerveDrive->SetBrakeMode(BrakeMode::Coast);
+  m_swerveDrive->SetBrakeMode(constants::BrakeMode::Coast);
 }
 
 void RobotContainer::SetAllBrake() {
-  m_swerveDrive->SetBrakeMode(BrakeMode::Brake);
+  m_swerveDrive->SetBrakeMode(constants::BrakeMode::Brake);
   
 }
 
 // motors will coast along
 
 void RobotContainer::SetAllNormalBrakeMode() {
-  m_swerveDrive->SetBrakeMode(BrakeMode::Default);
+  m_swerveDrive->SetBrakeMode(constants::BrakeMode::Default);
  
 }
 
 void RobotContainer::SetDriveBrake() {
-  m_swerveDrive->SetBrakeMode(BrakeMode::Brake);
+  m_swerveDrive->SetBrakeMode(constants::BrakeMode::Brake);
 }
 
 void RobotContainer::SetDriveCoast() {
-  m_swerveDrive->SetBrakeMode(BrakeMode::Coast);
+  m_swerveDrive->SetBrakeMode(constants::BrakeMode::Coast);
 }
 
 void RobotContainer::PrintActiveCommands() {
-  // frc::SmartDashboard::PutString("Current command/swerve", m_swerveDrive->GetCurrentCommand()->GetName());
-  // frc::SmartDashboard::PutString("Current command/coral elevator", m_coralElevator->GetCurrentCommand()->GetName());
-  // frc::SmartDashboard::PutString("Current command/coral manipulator", m_coralManipulator->GetCurrentCommand()->GetName());
+  frc::SmartDashboard::PutString("Current command/swerve", m_swerveDrive->GetCurrentCommand()->GetName());
 }
 
 void RobotContainer::ConfigureTestBindings() {
 
-  frc2::Trigger incrementFlywheelPowerButton([this](){ return m_test.GetSquareButton(); });
-  incrementFlywheelPowerButton.OnTrue(CommandManager::IncrementFlywheelPower(m_flywheel)); 
-  frc2::Trigger decrementFlywheelPowerButton([this](){ return m_test.GetCircleButton(); });
-  decrementFlywheelPowerButton.OnTrue(CommandManager::DecrementFlywheelPower(m_flywheel));
-
-  frc2::Trigger incrementArticulationAngleButton([this](){ return m_test.GetR2Button(); });
-  incrementArticulationAngleButton.OnTrue(CommandManager::ArticulationAngleUp(m_articulation));
-
-  frc2::Trigger decrementArticulationAngleButton([this](){ return m_test.GetL2Button(); });
-  decrementArticulationAngleButton.OnTrue(CommandManager::ArticulationAngleDown(m_articulation));
-
-  // frc2::Trigger shootFuelButton([this](){ return m_test.GetR1Button(); });
-  // shootFuelButton.OnTrue(CommandManager::RunFlywheelAndLoader(m_kicker, m_flywheel));
-
   frc2::Trigger addInterpolationPoint([this]() { return m_test.GetCrossButton(); });
-  addInterpolationPoint.OnTrue(CommandManager::AddInterpolatorPoint(m_interpolatorData, m_swerveDrive, m_flywheel, m_articulation));
+  addInterpolationPoint.OnTrue(actions::interpolator::AddInterpolatorPoint(m_interpolatorData, m_swerveDrive, m_flywheel, m_articulation));
 
   frc2::Trigger removeInterpolationPoint([this]() { return m_test.GetTriangleButton(); });
-  removeInterpolationPoint.OnTrue(CommandManager::RemoveLastInterpolationPoint(m_interpolatorData));
+  removeInterpolationPoint.OnTrue(actions::interpolator::RemoveLastInterpolationPoint(m_interpolatorData));
 
   frc2::Trigger saveAllInterpolationPoints([this]() { return m_test.GetCreateButton(); }); 
-  saveAllInterpolationPoints.OnTrue(CommandManager::SaveAllInterpolationPoints(m_interpolatorData));
+  saveAllInterpolationPoints.OnTrue(actions::interpolator::SaveAllInterpolationPoints(m_interpolatorData));
 }
 
-Turret* RobotContainer::GetShooterSubsystem() {
+subsystems::shooter::Turret* RobotContainer::GetShooterSubsystem() {
   return m_turret; 
 }
 
-Articulation* RobotContainer::GetHoodSubsystem() {
+subsystems::shooter::Articulation* RobotContainer::GetHoodSubsystem() {
   return m_articulation; 
 }
 
-InterpolatorData* RobotContainer::GetInterpolatorData() {
+util::interpolator::Data* RobotContainer::GetInterpolatorData() {
   return m_interpolatorData; 
 }
 
+subsystems::swerve::Drive* RobotContainer::GetSwerveSubsystem() {
+  return m_swerveDrive; 
+}
 
+
+// ! Signs of a legend btw
 // no matter how nice ethan might seem, when you least expect it he will slap you with a piece of chicken and eat you in a bucket
+// ! dont delete it please :<(   (._.)

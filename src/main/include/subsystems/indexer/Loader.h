@@ -1,0 +1,43 @@
+#pragma once
+
+#include <frc2/command/SubsystemBase.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include <frc/Preferences.h>
+
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkClosedLoopController.h>
+
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc/controller/ArmFeedforward.h>
+#include <frc/controller/ProfiledPIDController.h>
+
+#include "constants/indexer/Loader.h"
+
+
+namespace subsystems {
+  namespace indexer {
+    class Loader : public frc2::SubsystemBase {
+      public:
+        Loader();
+        void SetLoaderMotorPower(double power);
+        void ConfigLoaderMotor();
+        /**
+         * Will be called periodically whenever the CommandScheduler runs.
+         */
+        void Periodic() override;
+
+      private:
+
+        rev::spark::SparkMax m_loaderMotor;
+        rev::spark::SparkMaxConfig m_loaderConfig;
+
+
+
+      };
+  };
+};
+
+

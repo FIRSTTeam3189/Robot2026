@@ -82,8 +82,8 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
   // frc::SmartDashboard::PutData("Command scheduler", &frc2::CommandScheduler::GetInstance());
-  m_container.GetShooterSubsystem()->SetState(TurretTarget::AlignHub); 
-  m_container.GetHoodSubsystem()->SetState(ArticulationTarget::AligntoHub); 
+  m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub); 
+  m_container.GetHoodSubsystem()->SetState(constants::shooter::ArticulationTarget::AligntoHub); 
   // m_container.PrintActiveCommands();
   
   // frc::SmartDashboard::PutBoolean("Auto command/is finished", m_autonomousCommand->IsFinished()); 
@@ -94,7 +94,7 @@ void Robot::TeleopInit() {
    if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Cancel();
   }
-  // m_container.GetShooterSubsystem()->SetState(TurretTarget::AlignHub); 
+  // m_container.Getshooter()->SetState(constants::shooter::TurretTarget::AlignHub); 
 }
 
 /**
@@ -103,8 +103,8 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
   // m_container.PrintActiveCommands();
   frc::SmartDashboard::PutNumber("Current Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
-  // m_container.GetShooterSubsystem()->SetState(TurretTarget::AlignHub); 
-  // m_container.GetHoodSubsystem()->SetState(ArticulationTarget::AligntoHub); 
+  m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub); 
+  m_container.GetHoodSubsystem()->SetState(constants::shooter::ArticulationTarget::AligntoHub); 
 }
 
 /**
@@ -124,7 +124,7 @@ void Robot::SimulationPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
-  (void)VisionConstants::kSyncBytes[0];
+  (void)constants::vision::kSyncBytes[0];
   return frc::StartRobot<Robot>();
 }
 #endif

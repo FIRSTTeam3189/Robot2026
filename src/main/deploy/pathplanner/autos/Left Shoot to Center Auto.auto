@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shoot End to Center"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Shoot Twice",
+  "choreoAuto": false
+}

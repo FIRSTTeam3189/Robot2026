@@ -20,6 +20,7 @@ m_CANcoderOffset(CANcoderOffset)
     m_signals.emplace_back(&m_anglePosition);
     m_signals.emplace_back(&m_driveVelocity);
     m_signals.emplace_back(&m_angleVelocity);
+
 }
 
 void SwerveModule::ConfigDriveMotor() {
@@ -111,17 +112,17 @@ void SwerveModule::ConfigCANcoder() {
     m_CANcoder.GetConfigurator().Apply(m_encoderConfigs);
 }
 
-void SwerveModule::SetBrakeMode(BrakeMode mode) {
+void SwerveModule::SetBrakeMode(constants::BrakeMode mode) {
     switch (mode) {
-        case(BrakeMode::Brake) :
+        case(constants::BrakeMode::Brake) :
             m_driveConfigs.MotorOutput.NeutralMode = ctre::phoenix6::signals::NeutralModeValue::Brake;
             m_angleConfigs.MotorOutput.NeutralMode = ctre::phoenix6::signals::NeutralModeValue::Brake;
             break;
-        case(BrakeMode::Coast) :
+        case(constants::BrakeMode::Coast) :
             m_driveConfigs.MotorOutput.NeutralMode = ctre::phoenix6::signals::NeutralModeValue::Coast;
             m_angleConfigs.MotorOutput.NeutralMode = ctre::phoenix6::signals::NeutralModeValue::Coast;
             break;
-        case(BrakeMode::Default) :
+        case(constants::BrakeMode::Default) :
             m_driveConfigs.MotorOutput.NeutralMode = SwerveModuleConstants::kDriveNeutralMode;
             m_angleConfigs.MotorOutput.NeutralMode = SwerveModuleConstants::kAngleNeutralMode;
             break;

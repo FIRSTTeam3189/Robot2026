@@ -1,0 +1,70 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+#include "subsystems/shooter/Flywheel.h"
+
+using namespace ctre::phoenix6;
+
+namespace subsystems::shooter { 
+    
+    Flywheel::Flywheel(subsystems::swerve::Drive *swerveDrive) 
+      : 
+        m_swerveDrive(swerveDrive),
+        m_powerInterpolator(constants::auto_align::kPowerInterpolatorDistances, constants::auto_align::kPowerInterpolatorPowers),
+        m_flywheelMotor(constants::shooter::flywheel::kShooterFlywheelID, "Swerve"),
+        m_flywheelConfig()
+    {
+    
+        ConfigFlywheelMotor();
+    }
+    
+    // This method will be called once per scheduler run
+    void Flywheel::Periodic() { 
+    
+        frc::Pose2d robotPose = m_swerveDrive->GetEstimatedPose(); 
+        double distanceToTarget = util::align::turret::GetDistanceToTarget(robotPose).value(); 
+        double power = m_powerInterpolator.Predict(distanceToTarget); 
+        double rps = (power * constants::shooter::flywheel::kFlywheelMaxRPM) / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
+        SetFlyWheelMotorVelocity(units::turns_per_second_t{std::abs(rps)}); 
+    
+        // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
+        // frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
+        // frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
+        frc::SmartDashboard::PutNumber("Test Bindings/flywheel current rpm", m_flywheelMotor.GetVelocity().GetValue().value() * 60);
+        frc::SmartDashboard::PutNumber("Test Bindings/flywheel target rpm", GetFlywheelTargetVelocity().value() * 60);
+    
+        // frc::SmartDashboard::PutNumber("Test Bindings/flywheel current",  m_flywheelMotor.GetSupplyCurrent().GetValue().value());
+       
+        
+    }
+    
+    void Flywheel::ConfigFlywheelMotor() {
+        m_flywheelConfig.MotorOutput.Inverted = constants::shooter::flywheel::kFlywheelMotorInverted;
+        m_flywheelConfig.MotorOutput.NeutralMode = constants::shooter::flywheel::kFlywheelNeutralMode;
+        m_flywheelConfig.OpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(1.0_s);
+    
+        auto& slot0Configs = m_flywheelConfig.Slot0;
+        slot0Configs.kS = constants::shooter::flywheel::kS;
+        slot0Configs.kV = constants::shooter::flywheel::kV;
+        slot0Configs.kI = constants::shooter::flywheel::kI; 
+        slot0Configs.kD = constants::shooter::flywheel::kD;
+    
+        m_flywheelMotor.GetConfigurator().Apply(m_flywheelConfig);  
+    }
+    
+    
+    void Flywheel::SetFlyWheelMotorVelocity(units::turns_per_second_t turnsPerSecond) {
+        controls::VelocityVoltage m_request = controls::VelocityVoltage{0_tps}.WithSlot(0);
+        m_flywheelMotor.SetControl(m_request.WithVelocity(turnsPerSecond).WithFeedForward(constants::shooter::flywheel::kFeedForwardVoltage).WithEnableFOC(true)); // TODO: make it a constant
+    }
+    
+    units::turns_per_second_t Flywheel::GetFlywheelTargetVelocity() {
+        return units::turns_per_second_t{m_flywheelMotor.GetClosedLoopReference().GetValue()}; 
+    }
+    
+    
+    void Flywheel::SetFlywheelMotorPower(double power) {
+        m_flywheelMotor.Set(power);
+    } 
+};

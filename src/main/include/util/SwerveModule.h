@@ -12,8 +12,8 @@
 #include <math.h>
 #include <iostream>
 #include <string>
-#include "Constants/GlobalConstants.h"
-#include "Constants/SwerveModuleConstants.h"
+#include "constants/Global.h"
+#include "constants/swerve/SwerveModule.h"
 
 struct PIDValues {
   double driveP;
@@ -31,7 +31,7 @@ class SwerveModule {
   void ConfigDriveMotor();
   void ConfigAngleMotor(int CANcoderID);
   void ConfigCANcoder();
-  void SetBrakeMode(BrakeMode mode);
+  void SetBrakeMode(constants::BrakeMode mode);
   void UpdatePreferences();
   void SetDesiredState(const frc::SwerveModuleState &state);
   std::vector<ctre::phoenix6::BaseStatusSignal*> GetSignals();
