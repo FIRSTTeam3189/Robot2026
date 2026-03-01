@@ -62,7 +62,6 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
   setHoodAngle40.OnTrue(actions::shooter::articulation::Articulation40Degrees(m_articulation)); 
 
-
 }
 
 void RobotContainer::RegisterAutoCommands() {

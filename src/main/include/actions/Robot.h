@@ -37,29 +37,34 @@
 namespace actions {
     namespace robot {
         frc2::SequentialCommandGroup Shoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
-            subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
+                                           subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                           subsystems::shooter::Articulation *articulation);
 
+        frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
+                                  subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
+                                  
         frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t tps);
         
         frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
             subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
             
 
-        frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
-            subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
+        frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                          subsystems::shooter::Articulation *articulation);
+
        
         frc2::CommandPtr GoToClosestPose(subsystems::swerve::Drive *swerveDrive, pathplanner::PathConstraints constraints);
 
         frc2::CommandPtr NomNomModeOn(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
-                                  subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
-                                  subsystems::intake::Intake *intake, subsystems::shooter::Articulation *articulation);
+                                      subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                      subsystems::intake::Intake *intake, subsystems::shooter::Articulation *articulation);
 
-        frc2::CommandPtr NomNomModeOff(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
-                                        subsystems::intake::Intake *intake);
+        frc2::CommandPtr NomNomModeOff(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
+                                       subsystems::indexer::Loader *loader, subsystems::intake::Intake *intake);
 
         frc2::CommandPtr NomNomMode(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
-                                subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
-                                subsystems::intake::Intake *intake, subsystems::shooter::Articulation *articulation, bool *nomNomMode);
+                                    subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                    subsystems::intake::Intake *intake, subsystems::shooter::Articulation *articulation, bool *nomNomMode);
 
         frc2::CommandPtr ToggleShooterState(constants::ShooterState *shooterState);
 

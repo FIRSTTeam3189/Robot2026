@@ -8,7 +8,7 @@ namespace actions::robot {
         // SetArticulationAngle(articulation, ArticulationTarget::Degrees20),
             frc2::ParallelCommandGroup(
                 frc2::SequentialCommandGroup(
-                    commands::util::SetFlywheelMotorVelocity(flywheel, 100_tps),
+                    commands::util::SetFlywheelMotorVelocity(flywheel, constants::shooter::flywheel::kFlywheelFixedVelocity),
                     frc2::WaitCommand(constants::shooter::flywheel::kFlywheelRunDelay)
                 ),
                 commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower)
@@ -18,6 +18,17 @@ namespace actions::robot {
                 commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
             )
         );
+    }
+
+
+    frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
+                              subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
+        return frc2::SequentialCommandGroup(
+            commands::util::SetFlywheelMotorPower(flywheel, 0.0), 
+            commands::util::SetLoaderPower(loader, 0.0),
+            commands::util::SetShooterKickerPower(kicker, 0.0),
+            commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees0)
+        ).ToPtr();
     }
 
     frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t tps) {
@@ -35,12 +46,12 @@ namespace actions::robot {
             commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::AligntoHub)
         );
     }
-        
+         
 
-    frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
-        subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
+
+    frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                   subsystems::shooter::Articulation *articulation) {
         return frc2::SequentialCommandGroup(
-            commands::util::SetFlywheelMotorPower(flywheel, 0.0), 
             commands::util::SetLoaderPower(loader, 0.0),
             commands::util::SetShooterKickerPower(kicker, 0.0),
             commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees0)

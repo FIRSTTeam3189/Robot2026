@@ -30,6 +30,8 @@ namespace constants {
             constexpr units::turns_per_second_t kFlywheelFerryVelocity {40_tps}; 
             constexpr units::turns_per_second_t kFlywheelShootVelocity {40_tps}; 
 
+            constexpr units::turns_per_second_t kFlywheelFixedVelocity {100_tps}; 
+
             constexpr units::second_t kFlywheelRunDelay {0.3_s}; 
             
             constexpr bool kFlywheelMotorInverted {false};

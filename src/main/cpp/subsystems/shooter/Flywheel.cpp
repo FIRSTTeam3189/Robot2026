@@ -56,7 +56,8 @@ namespace subsystems::shooter {
                 frc::Pose2d robotPose = m_swerveDrive->GetEstimatedPose(); 
                 double distanceToTarget = util::align::turret::GetDistanceToTarget(robotPose).value(); 
                 double power = m_powerInterpolator.Predict(distanceToTarget); 
-                double rps = (power * constants::shooter::flywheel::kFlywheelMaxRPM) / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
+                frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", power); 
+                m_rps = (power * constants::shooter::flywheel::kFlywheelMaxRPM) / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
                 break;
             }
             case (constants::shooter::FlywheelState::FixedVelocity) :
