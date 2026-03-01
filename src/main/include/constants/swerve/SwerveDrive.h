@@ -53,6 +53,13 @@ namespace constants {
             // constexpr frc::Pose2d kBlueResetPose {7.572_m, 4.026_m, frc::Rotation2d{0.0_deg}};
             constexpr frc::Pose2d kRedResetPose {12.950_m, 4.026_m, frc::Rotation2d{180.0_deg}};
 
+            constexpr frc::Pose2d kBlueLeftTrenchPose {3.627_m, 7.439_m, frc::Rotation2d{180.0_deg}};
+            constexpr frc::Pose2d kBlueRightTrenchPose {3.627_m, 0.694_m, frc::Rotation2d{180.0_deg}};
+
+            constexpr frc::Pose2d kRedLeftTrenchPose {12.927_m, 0.694_m, frc::Rotation2d{0.0_deg}};
+            constexpr frc::Pose2d kRedRightTrenchPose {12.927_m, 7.439_m, frc::Rotation2d{0.0_deg}};
+
+
             constexpr units::degree_t kClimbAlignRotBlue {90_deg};
             constexpr units::degree_t kClimbAlignRotRed {-90_deg}; 
 

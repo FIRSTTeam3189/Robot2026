@@ -21,6 +21,7 @@ namespace constants {
             Manual,
             FixedAlign,
             Degrees0,
+            Degrees15,
             Degrees20,
             Degrees25,
             Degrees30,

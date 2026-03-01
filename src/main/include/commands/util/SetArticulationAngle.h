@@ -12,6 +12,7 @@
 
 #include "constants/shooter/Articulation.h"
 
+#include "RobotContainer.h"
 
 namespace commands {
   namespace util {

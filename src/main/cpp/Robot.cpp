@@ -32,6 +32,23 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+  constants::ShooterState shooterState = RobotContainer::GetShooterState();
+  frc::SmartDashboard::PutNumber("Current Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
+  frc::SmartDashboard::PutNumber("Curret Shooter State", static_cast<int>(shooterState));
+  switch (shooterState) {
+    case (constants::ShooterState::Automatic) : {
+      RobotContainer::SetShooterState(constants::ShooterState::Automatic);
+      m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::AutoVelocity);
+      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub);
+      break;
+    }
+    case (constants::ShooterState::Fixed) : {
+      RobotContainer::SetShooterState(constants::ShooterState::Fixed);
+      m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::FixedVelocity);
+      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::PointStraight);
+      break;
+    }
+  }
 }
 
 /**
@@ -82,8 +99,7 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
   // frc::SmartDashboard::PutData("Command scheduler", &frc2::CommandScheduler::GetInstance());
-  m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub); 
-  m_container.GetHoodSubsystem()->SetState(constants::shooter::ArticulationTarget::AligntoHub); 
+
   // m_container.PrintActiveCommands();
   
   // frc::SmartDashboard::PutBoolean("Auto command/is finished", m_autonomousCommand->IsFinished()); 
@@ -102,9 +118,7 @@ void Robot::TeleopInit() {
  */
 void Robot::TeleopPeriodic() {
   // m_container.PrintActiveCommands();
-  frc::SmartDashboard::PutNumber("Current Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
-  m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub); 
-  m_container.GetHoodSubsystem()->SetState(constants::shooter::ArticulationTarget::AligntoHub); 
+
 }
 
 /**

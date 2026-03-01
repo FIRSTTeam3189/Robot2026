@@ -23,7 +23,6 @@
 #include "util/interpolator/Linear.h"
 #include "util/align/Hood.h"
 
-
 namespace subsystems {
   namespace shooter {
     class Flywheel : public frc2::SubsystemBase {
@@ -33,6 +32,8 @@ namespace subsystems {
         void ConfigFlywheelMotor();
 
         void SetFlywheelMotorPower(double power);
+
+        void SetState(constants::shooter::FlywheelState flywheelState);
 
         void SetFlyWheelTargetPower(double power); 
         void SetFlyWheelMotorVelocity(units::turns_per_second_t turnsPerSecond);
@@ -50,10 +51,14 @@ namespace subsystems {
         // declared private and exposed only through public methods.
         subsystems::swerve::Drive *m_swerveDrive; 
 
+        constants::shooter::FlywheelState m_flywheelState = constants::shooter::FlywheelState::AutoVelocity;
+
         util::interpolator::Linear m_powerInterpolator; 
 
         ctre::phoenix6::hardware::TalonFX m_flywheelMotor;
         ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
+
+        double m_rps;
 
     };
   };

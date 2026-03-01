@@ -5,27 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Front Static Shoot First Backup "
+            "name": "Set Pose Left Trench"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Front Auto Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto Shoot End"
+            "name": "Auto Shoot"
           }
         }
       ]

@@ -85,5 +85,18 @@ namespace actions::robot {
         }
     }
 
+    frc2::CommandPtr ToggleShooterState(constants::ShooterState *shooterState) {
+        return frc2::InstantCommand([shooterState] () {
+            if (*shooterState == constants::ShooterState::Automatic)
+            {
+                *shooterState = constants::ShooterState::Fixed;
+            }
+            else 
+            {
+                *shooterState = constants::ShooterState::Automatic;
+            }
+        }).ToPtr();
+    }
+
 
 }

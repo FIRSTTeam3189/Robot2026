@@ -60,5 +60,8 @@ namespace actions {
         frc2::CommandPtr NomNomMode(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
                                 subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
                                 subsystems::intake::Intake *intake, subsystems::shooter::Articulation *articulation, bool *nomNomMode);
+
+        frc2::CommandPtr ToggleShooterState(constants::ShooterState *shooterState);
+
     };
 };

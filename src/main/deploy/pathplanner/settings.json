@@ -3,13 +3,15 @@
   "robotLength": 0.83,
   "holonomicMode": true,
   "pathFolders": [
-    "Shoot Twice",
+    "Ferry",
     "Shoot Once",
+    "Shoot Twice",
     "Test"
   ],
   "autoFolders": [
-    "Shoot Twice",
+    "Ferry",
     "Shoot Once",
+    "Shoot Twice",
     "Test"
   ],
   "defaultMaxVel": 1.0,

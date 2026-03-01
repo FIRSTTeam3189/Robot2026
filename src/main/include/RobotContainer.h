@@ -103,6 +103,11 @@ class RobotContainer {
   subsystems::shooter::Articulation* GetHoodSubsystem(); 
   util::interpolator::Data* GetInterpolatorData(); 
   subsystems::swerve::Drive* GetSwerveSubsystem(); 
+  subsystems::shooter::Flywheel* GetFlywheelSubsystem();
+
+  static void SetShooterState(constants::ShooterState shooterState);
+  static constants::ShooterState GetShooterState();
+
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -144,6 +149,9 @@ class RobotContainer {
   frc::SendableChooser<frc2::Command*> m_chooser;
 
   subsystems::swerve::State m_driveState = subsystems::swerve::State::HeadingControl;
+
+  inline static constants::ShooterState m_shooterState = constants::ShooterState::Automatic;
+
 
   bool m_nomNomMode = false; 
 
