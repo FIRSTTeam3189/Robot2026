@@ -21,10 +21,14 @@ namespace actions::robot {
     }
 
 
-    frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
-                              subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
+    frc2::CommandPtr ShootEnd(subsystems::swerve::Drive *swervedrive, subsystems::swerve::State *drivestate, frc::PS5Controller *bill, subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
+        subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
         return frc2::SequentialCommandGroup(
-            commands::util::SetFlywheelMotorPower(flywheel, 0.0), 
+            frc2::InstantCommand([swervedrive, bill, drivestate]{
+            *drivestate = subsystems::swerve::State::HeadingControl;
+            swervedrive->SetDefaultCommand(commands::main::Drive(bill, swervedrive, *drivestate));
+        },{swervedrive}),
+            // commands::util::SetFlywheelMotorPower(flywheel, 0.0), 
             commands::util::SetLoaderPower(loader, 0.0),
             commands::util::SetShooterKickerPower(kicker, 0.0),
             commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees0)
@@ -35,9 +39,10 @@ namespace actions::robot {
         return commands::util::SetFlywheelMotorVelocity(flywheel, tps).ToPtr();
     }
         
-    frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
+    frc2::ParallelCommandGroup AdvancedShoot(subsystems::swerve::Drive *swervedrive, subsystems::swerve::State *drivestate, frc::PS5Controller *bill, subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
         subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
         return frc2::ParallelCommandGroup(
+            actions::swerve::SlowDownSwerves(swervedrive, drivestate, bill),
             frc2::SequentialCommandGroup(
                 frc2::WaitCommand(constants::indexer::loader::kShootDelay),
                 commands::util::SetLoaderPower(loader, constants::indexer::loader::kLoadFuelPower),
@@ -49,14 +54,15 @@ namespace actions::robot {
          
 
 
-    frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
-                                   subsystems::shooter::Articulation *articulation) {
-        return frc2::SequentialCommandGroup(
-            commands::util::SetLoaderPower(loader, 0.0),
-            commands::util::SetShooterKickerPower(kicker, 0.0),
-            commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees0)
-        ).ToPtr();
-    }
+    frc2::CommandPtr AdvancedShootEnd(subsystems::swerve::Drive *swervedrive, subsystems::swerve::State *drivestate, frc::PS5Controller *bill, subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                               subsystems::shooter::Articulation *articulation) {
+    return frc2::SequentialCommandGroup(
+        actions::swerve::DefaultSwerveSpeed(swervedrive, drivestate, bill),  // <-- add this
+        commands::util::SetLoaderPower(loader, 0.0),
+        commands::util::SetShooterKickerPower(kicker, 0.0),
+        commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees0)
+    ).ToPtr();
+}
     
     frc2::CommandPtr GoToClosestPose(subsystems::swerve::Drive *swerveDrive, pathplanner::PathConstraints constraints) {
         return frc2::cmd::RunOnce([swerveDrive, constraints](){

@@ -14,7 +14,7 @@
 
 namespace constants {
     namespace shooter {
-        enum class FlywheelState { AutoVelocity, FixedVelocity };
+        enum class FlywheelState { AutoVelocity, FixedVelocity, ManualVelocity};
 
         namespace flywheel {
             constexpr int kShooterFlywheelID{24};
@@ -23,12 +23,16 @@ namespace constants {
             constexpr double kFlywheelFerryPower {-0.95}; 
             constexpr double kFlywheelShootPower {-0.90};
 
-            constexpr double kFlywheelMaxRPM {4800.0}; 
+            constexpr double kFlywheelMaxRPM {4100.0}; 
 
             constexpr double kMotorConversionRPMToRPS {60.0}; 
 
+            constexpr units::turns_per_second_t kFlywheelIncrementVelocity {5_tps}; 
+            constexpr units::turns_per_second_t kFlywheelDecrementVelocity {-5_tps}; 
+
+
             constexpr units::turns_per_second_t kFlywheelFerryVelocity {40_tps}; 
-            constexpr units::turns_per_second_t kFlywheelShootVelocity {40_tps}; 
+            constexpr units::turns_per_second_t kFlywheelShootVelocity {0_tps}; // fixed state actually
 
             constexpr units::turns_per_second_t kFlywheelFixedVelocity {100_tps}; 
 
@@ -39,7 +43,7 @@ namespace constants {
 
             // flywheel pid stuff
             constexpr double kS {0.0};
-            constexpr double kV {0.15};
+            constexpr double kV {0.12};
             constexpr double kP {1.0};
             constexpr double kI {0.0};
             constexpr double kD {0.0};

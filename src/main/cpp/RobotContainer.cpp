@@ -45,8 +45,8 @@ void RobotContainer::ConfigureDriverBindings() {
   resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive));
   
   frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
-  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
-  shootFuelButton.OnFalse(actions::robot::ShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
+  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_swerveDrive, &m_driveState, &m_bill, m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
+  shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_swerveDrive, &m_driveState, &m_bill, m_kicker, m_loader, m_articulation));
 
   frc2::Trigger runFlywheelButton([this]() { return m_bill.GetTriangleButton();});
   runFlywheelButton.OnTrue(actions::shooter::flywheel::FlywheelPowerForward(m_flywheel)); 
@@ -62,6 +62,14 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger setHoodAngle40([this]() { return m_bill.GetCrossButton(); }); 
   setHoodAngle40.OnTrue(actions::shooter::articulation::Articulation40Degrees(m_articulation)); 
 
+  // frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetPOV() == 0; });
+  // incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
+
+  // frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetPOV() == 180; });
+  // incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
+
+  // frc2::Trigger incrementHoodAngleButton([this]() { return m_bill.GetPOV})
+
 }
 
 void RobotContainer::RegisterAutoCommands() {
@@ -73,7 +81,7 @@ void RobotContainer::RegisterAutoCommands() {
       std::cout << "Auto started/ended\n"; }},{}).ToPtr());
 
   pathplanner::NamedCommands::registerCommand("Intake", actions::intake::IntakePowerForward(m_intake).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
+  // pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShoot(m_swerveDrive, &m_driveState, &m_bill, m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
   pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::autonomous::AutoShootEnd(m_flywheel, m_kicker, m_loader, m_articulation));
   pathplanner::NamedCommands::registerCommand("Set Pose Left Trench", actions::SetLeftTrenchAutoPose(m_swerveDrive));
   pathplanner::NamedCommands::registerCommand("Set Pose Right Trench", actions::SetRightTrenchAutoPose(m_swerveDrive));

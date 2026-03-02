@@ -4,12 +4,14 @@
   "holonomicMode": true,
   "pathFolders": [
     "Ferry",
+    "Shoot Three",
     "Shoot Once",
     "Shoot Twice",
     "Test"
   ],
   "autoFolders": [
     "Ferry",
+    "Shoot Three",
     "Shoot Once",
     "Shoot Twice",
     "Test"

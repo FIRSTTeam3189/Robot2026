@@ -2,153 +2,165 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 #include "commands/main/Drive.h"
 
-namespace commands::main {
+namespace commands::main
+{
 
-  Drive::Drive(frc::PS5Controller *joystick, subsystems::swerve::Drive *swerveDrive, 
-               subsystems::swerve::State driveState, units::degree_t arbitraryAngle) :
-  m_bill(joystick),
-  m_swerveDrive(swerveDrive),
-  m_rotationPIDController(constants::swerve::swerve_drive::kPRot, constants::swerve::swerve_drive::kIRot, constants::swerve::swerve_drive::kDRot),
-  m_driveState(driveState),
-  m_arbitraryAngle(arbitraryAngle),
-  m_allianceSide(frc::DriverStation::Alliance::kBlue) 
+  Drive::Drive(frc::PS5Controller *joystick, subsystems::swerve::Drive *swerveDrive,
+               subsystems::swerve::State driveState, units::degree_t arbitraryAngle) : m_bill(joystick),
+                                                                                       m_swerveDrive(swerveDrive),
+                                                                                       m_rotationPIDController(constants::swerve::swerve_drive::kPRot, constants::swerve::swerve_drive::kIRot, constants::swerve::swerve_drive::kDRot),
+                                                                                       m_driveState(driveState),
+                                                                                       m_arbitraryAngle(arbitraryAngle),
+                                                                                       m_allianceSide(frc::DriverStation::Alliance::kBlue)
   {
     (void)constants::vision::kSyncBytes[0];
-  
+
     AddRequirements(swerveDrive);
-  
-    if (frc::DriverStation::GetAlliance()) {
+
+    if (frc::DriverStation::GetAlliance())
+    {
       m_allianceSide = frc::DriverStation::GetAlliance();
     }
-  
+
     // Add tolerance value of 1
     m_rotationPIDController.SetTolerance(constants::swerve::swerve_drive::kSwerveRotationTolerance);
     m_rotationPIDController.EnableContinuousInput(-180, 180);
-  
+
     m_rotationPKey = "Robot Rotation P";
     m_rotationIKey = "Robot Rotation I";
     m_rotationDKey = "Robot Rotation D";
-  
+
     frc::Preferences::SetDouble(m_rotationPKey, constants::swerve::swerve_drive::kPRot);
     frc::Preferences::SetDouble(m_rotationIKey, constants::swerve::swerve_drive::kIRot);
     frc::Preferences::SetDouble(m_rotationDKey, constants::swerve::swerve_drive::kDRot);
   }
-  
-  void Drive::Execute(){
-    if (frc::Preferences::GetBoolean("Tuning Mode", false)) {
+
+  void Drive::Execute()
+  {
+    if (frc::Preferences::GetBoolean("Tuning Mode", false))
+    {
       UpdatePreferences();
     }
-  
+
     bool fieldRelative = true;
     triple joystickX = 0.0, joystickY = 0.0;
     m_allianceSide = frc::DriverStation::GetAlliance();
-  
-     if (m_allianceSide) {
-      if (m_allianceSide.value() == frc::DriverStation::Alliance::kBlue) {
+
+    if (m_allianceSide)
+    {
+      if (m_allianceSide.value() == frc::DriverStation::Alliance::kBlue)
+      {
         joystickX = -m_bill->GetRawAxis(constants::controller::kAxisLeftStickY);
         joystickY = -m_bill->GetRawAxis(constants::controller::kAxisLeftStickX);
-      } else {
+      }
+      else
+      {
         joystickX = m_bill->GetRawAxis(constants::controller::kAxisLeftStickY);
         joystickY = m_bill->GetRawAxis(constants::controller::kAxisLeftStickX);
       }
     }
-  
+
     joystickX = (0.3 * joystickX) + (0.7 * pow(joystickX, 3));
     joystickY = (0.3 * joystickY) + (0.7 * pow(joystickY, 3));
-  
+
     units::meters_per_second_t xSpeed = (m_xSpeedLimiter.Calculate(joystickX) * constants::swerve::swerve_drive::kMaxSpeed);
     units::meters_per_second_t ySpeed = (m_ySpeedLimiter.Calculate(joystickY) * constants::swerve::swerve_drive::kMaxSpeed);
-  
+
     if (fabs(joystickX) < .05)
       xSpeed = 0_mps;
     if (fabs(joystickY) < .05)
       ySpeed = 0_mps;
-  
+
     // frc::SmartDashboard::PutNumber("X speed", xSpeed.value());
     // frc::SmartDashboard::PutNumber("Y speed", ySpeed.value());
     units::radians_per_second_t rot;
-  
-     // For now, just heading control, but added switch statement in case of new additions                                                                              
-     switch (m_driveState) {
-      case(subsystems::swerve::State::HeadingControl) :
-        rot = GetDesiredRotationalVelocity();
-        break;
-      case(subsystems::swerve::State::ArbitraryAngleAlign) :
-        rot = units::angular_velocity::radians_per_second_t{
-                m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), m_arbitraryAngle.value()))
-                * constants::swerve::swerve_drive::kMaxAngularVelocity};
-        break;
-      case(subsystems::swerve::State::SlowDownSwerves) :
+
+    // For now, just heading control, but added switch statement in case of new additions
+    switch (m_driveState)
+    {
+    case subsystems::swerve::State::HeadingControl:
+      rot = GetDesiredRotationalVelocity();
+      break;
+
+    case subsystems::swerve::State::ArbitraryAngleAlign:
+      rot = units::angular_velocity::radians_per_second_t{
+          m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), m_arbitraryAngle.value())) * constants::swerve::swerve_drive::kMaxAngularVelocity};
+      break;
+
+    case subsystems::swerve::State::SlowDownSwerves:
+      xSpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
+      ySpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
+      rot = GetDesiredRotationalVelocity() * constants::swerve::swerve_drive::kSlowModeSwerveDriveRotMultiplier;
+      break;
+
+    case subsystems::swerve::State::ClimbAlign:
+      if (frc::DriverStation::GetAlliance())
+      {
+        if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
         {
-          xSpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier; 
-          ySpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
-          rot = GetDesiredRotationalVelocity() * constants::swerve::swerve_drive::kSlowModeSwerveDriveRotMultiplier;
+          rot = units::angular_velocity::radians_per_second_t{
+              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(),
+                                                                       constants::swerve::swerve_drive::kClimbAlignRotBlue.value())) *
+              constants::swerve::swerve_drive::kMaxAngularVelocity};
         }
-        break;
-      case(subsystems::swerve::State::ClimbAlign) : 
+        else
         {
-          if (frc::DriverStation::GetAlliance()) {
-            if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
-              rot = units::angular_velocity::radians_per_second_t{
-                m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), 
-                                                                         constants::swerve::swerve_drive::kClimbAlignRotBlue.value()))
-                * constants::swerve::swerve_drive::kMaxAngularVelocity};
-            } else {
-              rot = units::angular_velocity::radians_per_second_t{
-                m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), 
-                                                                         constants::swerve::swerve_drive::kClimbAlignRotRed.value()))
-                * constants::swerve::swerve_drive::kMaxAngularVelocity};
-            }
-          }
-  
-          break;
+          rot = units::angular_velocity::radians_per_second_t{
+              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(),
+                                                                       constants::swerve::swerve_drive::kClimbAlignRotRed.value())) *
+              constants::swerve::swerve_drive::kMaxAngularVelocity};
         }
-      default:
-        rot = units::angular_velocity::radians_per_second_t{0.0};
-        break;
+      }
+      break;
+    default:
+      rot = units::angular_velocity::radians_per_second_t{0.0};
+      break;
     }
-    
-  
+
     // frc::SmartDashboard::PutNumber("Robot desired rotation (rad per s)", rot.value());
     frc::SmartDashboard::PutNumber("Swerve Drive Desired Speeds/X: ", xSpeed.value());
     frc::SmartDashboard::PutNumber("Swerve Drive Desired Speeds/Y: ", ySpeed.value());
     frc::SmartDashboard::PutNumber("Swerve Drive Desired Speeds/rot: ", rot.value());
-  
+
     m_swerveDrive->Operate(xSpeed, ySpeed, rot, fieldRelative, frc::Translation2d{});
-  
-  
-  
   }
-  
-  units::angular_velocity::radians_per_second_t Drive::GetDesiredRotationalVelocity() { 
-     // Get raw (-1.0 to 1.0) joystick positions for x and y axis
+
+  units::angular_velocity::radians_per_second_t Drive::GetDesiredRotationalVelocity()
+  {
+    // Get raw (-1.0 to 1.0) joystick positions for x and y axis
     // Left, up are -1.0; right, down are 1.0
     // Inverted so forward on joystick is down the field
     // If red alliance, flip 180
     m_allianceSide = frc::DriverStation::GetAlliance();
     double joystickX = 0.0, joystickY = 0.0;
-    
-    if (m_allianceSide) {
-      if (m_allianceSide.value() == frc::DriverStation::Alliance::kRed) {
+
+    if (m_allianceSide)
+    {
+      if (m_allianceSide.value() == frc::DriverStation::Alliance::kRed)
+      {
         // frc::SmartDashboard::PutString("Alliance", "red");
         joystickX = m_bill->GetRightY();
         joystickY = m_bill->GetRightX();
-      } else {
+      }
+      else
+      {
         // frc::SmartDashboard::PutString("Alliance", "blue");
         joystickX = -m_bill->GetRightY();
         joystickY = -m_bill->GetRightX();
       }
     }
-  
+
     // Manual deadband to inputs greater than 5% only
     // If deadband detected (i.e. user is not giving rotation input), then set goalAngle as last desired angle
-    if ((fabs(joystickX) < .05) && (fabs(joystickY) < .05)) {
+    if ((fabs(joystickX) < .05) && (fabs(joystickY) < .05))
+    {
       // m_goalAngle = m_lastAngle;
       return units::angular_velocity::radians_per_second_t{0.0};
-    } else {
+    }
+    else
+    {
       // Convert joystick positions to goal angle in degrees
       // Normalized from -180, 180
       // Uses arctan2 function -- converts Cartesian coordinates (1, 1) to a polar angle (pi / 4), then multiplies by radians to degrees conversion
@@ -156,49 +168,49 @@ namespace commands::main {
       m_goalAngle = constants::swerve::swerve_drive::kRadiansToDegreesMultiplier * atan2(joystickY, joystickX);
     }
     m_lastAngle = m_goalAngle;
-  
+
     // frc::SmartDashboard::PutNumber("Robot Desired Angle", m_goalAngle);
-  
+
     // Return next velocity in radians per second as calculated by PIDController and limited by rotLimiter
-    units::angular_velocity::radians_per_second_t rot = 
-                units::angular_velocity::radians_per_second_t{
-                m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), m_goalAngle))
-                * constants::swerve::swerve_drive::kMaxAngularVelocity};
-  
+    units::angular_velocity::radians_per_second_t rot =
+        units::angular_velocity::radians_per_second_t{
+            m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), m_goalAngle)) * constants::swerve::swerve_drive::kMaxAngularVelocity};
+
     // converts a given or desired coordinate to a degree on the unit circle
-  
+
     // frc::SmartDashboard::PutNumber("Rotation PID Output (deg per s)", rot.value() * (180.0 / PI));
-  
-    if (abs(m_swerveDrive->GetNormalizedYaw().value() - m_goalAngle) < constants::swerve::swerve_drive::kSwerveRotationTolerance) {
+
+    if (abs(m_swerveDrive->GetNormalizedYaw().value() - m_goalAngle) < constants::swerve::swerve_drive::kSwerveRotationTolerance)
+    {
       // Clear integral sum
       // frc::SmartDashboard::PutBoolean("Integral gain reset", true);
       m_rotationPIDController.Reset();
       rot = units::angular_velocity::radians_per_second_t{0.0};
     }
-  
+
     return rot;
   }
-  
-  
-  
-  void Drive::UpdatePreferences() {
-    if (frc::Preferences::GetBoolean("Tuning Mode", false)) {
+
+  void Drive::UpdatePreferences()
+  {
+    if (frc::Preferences::GetBoolean("Tuning Mode", false))
+    {
       m_rotationPIDController.SetP(frc::Preferences::GetDouble(m_rotationPKey, constants::swerve::swerve_drive::kPRot));
       m_rotationPIDController.SetI(frc::Preferences::GetDouble(m_rotationIKey, constants::swerve::swerve_drive::kIRot));
       m_rotationPIDController.SetD(frc::Preferences::GetDouble(m_rotationDKey, constants::swerve::swerve_drive::kDRot));
     }
   }
-  
-  void Drive::Initialize(){}
-  
-  bool Drive::IsFinished(){
+
+  void Drive::Initialize() {}
+
+  bool Drive::IsFinished()
+  {
     return false;
-    
   }
-  
+
   // Called once the command ends or is interrupted.
-  void Drive::End(bool interrupted) {
+  void Drive::End(bool interrupted)
+  {
     m_swerveDrive->Stop();
   }
 }
-

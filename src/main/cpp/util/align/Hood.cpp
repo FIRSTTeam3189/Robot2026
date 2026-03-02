@@ -73,10 +73,11 @@ namespace util::align::hood {
         frc::SmartDashboard::PutNumber("Auto Align/Target Hood Angle with offset", targetHoodAngle.value());
         frc::SmartDashboard::PutNumber("Auto Align/Target Hood Scaled Angle", targetHoodAngleScaled.value()); 
         frc::SmartDashboard::PutNumber("Auto Align/Target Hood Angle without offset", (90.0 - angle));
-
+        
         //clamp it 
-        if (targetHoodAngleScaled > 30_deg) {
-            targetHoodAngleScaled = 30_deg;
+        targetHoodAngleScaled+=2.5_deg; 
+        if (targetHoodAngleScaled > 32.5_deg) {
+            targetHoodAngleScaled = 32.5_deg;
         }
 
         return targetHoodAngleScaled; 

@@ -64,6 +64,11 @@ namespace subsystems::shooter {
             {
                 m_rps = constants::shooter::flywheel::kFlywheelShootVelocity.value();
                 break;
+            } 
+            case (constants::shooter::FlywheelState::ManualVelocity) : 
+            {
+                m_rps = m_rps;
+                break; 
             }
         }
         

@@ -10,6 +10,7 @@ namespace subsystems::shooter {
     : 
         m_articulationMotor(constants::shooter::articulation::kArticulationMotorID, "Swerve"),
         m_articulationConfig(),
+        m_angleInterpolator(constants::auto_align::kPowerInterpolatorDistances, constants::auto_align::kAngleInterpolatorAngles),
         m_swerveDrive(swerveDrive),
         m_manualAngle(),
         m_state(constants::shooter::ArticulationTarget::Stationary)
@@ -131,6 +132,9 @@ namespace subsystems::shooter {
         switch(state){
             case(constants::shooter::ArticulationTarget::AligntoHub): {
                 frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
+                // double distanceToTarget = util::align::turret::GetDistanceToTarget(currentPose).value(); 
+                // m_targetArticulationAngle = units::degree_t{m_angleInterpolator.Predict(distanceToTarget)}; 
+                
                 m_targetArticulationAngle = util::align::hood::CalculateArticulationAngle(currentPose);
                 break;
             }

@@ -5,7 +5,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 
-
 #include "commands/util/SetArticulationAngle.h"
 
 namespace commands::util {
@@ -23,7 +22,7 @@ namespace commands::util {
   }
   
   // Called repeatedly when this Command is scheduled to run
-  void SetArticulationAngle::Execute() {
+  void SetArticulationAngle::Execute() {   
     if (RobotContainer::GetShooterState() == constants::ShooterState::Fixed) {
       m_articulation->SetState(constants::shooter::ArticulationTarget::Degrees15); 
     } else {  

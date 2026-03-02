@@ -78,12 +78,13 @@ namespace constants {
 
         const Vector2d kTurretOffset(0.15, 0.0); 
 
-        constexpr double kMinimumVelocityMultiplier {0.1}; 
-        constexpr double kVelocityMultiplier {0.5}; 
+        constexpr double kMinimumVelocityMultiplier {0.02}; 
+        constexpr double kVelocityMultiplier {1.65}; 
 
-        // 0 is 15, and max is 35 
         const std::vector<double> kPowerInterpolatorDistances = {1.0, 1.5, 2.0, 2.5, 3.0}; 
-        const std::vector<double> kPowerInterpolatorPowers = {0.60, 0.66, 0.73, 0.84, 0.95}; 
+        const std::vector<double> kPowerInterpolatorPowers = {0.53, 0.60, 0.68, 0.75, 0.80}; 
+        // 0 is 15, and max is 35 
+        const std::vector<double> kAngleInterpolatorAngles = {15.0, 20.0, 22.5, 25.0, 27.5}; 
 
         //! need to be configured 
         constexpr units::degree_t kHoodDefaultAngle{15_deg};

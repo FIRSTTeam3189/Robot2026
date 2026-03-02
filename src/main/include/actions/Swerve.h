@@ -10,12 +10,10 @@
 #include "subsystems/swerve/Drive.h" 
 
 
-
-
 namespace actions {
     namespace swerve {
-        frc2::CommandPtr SlowDownSwerves(subsystems::swerve::Drive *swerveDrive, subsystems::swerve::State *driveState, frc::PS5Controller *bill);
-        frc2::CommandPtr DefaultSwerveSpeed(subsystems::swerve::Drive *swerveDrive, subsystems::swerve::State *driveState, frc::PS5Controller *bill);
+        frc2::InstantCommand SlowDownSwerves(subsystems::swerve::Drive *swerveDrive, subsystems::swerve::State *driveState, frc::PS5Controller *bill);
+        frc2::InstantCommand DefaultSwerveSpeed(subsystems::swerve::Drive *swerveDrive, subsystems::swerve::State *driveState, frc::PS5Controller *bill);
         frc2::CommandPtr ClimbAlignSwerves(subsystems::swerve::Drive *swerveDrive, subsystems::swerve::State *driveState, frc::PS5Controller *bill);
     };
 };

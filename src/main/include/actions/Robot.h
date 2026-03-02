@@ -40,16 +40,16 @@ namespace actions {
                                            subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
                                            subsystems::shooter::Articulation *articulation);
 
-        frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
+        frc2::CommandPtr ShootEnd(subsystems::swerve::Drive *swerveDrive, subsystems::swerve::State *driveState, frc::PS5Controller *bill, subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
                                   subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
                                   
         frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t tps);
         
-        frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
+        frc2::ParallelCommandGroup AdvancedShoot(subsystems::swerve::Drive *swervedrive, subsystems::swerve::State *drivestate, frc::PS5Controller *bill, subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
             subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
             
 
-        frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+        frc2::CommandPtr AdvancedShootEnd(subsystems::swerve::Drive *swervedrive, subsystems::swerve::State *drivestate, frc::PS5Controller *bill, subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
                                           subsystems::shooter::Articulation *articulation);
 
        

@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Auto Shoot"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [

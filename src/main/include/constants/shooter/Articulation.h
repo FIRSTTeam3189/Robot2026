@@ -88,8 +88,8 @@ namespace constants {
             constexpr units::degree_t kHoodStationaryAngle {15.0_deg};
             constexpr units::degree_t kHoodMaxAngle {50.0_deg}; 
 
-            constexpr units::degree_t kArticulationAngleIncrement {5.0_deg};
-            constexpr units::degree_t kArticulationAngleDecrement {-5.0_deg};
+            constexpr units::degree_t kArticulationAngleIncrement {1.0_deg};
+            constexpr units::degree_t kArticulationAngleDecrement {-1.0_deg};
 
         };
     };

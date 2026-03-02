@@ -7,12 +7,13 @@ namespace util::align::turret {
                                          frc::Field2d &velocityField) {
         Vector2d targetVec(targetPose); // Account for velocity 
         double robotSpeed = robotVelocity.Length(); 
-        if (robotSpeed > constants::auto_align::kMinimumVelocityMultiplier * SwerveModuleConstants::kMaxSpeed.value()) {
-            // Needs to multiply magnitude by a linear interpolation based on ball air time 
-            targetVec = targetVec + (robotVelocity * constants::auto_align::kVelocityMultiplier * -1); 
-            return targetVec.ToPose2d(); 
-        }
-
+        // if (robotSpeed > constants::auto_align::kMinimumVelocityMultiplier * SwerveModuleConstants::kMaxSpeed.value()) {
+        //     // Needs to multiply magnitude by a linear interpolation based on ball air time 
+        //     targetVec = targetVec + (robotVelocity * constants::auto_align::kVelocityMultiplier * -1); 
+        //     return targetVec.ToPose2d(); 
+        // }
+        targetVec = targetVec + (robotVelocity * constants::auto_align::kVelocityMultiplier * -1); 
+        return targetVec.ToPose2d(); 
         // For FIELD 2D ONLY 
         Vector2d robotVec(robotPose); 
         frc::Pose2d velocityEnd = (robotVec + robotVelocity).ToPose2d(); 

@@ -30,6 +30,7 @@
 
 #include "util/interpolator/Linear.h"
 #include "util/align/Hood.h"
+#include "util/align/Turret.h"
 #include "util/align/Drivetrain.h"
 
 #include <algorithm>
@@ -91,8 +92,9 @@ namespace subsystems {
       std::string m_articulationAKey;
       std::string m_articulationTargetKey;
 
-      subsystems::swerve::Drive
- *m_swerveDrive;
+      util::interpolator::Linear m_angleInterpolator; 
+
+      subsystems::swerve::Drive *m_swerveDrive;
 
       constants::shooter::ArticulationTarget m_state; 
 

@@ -30,6 +30,9 @@ namespace actions {
             frc2::CommandPtr Articulation30Degrees(subsystems::shooter::Articulation *articulation);
             frc2::CommandPtr Articulation40Degrees(subsystems::shooter::Articulation *articulation);
             frc2::CommandPtr SetTurretAndArticulationManual(subsystems::shooter::Articulation *articulation, subsystems::shooter::Turret *turret);
+            frc2::CommandPtr IncrementArticulationAngle(subsystems::shooter::Articulation *articulation);
+            frc2::CommandPtr DecrementArticulationAngle(subsystems::shooter::Articulation *articulation);
+
         };
     };
 };
