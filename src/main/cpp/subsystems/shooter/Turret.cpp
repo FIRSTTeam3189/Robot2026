@@ -159,6 +159,11 @@ namespace subsystems::shooter {
                 m_targetPower = 0.0;
                 break;
             }   
+            case (constants::shooter::TurretTarget::Point0Deg): {
+                m_targetRotationAngle = 0.0_deg;
+                m_targetPower = 0.0;
+                break;
+            }
             default:
                 m_targetRotationAngle = 90.0_deg;
                 m_targetPower = 0.0;

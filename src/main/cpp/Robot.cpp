@@ -32,6 +32,9 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+
+  frc::SmartDashboard::PutNumber("Current Drive State", static_cast<int>(m_container.GetDriveState())); 
+
   constants::ShooterState shooterState = RobotContainer::GetShooterState();
   frc::SmartDashboard::PutNumber("Current Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
   frc::SmartDashboard::PutNumber("Curret Shooter State", static_cast<int>(shooterState));
@@ -46,6 +49,18 @@ void Robot::RobotPeriodic() {
       RobotContainer::SetShooterState(constants::ShooterState::Fixed);
       m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::FixedVelocity);
       m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::PointStraight);
+      break;
+    }
+    case (constants::ShooterState::Reset) : {
+      RobotContainer::SetShooterState(constants::ShooterState::Reset);
+      m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::ZeroVelocity);
+      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::Point0Deg);
+      break;
+    }
+    case (constants::ShooterState::Manual) : {
+      RobotContainer::SetShooterState(constants::ShooterState::Manual);
+      m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::ManualVelocity);
+      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub);
       break;
     }
   }

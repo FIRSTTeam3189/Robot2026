@@ -104,6 +104,7 @@ class RobotContainer {
   util::interpolator::Data* GetInterpolatorData(); 
   subsystems::swerve::Drive* GetSwerveSubsystem(); 
   subsystems::shooter::Flywheel* GetFlywheelSubsystem();
+  subsystems::swerve::State GetDriveState(); 
 
   static void SetShooterState(constants::ShooterState shooterState);
   static constants::ShooterState GetShooterState();

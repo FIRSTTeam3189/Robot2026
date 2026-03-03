@@ -44,14 +44,14 @@ namespace actions::shooter::articulation {
 
     frc2::CommandPtr IncrementArticulationAngle(subsystems::shooter::Articulation *articulation) {
         return frc2::InstantCommand([articulation]() {
-            articulation->SetArticulationAngle(articulation->GetArticulationAngle() + 
+            articulation->SetTargetAngle(articulation->GetTargetAngle() + 
                                                constants::shooter::articulation::kArticulationAngleIncrement); 
         }, {articulation}).ToPtr();
     }
 
     frc2::CommandPtr DecrementArticulationAngle(subsystems::shooter::Articulation *articulation) {
         return frc2::InstantCommand([articulation]() {
-            articulation->SetArticulationAngle(articulation->GetArticulationAngle() + 
+            articulation->SetTargetAngle(articulation->GetTargetAngle() + 
                                                constants::shooter::articulation::kArticulationAngleDecrement); 
         }, {articulation}).ToPtr();
     }

@@ -18,15 +18,24 @@ namespace commands::util {
   
   // Called when the command is initially scheduled.
   void SetArticulationAngle::Initialize() {
-    // m_turret->SetState(m_state);
+
   }
   
   // Called repeatedly when this Command is scheduled to run
   void SetArticulationAngle::Execute() {   
-    if (RobotContainer::GetShooterState() == constants::ShooterState::Fixed) {
-      m_articulation->SetState(constants::shooter::ArticulationTarget::Degrees15); 
-    } else {  
-      m_articulation->SetState(m_state);
+    switch (RobotContainer::GetShooterState()) {
+      case constants::ShooterState::Fixed:
+        m_articulation->SetState(constants::shooter::ArticulationTarget::Degrees15);
+        break; 
+      case constants::ShooterState::Reset:
+        m_articulation->SetState(constants::shooter::ArticulationTarget::Degrees0);
+        break;    
+      case constants::ShooterState::Manual:
+        m_articulation->SetState(constants::shooter::ArticulationTarget::Manual);     
+        break; 
+      default: 
+        m_articulation->SetState(m_state); 
+        frc::SmartDashboard::PutNumber("Set Articulation Angle State", static_cast<int>(m_state)); 
     }
   }
   

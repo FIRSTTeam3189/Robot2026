@@ -12,7 +12,6 @@ namespace subsystems::shooter {
         m_articulationConfig(),
         m_angleInterpolator(constants::auto_align::kPowerInterpolatorDistances, constants::auto_align::kAngleInterpolatorAngles),
         m_swerveDrive(swerveDrive),
-        m_manualAngle(),
         m_state(constants::shooter::ArticulationTarget::Stationary)
     {
         ConfigArticulation();
@@ -132,10 +131,11 @@ namespace subsystems::shooter {
         switch(state){
             case(constants::shooter::ArticulationTarget::AligntoHub): {
                 frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
-                // double distanceToTarget = util::align::turret::GetDistanceToTarget(currentPose).value(); 
-                // m_targetArticulationAngle = units::degree_t{m_angleInterpolator.Predict(distanceToTarget)}; 
+                double distanceToTarget = util::align::turret::GetDistanceToTarget(currentPose).value(); 
+                frc::SmartDashboard::PutNumber("DISTANCE TO TARGET ARTICULATOR", distanceToTarget);
+                m_targetArticulationAngle = units::degree_t{m_angleInterpolator.Predict(distanceToTarget)}; 
                 
-                m_targetArticulationAngle = util::align::hood::CalculateArticulationAngle(currentPose);
+                // m_targetArticulationAngle = util::align::hood::CalculateArticulationAngle(currentPose);
                 break;
             }
             case(constants::shooter::ArticulationTarget::Stationary): {
@@ -143,8 +143,8 @@ namespace subsystems::shooter {
                 break;
             }
             case(constants::shooter::ArticulationTarget::Manual): {
-                m_targetArticulationAngle = m_manualAngle; 
-                break; // set target to the manual angle 
+                m_targetArticulationAngle = m_targetArticulationAngle; 
+                break;
             }
             case(constants::shooter::ArticulationTarget::FixedAlign): {
                 frc::Pose2d pathfindingPose = util::align::drivetrain::GetClosestRobotPose(m_swerveDrive->GetEstimatedPose());
@@ -231,6 +231,10 @@ namespace subsystems::shooter {
 
     units::degree_t Articulation::GetTargetAngle() {
         return m_targetArticulationAngle;
+    }
+
+    void Articulation::SetTargetAngle(units::degree_t target) {
+        m_targetArticulationAngle = target; 
     }
 
 }

@@ -61,6 +61,8 @@ namespace subsystems {
       void RefreshAllSignals();
 
       units::degree_t GetTargetAngle(); 
+      
+      void SetTargetAngle(units::degree_t target);
 
       void OverrideSoftLimits(bool isEnabled);
 
@@ -100,8 +102,6 @@ namespace subsystems {
 
       units::degree_t m_targetArticulationAngle;
       units::degree_t m_currentArticulationAngle;
-
-      units::degree_t m_manualAngle; 
 
       ctre::phoenix6::StatusSignal<units::angle::turn_t> m_articulationAngle = m_articulationMotor.GetPosition();
       ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_articulationVelocity = m_articulationMotor.GetVelocity();

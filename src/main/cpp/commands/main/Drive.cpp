@@ -80,43 +80,45 @@ namespace commands::main
     // For now, just heading control, but added switch statement in case of new additions
     switch (m_driveState)
     {
-    case subsystems::swerve::State::HeadingControl:
-      rot = GetDesiredRotationalVelocity();
-      break;
-
-    case subsystems::swerve::State::ArbitraryAngleAlign:
-      rot = units::angular_velocity::radians_per_second_t{
-          m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), m_arbitraryAngle.value())) * constants::swerve::swerve_drive::kMaxAngularVelocity};
-      break;
-
-    case subsystems::swerve::State::SlowDownSwerves:
-      xSpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
-      ySpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
-      rot = GetDesiredRotationalVelocity() * constants::swerve::swerve_drive::kSlowModeSwerveDriveRotMultiplier;
-      break;
-
-    case subsystems::swerve::State::ClimbAlign:
-      if (frc::DriverStation::GetAlliance())
-      {
-        if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+      case subsystems::swerve::State::HeadingControl: {
+        rot = GetDesiredRotationalVelocity();
+        break;
+      } 
+      case subsystems::swerve::State::ArbitraryAngleAlign: {
+        rot = units::angular_velocity::radians_per_second_t{
+            m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), m_arbitraryAngle.value())) * constants::swerve::swerve_drive::kMaxAngularVelocity};
+        break;
+      } 
+      case subsystems::swerve::State::SlowDownSwerves: { 
+        xSpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
+        ySpeed *= constants::swerve::swerve_drive::kSlowModeSwerveDriveMultiplier;
+        rot = GetDesiredRotationalVelocity() * constants::swerve::swerve_drive::kSlowModeSwerveDriveRotMultiplier;
+        break;
+      } 
+      case subsystems::swerve::State::ClimbAlign: {
+        if (frc::DriverStation::GetAlliance())
         {
-          rot = units::angular_velocity::radians_per_second_t{
-              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(),
-                                                                       constants::swerve::swerve_drive::kClimbAlignRotBlue.value())) *
-              constants::swerve::swerve_drive::kMaxAngularVelocity};
+          if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+          {
+            rot = units::angular_velocity::radians_per_second_t{
+                m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(),
+                                                                        constants::swerve::swerve_drive::kClimbAlignRotBlue.value())) *
+                constants::swerve::swerve_drive::kMaxAngularVelocity};
+          }
+          else
+          {
+            rot = units::angular_velocity::radians_per_second_t{
+                m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(),
+                                                                        constants::swerve::swerve_drive::kClimbAlignRotRed.value())) *
+                constants::swerve::swerve_drive::kMaxAngularVelocity};
+          }
         }
-        else
-        {
-          rot = units::angular_velocity::radians_per_second_t{
-              m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(),
-                                                                       constants::swerve::swerve_drive::kClimbAlignRotRed.value())) *
-              constants::swerve::swerve_drive::kMaxAngularVelocity};
-        }
+        break;
       }
-      break;
-    default:
-      rot = units::angular_velocity::radians_per_second_t{0.0};
-      break;
+      default: { 
+        rot = units::angular_velocity::radians_per_second_t{0.0};
+        break;
+      } 
     }
 
     // frc::SmartDashboard::PutNumber("Robot desired rotation (rad per s)", rot.value());

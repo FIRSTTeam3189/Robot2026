@@ -67,7 +67,15 @@ namespace subsystems::shooter {
             } 
             case (constants::shooter::FlywheelState::ManualVelocity) : 
             {
-                m_rps = m_rps;
+                break; 
+            }
+            case (constants::shooter::FlywheelState::ZeroVelocity) : 
+            {
+                m_rps = 0.0;
+                break;
+            }
+            default: {
+                m_rps = 0.0; 
                 break; 
             }
         }
@@ -84,6 +92,15 @@ namespace subsystems::shooter {
         return units::turns_per_second_t{m_flywheelMotor.GetClosedLoopReference().GetValue()}; 
     }
     
+
+    double Flywheel::GetFlywheelTargetRPS() {
+        return m_rps; 
+    }
+
+    void Flywheel::SetFlywheelTargetRPS(double target) {
+        frc::SmartDashboard::PutNumber("flywheel should be", target); 
+        m_rps = target; 
+    }
     
     void Flywheel::SetFlywheelMotorPower(double power) {
         m_flywheelMotor.Set(power);

@@ -39,7 +39,10 @@ namespace subsystems {
         void SetFlyWheelMotorVelocity(units::turns_per_second_t turnsPerSecond);
         
         units::turns_per_second_t GetFlywheelTargetVelocity();
-        
+
+        double GetFlywheelTargetRPS();
+
+        void SetFlywheelTargetRPS(double target);
 
         /**
          * Will be called periodically whenever the CommandScheduler runs.
@@ -58,7 +61,7 @@ namespace subsystems {
         ctre::phoenix6::hardware::TalonFX m_flywheelMotor;
         ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
 
-        double m_rps;
+        double m_rps{};
 
     };
   };
