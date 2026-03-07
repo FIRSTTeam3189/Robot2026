@@ -12,7 +12,7 @@ namespace commands {
     namespace util { 
         class SetFlywheelMotorVelocity  : public frc2::CommandHelper<frc2::Command, SetFlywheelMotorVelocity> {
         public:
-        explicit SetFlywheelMotorVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t velocity);
+        explicit SetFlywheelMotorVelocity(subsystems::shooter::Flywheel *flywheel, double velocity);
 
         /**
          * Will be called periodically whenever the CommandScheduler runs.

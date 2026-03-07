@@ -12,8 +12,11 @@ namespace subsystems::shooter {
       : 
         m_swerveDrive(swerveDrive),
         m_powerInterpolator(constants::auto_align::kPowerInterpolatorDistances, constants::auto_align::kPowerInterpolatorPowers),
-        m_flywheelMotor(constants::shooter::flywheel::kShooterFlywheelID, "Swerve"),
-        m_flywheelConfig()
+        m_flywheelMotor(constants::shooter::flywheel::kShooterFlywheelID, rev::spark::SparkFlex::MotorType::kBrushless),
+        m_flywheelFollowMotor(constants::shooter::flywheel::kShooterFlywheel2ID, rev::spark::SparkFlex::MotorType::kBrushless),
+        m_flywheelConfig(),
+        m_flywheelFollowConfig(),
+        m_flywheelController(m_flywheelMotor.GetClosedLoopController())
     {
     
         ConfigFlywheelMotor();
@@ -25,26 +28,34 @@ namespace subsystems::shooter {
         // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
-        frc::SmartDashboard::PutNumber("Test Bindings/flywheel current rpm", m_flywheelMotor.GetVelocity().GetValue().value() * 60);
-        frc::SmartDashboard::PutNumber("Test Bindings/flywheel target rpm", GetFlywheelTargetVelocity().value() * 60);
+        frc::SmartDashboard::PutNumber("Test Bindings/flywheel current rpm", m_flywheelController.GetMAXMotionSetpointVelocity());
+        frc::SmartDashboard::PutNumber("Test Bindings/flywheel target rpm", GetFlywheelTargetVelocity());
     
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel current",  m_flywheelMotor.GetSupplyCurrent().GetValue().value());
        
-        SetFlyWheelMotorVelocity(units::turns_per_second_t{std::abs(m_rps)}); 
+        SetFlywheelMotorVelocity(std::abs(m_rpm)); 
     }
     
     void Flywheel::ConfigFlywheelMotor() {
-        m_flywheelConfig.MotorOutput.Inverted = constants::shooter::flywheel::kFlywheelMotorInverted;
-        m_flywheelConfig.MotorOutput.NeutralMode = constants::shooter::flywheel::kFlywheelNeutralMode;
-        m_flywheelConfig.OpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(1.0_s);
-    
-        auto& slot0Configs = m_flywheelConfig.Slot0;
-        slot0Configs.kS = constants::shooter::flywheel::kS;
-        slot0Configs.kV = constants::shooter::flywheel::kV;
-        slot0Configs.kI = constants::shooter::flywheel::kI; 
-        slot0Configs.kD = constants::shooter::flywheel::kD;
-    
-        m_flywheelMotor.GetConfigurator().Apply(m_flywheelConfig);  
+        m_flywheelConfig
+            .Inverted(constants::shooter::flywheel::kFlywheelMotorInverted)
+            .OpenLoopRampRate(1.0)
+            .SetIdleMode(rev::spark::SparkFlexConfig::IdleMode::kCoast)
+            .closedLoop
+            .P(constants::shooter::flywheel::kP)
+            .I(constants::shooter::flywheel::kI)
+            .D(constants::shooter::flywheel::kD)
+            .feedForward
+            .kS(constants::shooter::flywheel::kS)
+            .kV(constants::shooter::flywheel::kV);
+
+        m_flywheelFollowConfig
+            .Follow(m_flywheelMotor, constants::shooter::flywheel::kInvertSecondMotor)
+            .SetIdleMode(rev::spark::SparkFlexConfig::IdleMode::kCoast)
+            .OpenLoopRampRate(1.0);
+
+        m_flywheelMotor.Configure(m_flywheelConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
+        m_flywheelFollowMotor.Configure(m_flywheelFollowConfig, rev::spark::SparkBase::ResetMode::kResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
     }
 
     void Flywheel::SetState(constants::shooter::FlywheelState flywheelState) {
@@ -57,12 +68,12 @@ namespace subsystems::shooter {
                 double distanceToTarget = util::align::turret::GetDistanceToTarget(robotPose).value(); 
                 double power = m_powerInterpolator.Predict(distanceToTarget); 
                 frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", power); 
-                m_rps = (power * constants::shooter::flywheel::kFlywheelMaxRPM) / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
+                m_rpm = (power * constants::shooter::flywheel::kFlywheelMaxRPM); 
                 break;
             }
             case (constants::shooter::FlywheelState::FixedVelocity) :
             {
-                m_rps = constants::shooter::flywheel::kFlywheelShootVelocity.value();
+                m_rpm = constants::shooter::flywheel::kFlywheelShootVelocity;
                 break;
             } 
             case (constants::shooter::FlywheelState::ManualVelocity) : 
@@ -71,11 +82,11 @@ namespace subsystems::shooter {
             }
             case (constants::shooter::FlywheelState::ZeroVelocity) : 
             {
-                m_rps = 0.0;
+                m_rpm = 0.0;
                 break;
             }
             default: {
-                m_rps = 0.0; 
+                m_rpm = 0.0; 
                 break; 
             }
         }
@@ -83,23 +94,14 @@ namespace subsystems::shooter {
     }
     
     
-    void Flywheel::SetFlyWheelMotorVelocity(units::turns_per_second_t turnsPerSecond) {
-        controls::VelocityVoltage m_request = controls::VelocityVoltage{0_tps}.WithSlot(0);
-        m_flywheelMotor.SetControl(m_request.WithVelocity(turnsPerSecond).WithFeedForward(constants::shooter::flywheel::kFeedForwardVoltage).WithEnableFOC(true)); // TODO: make it a constant
+    void Flywheel::SetFlywheelMotorVelocity(double RPM) {
+        // Uncomment if you want to reimplement TalonFX
+        // controls::VelocityVoltage m_request = controls::VelocityVoltage{0_tps}.WithSlot(0);
+        m_flywheelController.SetSetpoint(RPM, rev::spark::SparkBase::ControlType::kMAXMotionVelocityControl); // TODO: make it a constant
     }
     
-    units::turns_per_second_t Flywheel::GetFlywheelTargetVelocity() {
-        return units::turns_per_second_t{m_flywheelMotor.GetClosedLoopReference().GetValue()}; 
-    }
-    
-
-    double Flywheel::GetFlywheelTargetRPS() {
-        return m_rps; 
-    }
-
-    void Flywheel::SetFlywheelTargetRPS(double target) {
-        frc::SmartDashboard::PutNumber("flywheel should be", target); 
-        m_rps = target; 
+    double Flywheel::GetFlywheelTargetVelocity() {
+        return m_flywheelController.GetMAXMotionSetpointVelocity(); 
     }
     
     void Flywheel::SetFlywheelMotorPower(double power) {

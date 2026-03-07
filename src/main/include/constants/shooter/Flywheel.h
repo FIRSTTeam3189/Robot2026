@@ -17,6 +17,7 @@ namespace constants {
         enum class FlywheelState { AutoVelocity, FixedVelocity, ManualVelocity, ZeroVelocity};
         namespace flywheel {
             constexpr int kShooterFlywheelID{24};
+            constexpr int kShooterFlywheel2ID {1000}; //! Change later
 
             constexpr double kAutoStaticFlywheelPower {-0.5};
             constexpr double kFlywheelFerryPower {-0.95}; 
@@ -26,18 +27,19 @@ namespace constants {
 
             constexpr double kMotorConversionRPMToRPS {60.0}; 
 
-            constexpr units::turns_per_second_t kFlywheelIncrementVelocity {5_tps}; 
-            constexpr units::turns_per_second_t kFlywheelDecrementVelocity {-5_tps}; 
+            constexpr double kFlywheelIncrementVelocity {300}; 
+            constexpr double kFlywheelDecrementVelocity {-300}; 
 
 
-            constexpr units::turns_per_second_t kFlywheelFerryVelocity {40_tps}; 
-            constexpr units::turns_per_second_t kFlywheelShootVelocity {0_tps}; // fixed state actually
+            constexpr double kFlywheelFerryVelocity {2400}; 
+            constexpr double kFlywheelShootVelocity {0}; // fixed state actually
 
-            constexpr units::turns_per_second_t kFlywheelFixedVelocity {100_tps}; 
+            constexpr double kFlywheelFixedVelocity {6000}; 
 
             constexpr units::second_t kFlywheelRunDelay {0.3_s}; 
             
             constexpr bool kFlywheelMotorInverted {false};
+            constexpr bool kInvertSecondMotor {true};
             constexpr ctre::phoenix6::signals::NeutralModeValue kFlywheelNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Coast};
 
             // flywheel pid stuff

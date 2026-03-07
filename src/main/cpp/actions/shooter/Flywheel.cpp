@@ -15,13 +15,13 @@ namespace actions::shooter::flywheel {
 
     frc2::CommandPtr IncrementFlywheelVelocity(subsystems::shooter::Flywheel *flywheel) {
         return frc2::InstantCommand([flywheel]() {
-            flywheel->SetFlywheelTargetRPS(flywheel->GetFlywheelTargetRPS() + constants::shooter::flywheel::kFlywheelIncrementVelocity.value());
+            flywheel->SetFlywheelMotorVelocity(flywheel->GetFlywheelTargetVelocity() + constants::shooter::flywheel::kFlywheelIncrementVelocity);
         }, {flywheel}).ToPtr(); 
     }
     
     frc2::CommandPtr DecrementFlywheelVelocity(subsystems::shooter::Flywheel *flywheel) {
         return frc2::InstantCommand([flywheel]() {
-            flywheel->SetFlywheelTargetRPS(flywheel->GetFlywheelTargetRPS() + constants::shooter::flywheel::kFlywheelDecrementVelocity.value());
+            flywheel->SetFlywheelMotorVelocity(flywheel->GetFlywheelTargetVelocity() + constants::shooter::flywheel::kFlywheelDecrementVelocity);
         }, {flywheel}).ToPtr();
     }
 };

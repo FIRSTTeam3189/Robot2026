@@ -5,7 +5,7 @@
 #include "commands/util/SetFlywheelMotorVelocity.h"
 
 namespace commands::util {
-    SetFlywheelMotorVelocity::SetFlywheelMotorVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t velocity)
+    SetFlywheelMotorVelocity::SetFlywheelMotorVelocity(subsystems::shooter::Flywheel *flywheel, double velocity)
     : m_flywheel(flywheel),
         m_velocity(velocity)
     {
@@ -13,7 +13,7 @@ namespace commands::util {
     }
 
     void SetFlywheelMotorVelocity::Execute() {
-        m_flywheel->SetFlyWheelMotorVelocity(m_velocity);
+        m_flywheel->SetFlywheelMotorVelocity(m_velocity.value());
     }
 
     void SetFlywheelMotorVelocity::End(bool interrupted) {

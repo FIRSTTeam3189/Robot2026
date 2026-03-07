@@ -6,7 +6,7 @@ namespace actions::interpolator {
         return frc2::InstantCommand([interpolatorData, swerveDrive, flywheel, articulation]() { // saves the point 
             frc::Pose2d robotPose = swerveDrive->GetEstimatedPose(); 
             interpolatorData->AddPoint(robotPose, util::align::turret::GetDistanceToTarget(robotPose), 
-                                        articulation->GetArticulationAngle(), flywheel->GetFlywheelTargetVelocity().value());
+                                        articulation->GetArticulationAngle(), flywheel->GetFlywheelTargetVelocity());
         }, {flywheel, swerveDrive, articulation}).ToPtr();  
     }
 

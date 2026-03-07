@@ -43,7 +43,7 @@ namespace actions {
         frc2::CommandPtr ShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
                                   subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation);
                                   
-        frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t tps);
+        frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, double rpm);
         
         frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
                                                  subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 

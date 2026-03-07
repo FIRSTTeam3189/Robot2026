@@ -23,6 +23,10 @@
 #include "util/interpolator/Linear.h"
 #include "util/align/Hood.h"
 
+#include <rev/SparkFlex.h>
+#include <rev/config/SparkFlexConfig.h>
+#include <rev/SparkClosedLoopController.h>
+
 namespace subsystems {
   namespace shooter {
     class Flywheel : public frc2::SubsystemBase {
@@ -36,13 +40,10 @@ namespace subsystems {
         void SetState(constants::shooter::FlywheelState flywheelState);
 
         void SetFlyWheelTargetPower(double power); 
-        void SetFlyWheelMotorVelocity(units::turns_per_second_t turnsPerSecond);
+        void SetFlywheelMotorVelocity(double turnsPerSecond);
+
+        double GetFlywheelTargetVelocity();
         
-        units::turns_per_second_t GetFlywheelTargetVelocity();
-
-        double GetFlywheelTargetRPS();
-
-        void SetFlywheelTargetRPS(double target);
 
         /**
          * Will be called periodically whenever the CommandScheduler runs.
@@ -58,10 +59,13 @@ namespace subsystems {
 
         util::interpolator::Linear m_powerInterpolator; 
 
-        ctre::phoenix6::hardware::TalonFX m_flywheelMotor;
-        ctre::phoenix6::configs::TalonFXConfiguration m_flywheelConfig {};
+        rev::spark::SparkFlex m_flywheelMotor;
+        rev::spark::SparkFlex m_flywheelFollowMotor;
+        rev::spark::SparkFlexConfig m_flywheelConfig {};
+        rev::spark::SparkFlexConfig m_flywheelFollowConfig {};
+        rev::spark::SparkClosedLoopController m_flywheelController;
 
-        double m_rps{};
+        double m_rpm{};
 
     };
   };

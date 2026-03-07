@@ -31,8 +31,8 @@ namespace actions::robot {
         ).ToPtr();
     }
 
-    frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, units::turns_per_second_t tps) {
-        return commands::util::SetFlywheelMotorVelocity(flywheel, tps).ToPtr();
+    frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, double rpm) {
+        return commands::util::SetFlywheelMotorVelocity(flywheel, rpm).ToPtr();
     }
         
     frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel, 
