@@ -32,10 +32,11 @@ namespace subsystems {
       Intake();
       void SetRollerPower(double power);
       void UpdatePreferences();
-      void ConfigRollerMotor();
+      void ConfigIntakeMotors();
 
       void SetIntake(double power);
       void RetractIntake();
+      void SetIntakePosition(double position);
 
       void SetState(subsystems::intake::State state, double rollerPower);
       subsystems::intake::State GetState();
@@ -50,9 +51,9 @@ namespace subsystems {
 
       // rev::spark::SparkMax m_rollerMotor;
       ctre::phoenix6::hardware::TalonFX m_intakeRollerMotor;
-      ctre::phoenix6::configs::TalonFXConfiguration m_intakeConfig {};
-
-      frc::DoubleSolenoid m_intakeSolenoid;
+      ctre::phoenix6::hardware::TalonFX m_intakeArticulationMotor;
+      ctre::phoenix6::configs::TalonFXConfiguration m_rollerConfig {};
+      ctre::phoenix6::configs::TalonFXConfiguration m_articulationConfig {};
 
       subsystems::intake::State m_state;
       double m_desiredPower;
