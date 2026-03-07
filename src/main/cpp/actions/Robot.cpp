@@ -130,6 +130,11 @@ namespace actions::robot {
             *shooterState = constants::ShooterState::Manual;
         }).ToPtr();
     }
-    
+
+    frc2::CommandPtr ShooterStateHoodAndInterpAuto(constants::ShooterState *shooterState) {
+         return frc2::InstantCommand([shooterState] () {
+            *shooterState = constants::ShooterState::HoodAndInterpAuto;
+        }).ToPtr();       
+    }
 
 }

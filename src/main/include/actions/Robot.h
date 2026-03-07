@@ -73,6 +73,6 @@ namespace actions {
         frc2::CommandPtr ShooterStateFixed(constants::ShooterState *shooterState);
         frc2::CommandPtr ShooterStateReset(constants::ShooterState *shooterState);
         frc2::CommandPtr ShooterStateManual(constants::ShooterState *shooterState);
-
+        frc2::CommandPtr ShooterStateHoodAndInterpAuto(constants::ShooterState *shooterState);
     };
 };

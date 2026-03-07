@@ -63,6 +63,12 @@ void Robot::RobotPeriodic() {
       m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub);
       break;
     }
+    case (constants::ShooterState::HoodAndInterpAuto) : {
+      RobotContainer::SetShooterState(constants::ShooterState::HoodAndInterpAuto);
+      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::PointStraight);
+      m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::AutoVelocity);
+      break;
+    }
   }
 }
 
