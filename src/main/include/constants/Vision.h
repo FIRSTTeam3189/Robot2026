@@ -14,76 +14,40 @@ namespace constants {
         constexpr wpi::array<double, 3> kPhotonVisionTrustCoefficients {0.5, 0.5, 10.0};
         constexpr double kPhotonVisionStdDevPerMeter {0.25};  // TODOOOOOOO
 
-        // !RAHHH Constants are wrong (prolly)!!!!
-        // These should be position not as a transform (positive)
-        constexpr units::meter_t kMainCameraXOffset {0.29_m}; 
-        constexpr units::meter_t kMainCameraYOffset {0.0_m}; 
-        constexpr units::meter_t kMainCameraZOffset {0.0_m};
-        constexpr units::degree_t kMainCameraPitchOffset {10.0_deg}; 
-        constexpr units::degree_t kMainCameraYawOffset {0.0_deg};
-        constexpr units::meter_t kMaxDistance {100.0_m};
-        constexpr double kMaxAmbiguity {0.2}; // [0, 1] where 1 is completely ambiguous
-        constexpr bool kShouldUseVision {true};
-        constexpr double kUseVisionMeasurementThreshold {100.0}; // Meters
-
-
-
-        //! START VERSION THAT WE DID JANKILY //////
-
-        // const std::string kPhotonIntakeCameraName {"Camera_Reef_Center"};
-        // constexpr units::meter_t kPhotonIntakeCameraXOffset {-0.04179_m}; 
-        // constexpr units::meter_t kPhotonIntakeCameraYOffset {0.2032_m}; 
-        // constexpr units::meter_t kPhotonIntakeCameraZOffset {0.0_m};
-        // constexpr units::degree_t kPhotonIntakeCameraPitchOffset {0.0_deg}; 
-        // constexpr units::degree_t kPhotonIntakeCameraYawOffset {180.0_deg}; 
-
-
-        // const std::string kPhotonReefCameraName {"Camera_Intake"};
-        // constexpr units::meter_t kPhotonReefCameraXOffset {-0.18519_m}; 
-        // constexpr units::meter_t kPhotonReefCameraYOffset {0.5032_m}; 
-        // constexpr units::meter_t kPhotonReefCameraZOffset {0.0_m}; // don't care
-        // constexpr units::degree_t kPhotonReefCameraPitchOffset {0.0_deg};  // don't care
-        // constexpr units::degree_t kPhotonReefCameraYawOffset {0.0_deg};
-
-        // const std::string kPhotonTurretCameraName {"Camera_Reef"};
-        // constexpr units::meter_t kPhotonTurretCameraXOffset {-0.29_m}; 
-        // constexpr units::meter_t kPhotonTurretCameraYOffset {0.0_m}; 
-        // constexpr units::meter_t kPhotonTurretCameraZOffset {0.0_m};
-        // constexpr units::degree_t kPhotonTurretCameraPitchOffset {0.0_deg}; 
-        // constexpr units::degree_t kPhotonTurretCameraYawOffset {0.0_deg}; 
-        //! END VERSION THAT WE DID JANKILY //////
-
         
 
         const std::string kPhotonTurretFrontCamera {"Front Cam"};
-        constexpr units::meter_t kPhotonTurretFrontCameraXOffset {-0.3429_m}; 
-        constexpr units::meter_t kPhotonTurretFrontCameraYOffset {-0.1778_m}; 
+        constexpr units::meter_t kPhotonTurretFrontCameraXOffset {0.0_m}; 
+        constexpr units::meter_t kPhotonTurretFrontCameraYOffset {0.0_m}; 
         constexpr units::meter_t kPhotonTurretFrontCameraZOffset {0.0_m};
-        constexpr units::meter_t kPhotonTurretFrontCameraHeight {0.135_m};
-        constexpr units::degree_t kPhotonTurretFrontCameraPitchOffset {36.0_deg}; 
+        constexpr units::meter_t kPhotonTurretFrontCameraHeight {0.0_m};
+        constexpr units::degree_t kPhotonTurretFrontCameraPitchOffset {0.0_deg}; 
         constexpr units::degree_t kPhotonTurretFrontCameraYawOffset {0.0_deg}; 
 
-        const std::string kPhotonCamera2 {"Vision 2"};
-        constexpr units::meter_t kPhotonReefCameraXOffset {-0.18519_m}; 
-        constexpr units::meter_t kPhotonReefCameraYOffset {0.2032_m}; 
-        constexpr units::meter_t kPhotonReefCameraZOffset {0.0_m}; // don't care
-        constexpr units::degree_t kPhotonReefCameraPitchOffset {0.0_deg};  // don't care
-        constexpr units::degree_t kPhotonReefCameraYawOffset {0.0_deg};
+        const std::string kPhotonTurretRightCamera {"Right Cam"};
+        constexpr units::meter_t kPhotonTurretRightCameraXOffset {0.0_m}; 
+        constexpr units::meter_t kPhotonTurretRightCameraYOffset {0.0_m}; 
+        constexpr units::meter_t kPhotonTurretRightCameraZOffset {0.0_m};
+        constexpr units::meter_t kPhotonTurretRightCameraHeight {0.0_m};
+        constexpr units::degree_t kPhotonTurretRightCameraPitchOffset {0.0_deg};
+        constexpr units::degree_t kPhotonTurretRightCameraYawOffset {0.0_deg};
 
-        const std::string kPhotonCamera3 {"Front"};
-        constexpr units::meter_t kPhotonTurretCameraXOffset {0.23_m}; 
-        constexpr units::meter_t kPhotonTurretCameraYOffset {0.046_m}; 
-        constexpr units::meter_t kPhotonTurretCameraZOffset {0.0_m};
-        constexpr units::degree_t kPhotonTurretCameraPitchOffset {36_deg}; 
-        constexpr units::degree_t kPhotonTurretCameraYawOffset {0.0_deg}; 
+        const std::string kPhotonTurretLeftCamera {"Left Cam"};
+        constexpr units::meter_t kPhotonTurretLeftCameraXOffset {0.0_m}; 
+        constexpr units::meter_t kPhotonTurretLeftCameraYOffset {0.0_m}; 
+        constexpr units::meter_t kPhotonTurretLeftCameraZOffset {0.0_m};
+        constexpr units::meter_t kPhotonTurretLeftCameraHeight {0.0_m};
+        constexpr units::degree_t kPhotonTurretLeftCameraPitchOffset {0.0_deg}; 
+        constexpr units::degree_t kPhotonTurretLeftCameraYawOffset {0.0_deg}; 
 
         constexpr int kBaudRate {115200};
         constexpr int kBufferSize {1024};
 
-        constexpr units::meter_t kRobotRelativeBranchOffsetX {0.546_m}; 
-        constexpr units::meter_t kRobotRelativeBranchOffsetY {0.1651_m}; // Distance between center of each reef face and center of pipe (or pipe to pipe / 2)
-        constexpr units::meter_t kOffsetMagnitude {0.5704156_m}; // Just distance formula with two above
-
+        constexpr double kMaxAmbiguity {0.2}; // [0, 1] where 1 is completely ambiguous
+        constexpr bool kShouldUseVision {true};
+        constexpr double kUseVisionMeasurementThreshold {100.0}; // Meters
+        constexpr units::meter_t kMaxDistance {100.0_m};
+        
         // Vision Sync bytes, in char format
         constexpr std::array kSyncBytes {'\x1a', '\xcf', '\xfc', '\x1d'};
     };

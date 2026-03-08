@@ -110,10 +110,15 @@ namespace subsystems::vision {
             // Add offset to timestamp to set to rust vision's epoch
             if (ambiguity < constants::vision::kMaxAmbiguity && tagDistance < constants::vision::kMaxDistance.value()) {
                 if (visionEstimatedDistance < constants::vision::kUseVisionMeasurementThreshold){
+                    // 3 cams
                     if (m_cameraName == constants::vision::kPhotonTurretFrontCamera) {
-                        m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp, distanceCompensatedStdDevs, VisionCamera::PhotonVision1);
-                    } else if (m_cameraName == constants::vision::kPhotonCamera3) {
-                        m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp, distanceCompensatedStdDevs, VisionCamera::PhotonVision2);     
+                        m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp, distanceCompensatedStdDevs, VisionCamera::FrontCamera);
+                    } 
+                    else if (m_cameraName == constants::vision::kPhotonTurretRightCamera) {
+                        m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp, distanceCompensatedStdDevs, VisionCamera::RightCamera);     
+                    } 
+                    else if (m_cameraName == constants::vision::kPhotonTurretLeftCamera) {
+                        m_poseEstimator->AddVisionMeasurement(visionEstimatedRobotPose, timestamp, distanceCompensatedStdDevs, VisionCamera::LeftCamera);     
                     }
                 
                 } else {

@@ -130,13 +130,30 @@ class RobotContainer {
   subsystems::shooter::Turret *m_turret = new subsystems::shooter::Turret(m_swerveDrive);
   subsystems::shooter::Flywheel *m_flywheel = new subsystems::shooter::Flywheel(m_swerveDrive); 
 
-  subsystems::vision::Photon *m_turretCamera = new subsystems::vision::Photon(m_poseEstimator, 
+  // Vision
+  subsystems::vision::Photon *m_frontCam = new subsystems::vision::Photon(m_poseEstimator, 
     constants::vision::kPhotonTurretFrontCamera, 
     constants::vision::kPhotonTurretFrontCameraXOffset, 
     constants::vision::kPhotonTurretFrontCameraYOffset, 
     frc::Rotation2d{constants::vision::kPhotonTurretFrontCameraYawOffset},
     frc::Rotation2d{constants::vision::kPhotonTurretFrontCameraPitchOffset},
     constants::vision::kPhotonTurretFrontCameraHeight
+  );
+  subsystems::vision::Photon *m_rightCam = new subsystems::vision::Photon(m_poseEstimator, 
+    constants::vision::kPhotonTurretRightCamera, 
+    constants::vision::kPhotonTurretRightCameraXOffset, 
+    constants::vision::kPhotonTurretRightCameraYOffset, 
+    frc::Rotation2d{constants::vision::kPhotonTurretRightCameraYawOffset},
+    frc::Rotation2d{constants::vision::kPhotonTurretRightCameraPitchOffset},
+    constants::vision::kPhotonTurretRightCameraHeight
+  );
+  subsystems::vision::Photon *m_leftCam = new subsystems::vision::Photon(m_poseEstimator, 
+    constants::vision::kPhotonTurretLeftCamera, 
+    constants::vision::kPhotonTurretLeftCameraXOffset, 
+    constants::vision::kPhotonTurretLeftCameraYOffset, 
+    frc::Rotation2d{constants::vision::kPhotonTurretLeftCameraYawOffset},
+    frc::Rotation2d{constants::vision::kPhotonTurretLeftCameraPitchOffset},
+    constants::vision::kPhotonTurretLeftCameraHeight
   );
 
   subsystems::intake::Intake *m_intake = new subsystems::intake::Intake();
@@ -154,7 +171,7 @@ class RobotContainer {
 
   subsystems::swerve::State m_driveState = subsystems::swerve::State::HeadingControl;
 
-  inline static constants::ShooterState m_shooterState = constants::ShooterState::Automatic;
+  inline static constants::ShooterState m_shooterState = constants::ShooterState::Fixed;
 
 
   bool m_nomNomMode = false; 

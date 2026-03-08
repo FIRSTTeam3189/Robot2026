@@ -13,7 +13,7 @@ namespace subsystems::shooter {
         m_swerveDrive(swerveDrive),
         m_powerInterpolator(constants::auto_align::kPowerInterpolatorDistances, constants::auto_align::kPowerInterpolatorPowers),
         m_flywheelMotor(constants::shooter::flywheel::kShooterFlywheelID, rev::spark::SparkFlex::MotorType::kBrushless),
-        m_flywheelFollowMotor(constants::shooter::flywheel::kShooterFlywheel2ID, rev::spark::SparkFlex::MotorType::kBrushless),
+        m_flywheelFollowMotor(constants::shooter::flywheel::kShooterFlywheelFollowID, rev::spark::SparkFlex::MotorType::kBrushless),
         m_flywheelConfig(),
         m_flywheelFollowConfig(),
         m_flywheelController(m_flywheelMotor.GetClosedLoopController())
@@ -25,10 +25,7 @@ namespace subsystems::shooter {
     // This method will be called once per scheduler run
     void Flywheel::Periodic() { 
     
-        // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
-        // frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
-        // frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
-        frc::SmartDashboard::PutNumber("Test Bindings/flywheel current rpm", m_flywheelController.GetMAXMotionSetpointVelocity());
+        frc::SmartDashboard::PutNumber("Test Bindings/flywheel current rpm", m_flywheelMotor.GetEncoder().GetVelocity());
         frc::SmartDashboard::PutNumber("Test Bindings/flywheel target rpm", GetFlywheelTargetVelocity());
     
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel current",  m_flywheelMotor.GetSupplyCurrent().GetValue().value());
@@ -97,7 +94,7 @@ namespace subsystems::shooter {
     void Flywheel::SetFlywheelMotorVelocity(double RPM) {
         // Uncomment if you want to reimplement TalonFX
         // controls::VelocityVoltage m_request = controls::VelocityVoltage{0_tps}.WithSlot(0);
-        m_flywheelController.SetSetpoint(RPM, rev::spark::SparkBase::ControlType::kMAXMotionVelocityControl); // TODO: make it a constant
+        m_flywheelController.SetSetpoint(RPM, rev::spark::SparkBase::ControlType::kMAXMotionVelocityControl); 
     }
     
     double Flywheel::GetFlywheelTargetVelocity() {

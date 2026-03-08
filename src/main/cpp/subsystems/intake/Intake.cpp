@@ -32,7 +32,6 @@ namespace subsystems::intake
         m_articulationConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constants::intake::kBottomSoftLimit;
 
         m_articulationConfig.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::RotorSensor;
-        m_articulationConfig.Feedback.FeedbackRotorOffset = constants::intake::kRotationOffset;
 
         m_articulationConfig.CurrentLimits.SupplyCurrentLowerLimit = constants::intake::kRotationContinuousCurrentLimit;
         m_articulationConfig.CurrentLimits.SupplyCurrentLimit = constants::intake::kRotationPeakCurrentLimit;
@@ -48,22 +47,22 @@ namespace subsystems::intake
         m_articulationConfig.Slot0.kP = constants::intake::kArticulationKP;
         m_articulationConfig.Slot0.kI = constants::intake::kArticulationKI;
         m_articulationConfig.Slot0.kD = constants::intake::kArticulationKD;
-        m_articulationConfig.Slot0.GravityType = ctre::phoenix6::signals::GravityTypeValue::Arm_Cosine;
-        m_articulationConfig.Slot0.GravityArmPositionOffset = constants::intake::kArticulationOffset;
+        // m_articulationConfig.Slot0.GravityType = ctre::phoenix6::signals::GravityTypeValue::Arm_Cosine;
 
         // m_articulationConfig.MotionMagic.MotionMagicCruiseVelocity = constants::intake::kMotionMagicMaxVelocity;
         // m_articulationConfig.MotionMagic.MotionMagicAcceleration = constants::intake::kMotionMagicMaxAcceleration;
         // m_articulationConfig.MotionMagic.MotionMagicJerk = constants::intake::kMotionMagicMaxJerk;
 
         m_intakeArticulationMotor.GetConfigurator().Apply(m_articulationConfig);
+        m_intakeArticulationMotor.SetPosition(0.0_tr);
         m_intakeRollerMotor.GetConfigurator().Apply(m_rollerConfig);
-        // m_turretMotor.SetPosition(0.0_tr);
+
+        SetState(State::RetractIntake, 0.0);
     }
 
     void Intake::SetIntakePosition(double position)
     {
         ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
-
         m_intakeArticulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{position / constants::intake::kRotationConversionRotationsToDegrees}));
     }
 
@@ -74,13 +73,13 @@ namespace subsystems::intake
 
     void Intake::SetIntake(double power)
     {
-        SetIntakePosition(constants::intake::kIntakeExtendedPosition);
+        SetIntakePosition(constants::intake::kExtendAngle.value());
         m_intakeRollerMotor.Set(power);
     }
 
     void Intake::RetractIntake()
     {
-        SetIntakePosition(constants::intake::kIntakeRetractedPosition);
+        SetIntakePosition(constants::intake::kRetractAngle.value());
         m_intakeRollerMotor.Set(0.0);
     }
 
@@ -112,7 +111,7 @@ namespace subsystems::intake
 
     State Intake::GetState()
     {
-        // frc::SmartDashboard::PutNumber("Intake State: ",  static_cast<int>(m_state));
+        frc::SmartDashboard::PutNumber("Intake State: ",  static_cast<int>(m_state));
         return m_state;
     }
 

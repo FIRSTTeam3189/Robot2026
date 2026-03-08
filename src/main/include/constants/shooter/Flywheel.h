@@ -17,7 +17,7 @@ namespace constants {
         enum class FlywheelState { AutoVelocity, FixedVelocity, ManualVelocity, ZeroVelocity};
         namespace flywheel {
             constexpr int kShooterFlywheelID{24};
-            constexpr int kShooterFlywheel2ID {1000}; //! Change later
+            constexpr int kShooterFlywheelFollowID {1000}; //! Change later
 
             constexpr double kAutoStaticFlywheelPower {-0.5};
             constexpr double kFlywheelFerryPower {-0.95}; 

@@ -196,7 +196,7 @@ namespace subsystems::shooter {
         units::degree_t encoderValue = units::degree_t{constants::shooter::articulation::kRotationConversionRotationsToDegrees 
             * ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_articulationAngle, m_articulationVelocity).value()};
         
-        frc::SmartDashboard::PutNumber("hood motor turns", ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_articulationAngle, m_articulationVelocity).value());
+        frc::SmartDashboard::PutNumber("Hood motor turns", ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(m_articulationAngle, m_articulationVelocity).value());
         encoderValue += constants::shooter::articulation::kHoodStationaryAngle;
         return encoderValue;
     }

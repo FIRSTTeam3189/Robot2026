@@ -14,6 +14,7 @@
 
 #include "constants/swerve/SwerveDrive.h"
 #include "constants/swerve/SwerveModule.h"
+#include "constants/shooter/Turret.h"
 #include "constants/AutoAlign.h"
 
 #include "util/Vector2d.h"

@@ -18,7 +18,7 @@
 
 namespace subsystems {
   namespace vision {
-    enum class VisionCamera { PhotonVision1, PhotonVision2 };
+    enum class VisionCamera { FrontCamera, RightCamera, LeftCamera };
 
     class PoseEstimatorHelper : public frc2::SubsystemBase {
     public:
@@ -38,12 +38,14 @@ namespace subsystems {
       frc::SwerveDrivePoseEstimator<4> *m_poseEstimator;
       frc::Field2d m_estimatedPose;
 
-      frc::Field2d m_photonVision1;
-      frc::Field2d m_photonVision1Pose;
+      frc::Field2d m_photonVisionFront;
+      frc::Field2d m_photonVisionFrontPose;
 
-      frc::Field2d m_photonVision2;
-      frc::Field2d m_photonVision2Pose;
+      frc::Field2d m_photonVisionRight;
+      frc::Field2d m_photonVisionRightPose;
 
+      frc::Field2d m_photonVisionLeft;
+      frc::Field2d m_photonVisionLeftPose;
     
       frc::Field2d m_autoField;
       frc::Rotation2d m_rotation;

@@ -82,7 +82,7 @@ namespace subsystems::shooter {
             
              
         m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
-        m_turretMotor.SetPosition(0.0_tr);
+        m_turretMotor.SetPosition(units::turn_t{constants::shooter::turret::kMinimumAngleNegative.value() / constants::shooter::turret::kRotationConversionRotationsToDegrees});
         SetState(constants::shooter::TurretTarget::PointStraight); 
     }
     
@@ -173,15 +173,9 @@ namespace subsystems::shooter {
     }
     
     void Turret::SetTurretAngle(units::degree_t angle) {
-        // double angleDouble = angle.value() + 45; // from -45 to 225 to 0 to 270 
         ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
-    
-        if ((m_state == constants::shooter::TurretTarget::PointStraight) && ((m_currentRotationAngle.value() < 90.05) && (m_currentRotationAngle.value() > 89.95))) {
-            m_turretMotor.Set(0);
-        } else {
-            m_turretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
-                constants::shooter::turret::kRotationConversionRotationsToDegrees}));
-        }
+        m_turretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 
+            constants::shooter::turret::kRotationConversionRotationsToDegrees}));
     }
     
     units::degree_t Turret::GetTurretAngle() {
