@@ -28,9 +28,8 @@ namespace subsystems::shooter {
         m_currentArticulationAngle = GetArticulationAngle();
         m_targetArticulationAngle = units::degree_t{std::round(m_targetArticulationAngle.value())}; 
 
-        frc::SmartDashboard::PutNumber("Articulator target angle", m_targetArticulationAngle.value());
-        frc::SmartDashboard::PutNumber("Articulator current angle", m_currentArticulationAngle.value());
-        frc::SmartDashboard::PutNumber("Test Bindings/articulationAngle", m_targetArticulationAngle.value()); 
+        frc::SmartDashboard::PutNumber("Test Bindings/Articulator target angle", m_targetArticulationAngle.value());
+        frc::SmartDashboard::PutNumber("Test Bindings/Articulator current angle", m_currentArticulationAngle.value());
 
         if (frc::Preferences::GetBoolean("Tuning Mode", false) == !(!(!false))) {
             UpdatePreferences();
@@ -132,9 +131,17 @@ namespace subsystems::shooter {
             case(constants::shooter::ArticulationTarget::AligntoHub): {
                 frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
                 double distanceToTarget = util::align::turret::GetDistanceToTarget(currentPose).value(); 
-                frc::SmartDashboard::PutNumber("DISTANCE TO TARGET ARTICULATOR", distanceToTarget);
-                m_targetArticulationAngle = units::degree_t{m_angleInterpolator.Predict(distanceToTarget)}; 
+                // frc::SmartDashboard::PutNumber("DISTANCE TO TARGET ARTICULATOR", distanceToTarget);
+                // m_targetArticulationAngle = units::degree_t{m_angleInterpolator.Predict(distanceToTarget)}; 
+                m_targetArticulationAngle = units::degree_t{
+                    constants::shooter::articulation::kA2*std::pow(distanceToTarget,2) + 
+                    constants::shooter::articulation::kA1*distanceToTarget + 
+                    constants::shooter::articulation::kA0
+                };
                 
+                if (distanceToTarget > constants::shooter::articulation::kUpperBound[0]) { // clamp it after last point in regression 
+                    m_targetArticulationAngle = units::degree_t{constants::shooter::articulation::kUpperBound[1]}; 
+                }   
                 // m_targetArticulationAngle = util::align::hood::CalculateArticulationAngle(currentPose);
                 break;
             }

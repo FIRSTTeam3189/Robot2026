@@ -26,8 +26,8 @@ namespace constants {
 
             constexpr double kMotorConversionRPMToRPS {60.0}; 
 
-            constexpr units::turns_per_second_t kFlywheelIncrementVelocity {5_tps}; 
-            constexpr units::turns_per_second_t kFlywheelDecrementVelocity {-5_tps}; 
+            constexpr units::turns_per_second_t kFlywheelIncrementVelocity {1.667_tps}; 
+            constexpr units::turns_per_second_t kFlywheelDecrementVelocity {-1.667_tps}; 
 
 
             constexpr units::turns_per_second_t kFlywheelFerryVelocity {40_tps}; 
@@ -48,6 +48,15 @@ namespace constants {
             constexpr double kD {0.0};
 
             constexpr units::volt_t kFeedForwardVoltage {0.5_V};
+
+            // flywheel regression constants
+            // A is just a name of the constant, the number tells you the degree of that term 
+            constexpr double kA4 {70.18}; 
+            constexpr double kA3 {-887.7}; 
+            constexpr double kA2 {4075.0}; 
+            constexpr double kA1 {-7705}; 
+            constexpr double kA0 {7294}; 
+            
         };
     };
 };

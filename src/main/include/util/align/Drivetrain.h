@@ -18,6 +18,7 @@
 #include "constants/AutoAlign.h"
 
 #include "util/Vector2d.h"
+#include "util/align/Turret.h"
 
 
 
@@ -38,6 +39,7 @@ namespace util {
             frc::Pose2d GetClosestRobotPose(frc::Pose2d robotPose);
             frc2::CommandPtr AutoAlignToPose(subsystems::swerve::Drive *swerveDrive, pathplanner::PathConstraints constraints);
             int GetIndexOfPathfindingPose(frc::Pose2d pathfindingPose);
+            // double GetDesiredRobotAngle(frc::Pose2d robotPose); 
         }; 
     };
 };

@@ -72,8 +72,6 @@ namespace util::align::drivetrain {
         }
 
         return 0; 
-    } 
-
-
+    }
 
 };

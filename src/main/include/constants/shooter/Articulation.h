@@ -91,6 +91,14 @@ namespace constants {
             constexpr units::degree_t kArticulationAngleIncrement {1.0_deg};
             constexpr units::degree_t kArticulationAngleDecrement {-1.0_deg};
 
+            // articulation angle regression constants
+            // A is just a name of the constant, the number tells you the degree of that term 
+            constexpr double kA2 {-0.54710882}; 
+            constexpr double kA1 {5.78783607}; 
+            constexpr double kA0 {12.80774277}; 
+            // upper bound for regression, so after 5.1 meters distance hood stays at 28.0 degrees 
+            const double kUpperBound[2] = {5.1, 28.0}; 
+
         };
     };
 };

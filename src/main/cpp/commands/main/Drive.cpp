@@ -95,6 +95,12 @@ namespace commands::main
         rot = GetDesiredRotationalVelocity() * constants::swerve::swerve_drive::kSlowModeSwerveDriveRotMultiplier;
         break;
       } 
+      case(subsystems::swerve::State::SwerveAlign): {
+        // rot = units::angular_velocity::radians_per_second_t{
+        //       m_rotLimiter.Calculate(m_rotationPIDController.Calculate(m_swerveDrive->GetNormalizedYaw().value(), util::align::turret::GetDesiredRobotAngle(m_swerveDrive->GetEstimatedPose())))
+        //       * constants::swerve::swerve_drive::kMaxAngularVelocity};
+        break;
+        }
       case subsystems::swerve::State::ClimbAlign: {
         if (frc::DriverStation::GetAlliance())
         {

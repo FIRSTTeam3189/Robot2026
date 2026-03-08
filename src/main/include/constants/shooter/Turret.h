@@ -29,8 +29,8 @@ namespace constants {
 
             constexpr bool kSoftLimitEnabledForward{true};
             constexpr bool kSoftLimitEnabledReverse{true};
-            constexpr units::turn_t kTopSoftLimit {18.0_tr};
-            constexpr units::turn_t kBottomSoftLimit {-4.5_tr}; 
+            constexpr units::turn_t kTopSoftLimit {17.0_tr};
+            constexpr units::turn_t kBottomSoftLimit {-4.0_tr}; 
             constexpr units::turn_t kRotationOffset {0.0_tr};
 
             constexpr double kShooterGearRatio {1.0};

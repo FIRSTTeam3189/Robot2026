@@ -2,6 +2,6 @@
 
 namespace subsystems {
     namespace swerve {
-        enum class State { HeadingControl, ArbitraryAngleAlign, SlowDownSwerves, ClimbAlign } ;
+        enum class State { HeadingControl, ArbitraryAngleAlign, SlowDownSwerves, SwerveAlign, ClimbAlign } ;
     }; 
 };

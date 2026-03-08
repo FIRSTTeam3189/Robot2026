@@ -12,6 +12,7 @@
 
 #include "constants/Controller.h"
 #include "constants/swerve/SwerveDrive.h"
+#include "util/align/Turret.h"
 
 namespace commands {
       namespace main {

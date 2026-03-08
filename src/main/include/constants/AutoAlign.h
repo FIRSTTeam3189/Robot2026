@@ -34,11 +34,11 @@ namespace constants {
             // frc::Pose2d (5.145_m, 2.884_m, frc::Rotation2d(120.0_deg))
         };
 
-        constexpr frc::Pose2d kBlueHubPose {4.624_m, 4.036_m, frc::Rotation2d(0.0_deg)};
-        constexpr frc::Pose2d kRedHubPose {11.909_m, 4.036_m, frc::Rotation2d(180.0_deg)};
+        constexpr frc::Pose2d kBlueHubPose {4.625_m, 4.026_m, frc::Rotation2d(0.0_deg)};
+        constexpr frc::Pose2d kRedHubPose {11.921_m, 4.026_m, frc::Rotation2d(180.0_deg)};
 
-        constexpr frc::Pose2d kBlueInFrontHubPose {3.624_m, 4.036_m, frc::Rotation2d(0.0_deg)};
-        constexpr frc::Pose2d kRedInFrontHubPose {12.909_m, 4.036_m, frc::Rotation2d(180.0_deg)};
+        constexpr frc::Pose2d kBlueInFrontHubPose {3.624_m, 4.026_m, frc::Rotation2d(0.0_deg)};
+        constexpr frc::Pose2d kRedInFrontHubPose {12.909_m, 4.026_m, frc::Rotation2d(180.0_deg)};
 
         constexpr units::meter_t kBlueNeutralZoneThreshold {4.000_m};
         constexpr units::meter_t kRedNeutralZoneThreshold {12.550_m};
@@ -81,10 +81,13 @@ namespace constants {
         constexpr double kMinimumVelocityMultiplier {0.02}; 
         constexpr double kVelocityMultiplier {1.65}; 
 
-        const std::vector<double> kPowerInterpolatorDistances = {1.0, 1.5, 2.0, 2.5, 3.0}; 
+        // const std::vector<double> kPowerInterpolatorDistances = {1.0, 1.5, 2.0, 2.5, 3.0}; 
         const std::vector<double> kPowerInterpolatorPowers = {0.53, 0.60, 0.68, 0.75, 0.80}; 
         // 0 is 15, and max is 35 
-        const std::vector<double> kAngleInterpolatorAngles = {17.5, 20.0, 22.5, 29.0, 35.0}; 
+        // const std::vector<double> kAngleInterpolatorAngles = {17.5, 20.0, 22.5, 29.0, 35.0}; 
+        
+        const std::vector<double> kPowerInterpolatorDistances = {1.175, 1.498, 1.71, 1.97, 2.315, 2.7, 3.12, 3.625, 4.469, 5.113}; 
+        const std::vector<double> kAngleInterpolatorAngles = {19.0, 20.0, 21.0, 22.0, 23.0, 25.0, 26.0, 27.0, 26.0, 29.0}; 
 
         //! need to be configured 
         constexpr units::degree_t kHoodDefaultAngle{15_deg};

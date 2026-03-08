@@ -21,7 +21,9 @@ namespace subsystems::shooter {
     
     // This method will be called once per scheduler run
     void Flywheel::Periodic() { 
-    
+        double distanceToTarget = util::align::turret::GetDistanceToTarget(m_swerveDrive->GetEstimatedPose()).value(); 
+        frc::SmartDashboard::PutNumber("Test Bindings/distance to target", distanceToTarget);
+
         // frc::SmartDashboard::PutNumber("Power Interpolator/power", m_targetPower); 
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", m_targetPower);
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel power", m_flywheelMotor.Get());
@@ -55,9 +57,16 @@ namespace subsystems::shooter {
             {
                 frc::Pose2d robotPose = m_swerveDrive->GetEstimatedPose(); 
                 double distanceToTarget = util::align::turret::GetDistanceToTarget(robotPose).value(); 
-                double power = m_powerInterpolator.Predict(distanceToTarget); 
-                frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", power); 
-                m_rps = (power * constants::shooter::flywheel::kFlywheelMaxRPM) / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
+                // double power = m_powerInterpolator.Predict(distanceToTarget); 
+                // double rpm = 18.85663215*std::pow(distanceToTarget,2) + 46.37148976*distanceToTarget + 2244.7636984;
+                double rpm = constants::shooter::flywheel::kA4*std::pow(distanceToTarget,4) +
+                             constants::shooter::flywheel::kA3*std::pow(distanceToTarget,3) + 
+                             constants::shooter::flywheel::kA2*std::pow(distanceToTarget,2) + 
+                             constants::shooter::flywheel::kA1*distanceToTarget + 
+                             constants::shooter::flywheel::kA0;
+                frc::SmartDashboard::PutNumber("Test Bindings/flywheel target cubic rpm", rpm); 
+                // m_rps = (power * constants::shooter::flywheel::kFlywheelMaxRPM) / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
+                m_rps = rpm / constants::shooter::flywheel::kMotorConversionRPMToRPS; 
                 break;
             }
             case (constants::shooter::FlywheelState::FixedVelocity) :
