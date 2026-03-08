@@ -48,6 +48,13 @@ void RobotContainer::ConfigureDriverBindings() {
   // slowSwervesButton.OnTrue(actions::swerve::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
   // slowSwervesButton.OnFalse(actions::swerve::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
 
+  frc2::Trigger climberUp([this](){ return m_bill.GetR2Button(); });
+  climberUp.OnTrue(actions::climber::PutClimberUp(m_climber));
+  climberUp.OnFalse(actions::climber::StopClimber(m_climber));
+
+  frc2::Trigger climberDown([this](){ return m_bill.GetR2Button(); });
+  climberDown.OnTrue(actions::climber::PutClimberDown(m_climber));
+  climberDown.OnFalse(actions::climber::StopClimber(m_climber));
 
   frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
   shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());

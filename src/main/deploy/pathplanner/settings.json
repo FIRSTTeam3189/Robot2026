@@ -41,5 +41,7 @@
   "brModuleY": -0.27125,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Circle\",\"type\":\"circle\",\"data\":{\"center\":{\"x\":0.17,\"y\":0.0},\"radius\":0.15,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }

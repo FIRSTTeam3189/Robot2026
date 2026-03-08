@@ -42,6 +42,7 @@
 #include "subsystems/indexer/Kicker.h"
 #include "subsystems/shooter/Flywheel.h"
 #include "subsystems/indexer/Loader.h"
+#include "subsystems/climber/Climber.h"
 
 
 
@@ -67,6 +68,7 @@
 #include "actions/Interpolator.h"
 #include "actions/Robot.h"
 #include "actions/Swerve.h"
+#include "actions/Climber.h"
 
 
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -138,6 +140,7 @@ class RobotContainer {
   );
 
   subsystems::intake::Intake *m_intake = new subsystems::intake::Intake();
+  subsystems::climber::Climber *m_climber = new subsystems::climber::Climber();
 
   util::interpolator::Data *m_interpolatorData = new util::interpolator::Data(constants::interpolator::kInterpolatorDataFilePath); 
   

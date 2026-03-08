@@ -53,12 +53,16 @@ namespace commands::main
       if (m_allianceSide.value() == frc::DriverStation::Alliance::kBlue)
       {
         joystickX = -m_bill->GetRawAxis(constants::controller::kAxisLeftStickY);
+        // joystickX = -m_bill->GetLeftX();
         joystickY = -m_bill->GetRawAxis(constants::controller::kAxisLeftStickX);
+        // joystickY = -m_bill->GetLeftY();
       }
       else
       {
         joystickX = m_bill->GetRawAxis(constants::controller::kAxisLeftStickY);
+        // joystickX = -m_bill->GetLeftX();
         joystickY = m_bill->GetRawAxis(constants::controller::kAxisLeftStickX);
+        // joystickY = -m_bill->GetLeftY();
       }
     }
 
