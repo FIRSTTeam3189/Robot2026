@@ -34,4 +34,8 @@ class Robot : public frc::TimedRobot {
   RobotContainer m_container;
   frc2::Command* m_autonomousCommand = nullptr;
   bool m_epochSet = false;
+  std::string m_autoWinners;
+  bool m_autoWon;
+  bool m_shouldScore;
+  units::time::second_t m_timeLeft;
 };
