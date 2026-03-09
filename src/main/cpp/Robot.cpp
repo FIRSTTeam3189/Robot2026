@@ -33,6 +33,54 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
 
+  m_autoWinners = frc::DriverStation::GetGameSpecificMessage();
+  m_timeLeft = frc::DriverStation::GetMatchTime(); 
+
+  if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
+    if (m_autoWinners == "B") {
+      m_autoWon = true;
+    } else if (m_autoWinners == "R") {
+      m_autoWon = false;
+    }
+  } else if (!frc::DriverStation::GetAlliance() == frc::DriverStation::kRed) {
+    if (m_autoWinners == "R") {
+      m_autoWon = true;
+    } else if (m_autoWinners == "B") {
+      m_autoWon = false;
+    }
+    }
+
+  if (m_autoWon) {
+    if (m_timeLeft.value() <= 30) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 55) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 80) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 105) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 130) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 160) {
+      m_shouldScore = true;
+    }
+  } else if (m_autoWon == false) {
+    if (m_timeLeft.value() <= 30) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 55) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 80) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 105) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 160) {
+      m_shouldScore = true;
+    }
+  }
+
+
+  frc::SmartDashboard::PutBoolean("Won auto?", m_autoWon);
+
   frc::SmartDashboard::PutNumber("Current Drive State", static_cast<int>(m_container.GetDriveState())); 
 
   constants::ShooterState shooterState = RobotContainer::GetShooterState();
