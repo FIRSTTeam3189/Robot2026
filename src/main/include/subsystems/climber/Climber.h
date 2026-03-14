@@ -7,6 +7,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include "constants/Climber.h"
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 namespace subsystems {
   namespace climber {

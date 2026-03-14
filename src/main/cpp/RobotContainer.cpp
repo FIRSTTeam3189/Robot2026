@@ -188,8 +188,6 @@ void RobotContainer::ConfigureTestBindings() {
   frc2::Trigger setArticulationAngle20([this]() { return m_bill.GetSquareButton(); });
   setArticulationAngle20.OnTrue(actions::shooter::hood::Articulation20Degrees(m_articulation)); 
 
-
-
   // Kicker
   frc2::Trigger runKickerMotorForward([this]() { return m_bill.GetSquareButton(); });
   runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
@@ -226,7 +224,6 @@ void RobotContainer::ConfigureTestBindings() {
   runIntakeRotationMotorPowerReverse.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));
 
   // Intake PID Buttons
-  // TODO
   frc2::Trigger setIntakeRotationDown([this]() { return m_bill.GetSquareButton(); });
   setIntakeRotationDown.OnTrue(actions::intake::IntakeRetractState(m_intake));
 
@@ -251,6 +248,15 @@ void RobotContainer::ConfigureTestBindings() {
 
   frc2::Trigger setTurret135Deg([this]() { return m_bill.GetCircleButton(); });
   setTurret135Deg.OnTrue(actions::shooter::turret::PointTurretRight(m_turret));
+
+  // Climber
+  frc2::Trigger runClimberUp([this]() { return m_bill.GetTriangleButton(); });
+  runClimberUp.OnTrue(actions::climber::PutClimberUp(m_climber));
+  runClimberUp.OnFalse(actions::climber::ResetClimber(m_climber));
+
+  frc2::Trigger runClimberDown([this]() { return m_bill.GetCrossButton(); });
+  runClimberDown.OnTrue(actions::climber::PutClimberUp(m_climber));
+  runClimberDown.OnFalse(actions::climber::ResetClimber(m_climber));
 
 }
 

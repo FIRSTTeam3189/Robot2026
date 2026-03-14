@@ -38,7 +38,9 @@ namespace subsystems::climber
     }
 
     // This method will be called once per scheduler run
-    void Climber::Periodic() {}
+    void Climber::Periodic() {
+        frc::SmartDashboard::PutNumber("Climber turns", m_climberMotor.GetPosition().GetValue().value()); // for soft limits
+    }
 
 };
 

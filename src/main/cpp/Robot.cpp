@@ -80,6 +80,7 @@ void Robot::RobotPeriodic() {
 
 
   frc::SmartDashboard::PutBoolean("Won auto?", m_autoWon);
+  frc::SmartDashboard::PutBoolean("Should score?", m_shouldScore);
 
   frc::SmartDashboard::PutNumber("Current Drive State", static_cast<int>(m_container.GetDriveState())); 
 
