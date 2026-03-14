@@ -15,7 +15,7 @@
 #include "constants/swerve/SwerveDrive.h"
 #include "constants/swerve/SwerveModule.h"
 #include "constants/AutoAlign.h"
-#include "constants/shooter/Articulation.h"
+#include "constants/shooter/Hood.h"
 
 
 

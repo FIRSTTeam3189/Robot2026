@@ -2,7 +2,6 @@
 
 namespace subsystems::intake
 {
-
     Intake::Intake() :
 
                        m_intakeRollerMotor(constants::intake::kRollerMotorID),
@@ -71,16 +70,9 @@ namespace subsystems::intake
         m_intakeRollerMotor.Set(power);
     }
 
-    void Intake::SetIntake(double power)
+    void Intake::SetRotationPower(double power) 
     {
-        SetIntakePosition(constants::intake::kExtendAngle.value());
-        m_intakeRollerMotor.Set(power);
-    }
-
-    void Intake::RetractIntake()
-    {
-        SetIntakePosition(constants::intake::kRetractAngle.value());
-        m_intakeRollerMotor.Set(0.0);
+        m_intakeArticulationMotor.Set(power); 
     }
 
     void Intake::SetState(State state, double rollerPower)
@@ -92,18 +84,19 @@ namespace subsystems::intake
         {
         case (State::ExtendIntake):
         {
-            SetIntake(rollerPower);
+            SetIntakePosition(constants::intake::kExtendAngle.value());
+            SetRollerPower(rollerPower);
             // SetRollerPower(rollerPower); // Set to extended position
             break;
         }
         case (State::RetractIntake):
         {
-            RetractIntake();
+            SetIntakePosition(constants::intake::kRetractAngle.value());
+            SetRollerPower(0.0);
             // SetIntakePosition(constants::intake::kIntakeRetractedPosition); // Set to default position
             break;
         }
         default:
-            RetractIntake();
             break;
         }
         // Rotation will be set periodicially

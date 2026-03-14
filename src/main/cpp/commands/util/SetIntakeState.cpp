@@ -2,9 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/util/SetIntakeManual.h"
+#include "commands/util/SetIntakeState.h"
 namespace commands::util {
-  SetIntakeManual::SetIntakeManual(subsystems::intake::Intake *intake, subsystems::intake::State state, double power)
+  SetIntakeState::SetIntakeState(subsystems::intake::Intake *intake, subsystems::intake::State state, double power)
   : m_intake(intake), m_state(state), m_power(power) 
   {
     AddRequirements(intake);
@@ -12,21 +12,21 @@ namespace commands::util {
 
 
   // Called when the command is initially scheduled.
-  void SetIntakeManual::Initialize() {
+  void SetIntakeState::Initialize() {
     m_intake->SetState(m_state, m_power);
   }
 
   // Called repeatedly when this Command is scheduled to run
-  void SetIntakeManual::Execute() {
+  void SetIntakeState::Execute() {
 
   }
 
   // Called once the command ends or is interrupted.
-  void SetIntakeManual::End(bool interrupted) {
+  void SetIntakeState::End(bool interrupted) {
   }
 
   // Returns true when the command should end.
-  bool SetIntakeManual::IsFinished() {
+  bool SetIntakeState::IsFinished() {
     return true;
   }
 }

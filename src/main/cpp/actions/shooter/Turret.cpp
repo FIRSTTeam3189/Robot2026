@@ -13,10 +13,10 @@ namespace actions::shooter::turret {
         return commands::util::SetShooterRotationPower(turret, 0.0).ToPtr(); 
     }
 
-    frc2::CommandPtr AlignToHub(subsystems::shooter::Turret *turret, subsystems::shooter::Articulation *articulation) {
+    frc2::CommandPtr AlignToHub(subsystems::shooter::Turret *turret, subsystems::shooter::Hood *articulation) {
         return frc2::ParallelCommandGroup(
             commands::util::SetTurretAngle(turret, constants::shooter::TurretTarget::AlignHub),
-            commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::AligntoHub)
+            commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::AligntoHub)
         ).ToPtr(); 
     }
 

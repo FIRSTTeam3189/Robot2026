@@ -2,7 +2,7 @@
 
 namespace actions::interpolator {
     frc2::CommandPtr AddInterpolatorPoint(util::interpolator::Data *interpolatorData, subsystems::swerve::Drive *swerveDrive, 
-                                          subsystems::shooter::Flywheel *flywheel, subsystems::shooter::Articulation *articulation) {
+                                          subsystems::shooter::Flywheel *flywheel, subsystems::shooter::Hood *articulation) {
         return frc2::InstantCommand([interpolatorData, swerveDrive, flywheel, articulation]() { // saves the point 
             frc::Pose2d robotPose = swerveDrive->GetEstimatedPose(); 
             interpolatorData->AddPoint(robotPose, util::align::turret::GetDistanceToTarget(robotPose), 

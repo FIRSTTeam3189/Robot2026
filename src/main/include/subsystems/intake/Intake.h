@@ -37,7 +37,8 @@ namespace subsystems {
       void SetIntake(double power);
       void RetractIntake();
       void SetIntakePosition(double position);
-
+      void SetRotationPower(double power);
+      
       void SetState(subsystems::intake::State state, double rollerPower);
       subsystems::intake::State GetState();
 

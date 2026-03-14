@@ -64,11 +64,13 @@ namespace constants {
             constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
             constexpr bool kRotationEnableCurrentLimit = true;
 
-            constexpr units::degree_t kMinimumAngleNegative {-40.0_deg}; // in - range
-            constexpr units::degree_t kMinimumAnglePositive {320.0_deg}; // in + range
-            constexpr units::degree_t kMaximumAngle {310.0_deg};
+            constexpr units::degree_t kTotalROM {350.0_deg}; // in - range
+            constexpr units::degree_t kMinimumAngleNegative {-56.0_deg}; // in - range
+            constexpr units::degree_t kMinimumAnglePositive {360_deg + kMinimumAngleNegative}; // in + range
+            constexpr units::degree_t kMaximumAngle {kTotalROM + kMinimumAngleNegative};
 
             constexpr bool kRotationMotorInverted {false};
+
             constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
 
         };

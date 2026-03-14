@@ -1,22 +1,15 @@
 // Copyright (c) FIRST and other WPILib contributors.
-
 // Open Source Software; you can modify and/or share it under the terms of
-
 // the WPILib BSD license file in the root directory of this project.
-#pragma once
 
+#pragma once
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/shooter/Articulation.h"
-
-#include "constants/shooter/Articulation.h"
-
-#include "RobotContainer.h"
+#include "subsystems/intake/Intake.h"
 
 namespace commands {
   namespace util {
-
     /**
      * An example command.
      *
@@ -24,20 +17,13 @@ namespace commands {
      * directly; this is crucially important, or else the decorator functions in
      * Command will *not* work!
      */
-    
-    class SetArticulationAngle
-    
-        : public frc2::CommandHelper<frc2::Command, SetArticulationAngle> {
-    
+    class SetIntakeState
+        : public frc2::CommandHelper<frc2::Command, SetIntakeState> {
      public:
-    
       /* You should consider using the more terse Command factories API instead
-    
        * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-    
        */
-    
-      SetArticulationAngle(subsystems::shooter::Articulation *articulation, constants::shooter::ArticulationTarget state);
+      explicit SetIntakeState(subsystems::intake::Intake *intake, subsystems::intake::State state, double power);
     
       void Initialize() override;
     
@@ -48,9 +34,13 @@ namespace commands {
       bool IsFinished() override;
     
       private:
-        subsystems::shooter::Articulation *m_articulation;
-        constants::shooter::ArticulationTarget m_state;
-    
+      // Components (e.g. motor controllers and sensors) should generally be
+      // declared private and exposed only through public methods.
+      subsystems::intake::Intake * m_intake;
+      subsystems::intake::State m_state;
+      double m_power;
     };
   };
 };
+
+

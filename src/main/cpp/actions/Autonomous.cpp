@@ -2,9 +2,9 @@
 
 namespace actions::autonomous {
     frc2::CommandPtr AutoShoot(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
-                               subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
+                               subsystems::indexer::Loader *loader, subsystems::shooter::Hood *articulation) {
         return frc2::SequentialCommandGroup(
-            // commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees20),
+            // commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees20),
             frc2::ParallelCommandGroup(
             frc2::SequentialCommandGroup(
                 commands::util::SetFlywheelMotorPower(flywheel, constants::shooter::flywheel::kAutoStaticFlywheelPower),
@@ -20,12 +20,12 @@ namespace actions::autonomous {
     }
 
     frc2::CommandPtr AutoShootEnd(subsystems::shooter::Flywheel *flywheel, subsystems::indexer::Kicker *kicker, 
-                                  subsystems::indexer::Loader *loader, subsystems::shooter::Articulation *articulation) {
+                                  subsystems::indexer::Loader *loader, subsystems::shooter::Hood *articulation) {
         return frc2::SequentialCommandGroup(
                 commands::util::SetFlywheelMotorPower(flywheel, 0.0), 
                 commands::util::SetLoaderPower(loader, 0.0),
                 commands::util::SetShooterKickerPower(kicker, 0.0),
-                commands::util::SetArticulationAngle(articulation, constants::shooter::ArticulationTarget::Degrees0)
+                commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees0)
             ).ToPtr();
     }
 };

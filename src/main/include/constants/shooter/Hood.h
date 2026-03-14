@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include <iostream>
 #include <units/time.h>
 #include <units/frequency.h>
@@ -15,7 +13,7 @@
 
 namespace constants {
     namespace shooter {
-        enum ArticulationTarget {
+        enum HoodTarget {
             AligntoHub,
             Stationary,
             Manual,
@@ -29,7 +27,7 @@ namespace constants {
         }; 
         //Articulation Constants
 
-        namespace articulation {
+        namespace hood {
 
             constexpr int kArticulationMotorID{21};
 
@@ -42,6 +40,10 @@ namespace constants {
             constexpr units::turn_t kRotationOffset {0.0_tr};
 
             constexpr units::degree_t kArticulationTolerance {2.0_deg};
+
+            constexpr double kArticulationMotorPowerForward {0.1}; 
+            constexpr double kArticulationMotorPowerReverse {-0.1}; 
+
 
             //default values for articulation, use SysId to get real values
 

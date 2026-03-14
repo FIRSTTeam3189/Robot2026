@@ -25,7 +25,7 @@
 #include "commands/util/SetShooterRotationPower.h"
 #include "commands/util/SetTurretAngle.h"
 #include "commands/util/SetIntakeRollerMotor.h"
-#include "commands/util/SetArticulationAngle.h"
+#include "commands/util/SetHoodAngle.h"
 #include "commands/main/SetIntakeAngleAndPower.h"
 
 
@@ -38,7 +38,7 @@
 #include "subsystems/vision/PhotonVision.h"
 #include "subsystems/intake/Intake.h"
 
-#include "subsystems/shooter/Articulation.h"
+#include "subsystems/shooter/Hood.h"
 #include "subsystems/indexer/Kicker.h"
 #include "subsystems/shooter/Flywheel.h"
 #include "subsystems/indexer/Loader.h"
@@ -52,12 +52,12 @@
 #include "constants/Automatic.h"
 #include "constants/swerve/SwerveDrive.h"
 #include "constants/shooter/Turret.h"
-#include "constants/shooter/Articulation.h"
+#include "constants/shooter/Hood.h"
 #include "constants/indexer/Kicker.h"
 #include "constants/Interpolator.h"
 #include "constants/Vision.h"
 
-#include "actions/shooter/Articulation.h"
+#include "actions/shooter/Hood.h"
 #include "actions/shooter/Flywheel.h"
 #include "actions/indexer/Kicker.h"
 #include "actions/indexer/Loader.h"
@@ -102,7 +102,7 @@ class RobotContainer {
   void PrintActiveCommands();
 
   subsystems::shooter::Turret* GetShooterSubsystem();  
-  subsystems::shooter::Articulation* GetHoodSubsystem(); 
+  subsystems::shooter::Hood* GetHoodSubsystem(); 
   util::interpolator::Data* GetInterpolatorData(); 
   subsystems::swerve::Drive* GetSwerveSubsystem(); 
   subsystems::shooter::Flywheel* GetFlywheelSubsystem();
@@ -125,7 +125,7 @@ class RobotContainer {
   
   subsystems::indexer::Loader *m_loader = new subsystems::indexer::Loader(); 
   subsystems::indexer::Kicker *m_kicker = new subsystems::indexer::Kicker(); 
-  subsystems::shooter::Articulation *m_articulation = new subsystems::shooter::Articulation(m_swerveDrive);
+  subsystems::shooter::Hood *m_articulation = new subsystems::shooter::Hood(m_swerveDrive);
 
   subsystems::shooter::Turret *m_turret = new subsystems::shooter::Turret(m_swerveDrive);
   subsystems::shooter::Flywheel *m_flywheel = new subsystems::shooter::Flywheel(m_swerveDrive); 

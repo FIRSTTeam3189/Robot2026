@@ -24,7 +24,7 @@
 
 #include "subsystems/vision/PoseEstimatorHelper.h"
 
-#include "constants/shooter/Articulation.h"
+#include "constants/shooter/Hood.h"
 
 #include "constants/AutoAlign.h"
 
@@ -38,19 +38,19 @@
 
 namespace subsystems {
   namespace shooter {
-    class Articulation : public frc2::SubsystemBase {
+    class Hood : public frc2::SubsystemBase {
     public:
-      Articulation(subsystems::swerve::Drive *swerveDrive);
+      Hood(subsystems::swerve::Drive *swerveDrive);
 
       // void SetArticulationMotorPower(double power);
 
       void SetArticulationBrakeMode(constants::BrakeMode mode);
 
-      void SetArticulationAngle(units::degree_t angle);
+      void SetHoodAngle(units::degree_t angle);
 
       void SetArticulationMotorPower(double power);
 
-      void SetState(constants::shooter::ArticulationTarget state); 
+      void SetState(constants::shooter::HoodTarget state); 
 
       units::degree_t GetArticulationAngle();
 
@@ -92,13 +92,13 @@ namespace subsystems {
       std::string m_articulationSKey;
       std::string m_articulationVKey;
       std::string m_articulationAKey;
-      std::string m_articulationTargetKey;
+      std::string m_HoodTargetKey;
 
       util::interpolator::Linear m_angleInterpolator; 
 
       subsystems::swerve::Drive *m_swerveDrive;
 
-      constants::shooter::ArticulationTarget m_state; 
+      constants::shooter::HoodTarget m_state; 
 
       units::degree_t m_targetArticulationAngle;
       units::degree_t m_currentArticulationAngle;
