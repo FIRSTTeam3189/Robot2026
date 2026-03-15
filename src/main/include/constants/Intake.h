@@ -24,6 +24,8 @@ namespace constants
         constexpr double kRotationIntakePowerForward {0.5}; 
         constexpr double kRotationIntakePowerReverse {-0.5};
 
+        constexpr double kRotationIntakePowerShotCompression {-0.4};
+
         constexpr units::degree_t kRetractAngle{0.0_deg}; // 0.90
         constexpr units::degree_t kExtendAngle{120.0_deg}; // 0.90
 

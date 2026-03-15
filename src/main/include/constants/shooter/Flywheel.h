@@ -16,8 +16,8 @@ namespace constants {
     namespace shooter {
         enum class FlywheelState { AutoVelocity, FixedVelocity, ManualVelocity, ZeroVelocity};
         namespace flywheel {
-            constexpr int kShooterFlywheelID{24};
-            constexpr int kShooterFlywheelFollowID {1000}; //! Change later
+            constexpr int kShooterFlywheelID{40};
+            constexpr int kShooterFlywheelFollowID {41}; //! Change later
 
             constexpr double kAutoStaticFlywheelPower {-0.5};
             constexpr double kFlywheelFerryPower {-0.95}; 

@@ -53,6 +53,10 @@ void RobotContainer::ConfigureDriverBindings() {
   shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
   shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation));
 
+  frc2::Trigger shootFuelWithIntakeCompression([this](){ return m_bill.GetR1Button(); });
+  shootFuelWithIntakeCompression.OnTrue(actions::robot::AdvancedShootWithIntakeCompression(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
+  shootFuelWithIntakeCompression.OnFalse(actions::robot::AdvancedShootEndWithIntakeCompression(m_kicker, m_loader, m_articulation, m_intake));
+
   frc2::Trigger setAlignStateButton([this]() { return m_bill.GetPOV() == 90;}); 
   setAlignStateButton.OnTrue(actions::robot::ShooterStateAutomatic(&m_shooterState));
 
@@ -173,90 +177,90 @@ void RobotContainer::ConfigureTestBindings() {
   runFlywheelMotorReverse.OnFalse(actions::shooter::flywheel::ResetFlywheelPower(m_flywheel)); 
 
   // Articulation
-  frc2::Trigger runArticulationRotationMotorForward([this]() { return m_bill.GetSquareButton(); }); 
-  runArticulationRotationMotorForward.OnTrue(actions::shooter::hood::RunArticulationForward(m_articulation)); 
-  runArticulationRotationMotorForward.OnFalse(actions::shooter::hood::ResetArticulationPower(m_articulation)); 
+  // frc2::Trigger runArticulationRotationMotorForward([this]() { return m_bill.GetSquareButton(); }); 
+  // runArticulationRotationMotorForward.OnTrue(actions::shooter::hood::RunArticulationForward(m_articulation)); 
+  // runArticulationRotationMotorForward.OnFalse(actions::shooter::hood::ResetArticulationPower(m_articulation)); 
 
-  frc2::Trigger runArticulationRotationMotorReset([this]() { return m_bill.GetSquareButton(); }); 
-  runArticulationRotationMotorReset.OnTrue(actions::shooter::hood::RunArticulationReverse(m_articulation)); 
-  runArticulationRotationMotorReset.OnFalse(actions::shooter::hood::ResetArticulationPower(m_articulation)); 
+  // frc2::Trigger runArticulationRotationMotorReset([this]() { return m_bill.GetSquareButton(); }); 
+  // runArticulationRotationMotorReset.OnTrue(actions::shooter::hood::RunArticulationReverse(m_articulation)); 
+  // runArticulationRotationMotorReset.OnFalse(actions::shooter::hood::ResetArticulationPower(m_articulation)); 
 
-  // Articulation PID
-  frc2::Trigger setArticulationAngle0([this]() { return m_bill.GetSquareButton(); });
-  setArticulationAngle0.OnTrue(actions::shooter::hood::Articulation0Degrees(m_articulation)); 
+  // // Articulation PID
+  // frc2::Trigger setArticulationAngle0([this]() { return m_bill.GetSquareButton(); });
+  // setArticulationAngle0.OnTrue(actions::shooter::hood::Articulation0Degrees(m_articulation)); 
 
-  frc2::Trigger setArticulationAngle20([this]() { return m_bill.GetSquareButton(); });
-  setArticulationAngle20.OnTrue(actions::shooter::hood::Articulation20Degrees(m_articulation)); 
+  // frc2::Trigger setArticulationAngle20([this]() { return m_bill.GetSquareButton(); });
+  // setArticulationAngle20.OnTrue(actions::shooter::hood::Articulation20Degrees(m_articulation)); 
 
-  // Kicker
-  frc2::Trigger runKickerMotorForward([this]() { return m_bill.GetSquareButton(); });
-  runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
-  runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
+  // // Kicker
+  // frc2::Trigger runKickerMotorForward([this]() { return m_bill.GetSquareButton(); });
+  // runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
+  // runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
 
-  frc2::Trigger runKickerMotorReverse([this]() { return m_bill.GetSquareButton(); });
-  runKickerMotorReverse.OnTrue(actions::indexer::kicker::RunKickerBackward(m_kicker));
-  runKickerMotorReverse.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker)); 
+  // frc2::Trigger runKickerMotorReverse([this]() { return m_bill.GetSquareButton(); });
+  // runKickerMotorReverse.OnTrue(actions::indexer::kicker::RunKickerBackward(m_kicker));
+  // runKickerMotorReverse.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker)); 
 
-  // Loader (belly belt)
-  frc2::Trigger runLoaderMotorForward([this]() { return m_bill.GetSquareButton(); });
-  runLoaderMotorForward.OnTrue(actions::indexer::loader::RunLoaderForward(m_loader));
-  runLoaderMotorForward.OnFalse(actions::indexer::loader::ResetLoader(m_loader));
+  // // Loader (belly belt)
+  // frc2::Trigger runLoaderMotorForward([this]() { return m_bill.GetSquareButton(); });
+  // runLoaderMotorForward.OnTrue(actions::indexer::loader::RunLoaderForward(m_loader));
+  // runLoaderMotorForward.OnFalse(actions::indexer::loader::ResetLoader(m_loader));
 
-  frc2::Trigger runLoaderMotorReverse([this]() { return m_bill.GetSquareButton(); });
-  runLoaderMotorReverse.OnTrue(actions::indexer::loader::RunLoaderBackward(m_loader));
-  runLoaderMotorReverse.OnFalse(actions::indexer::loader::ResetLoader(m_loader)); 
+  // frc2::Trigger runLoaderMotorReverse([this]() { return m_bill.GetSquareButton(); });
+  // runLoaderMotorReverse.OnTrue(actions::indexer::loader::RunLoaderBackward(m_loader));
+  // runLoaderMotorReverse.OnFalse(actions::indexer::loader::ResetLoader(m_loader)); 
 
-  // Intake
-  frc2::Trigger runIntakeRollerMotorForward([this]() { return m_bill.GetSquareButton(); });
-  runIntakeRollerMotorForward.OnTrue(actions::intake::IntakePowerForward(m_intake).ToPtr());
-  runIntakeRollerMotorForward.OnFalse(actions::intake::ResetIntakePower(m_intake)); 
+  // // Intake
+  // frc2::Trigger runIntakeRollerMotorForward([this]() { return m_bill.GetSquareButton(); });
+  // runIntakeRollerMotorForward.OnTrue(actions::intake::IntakePowerForward(m_intake).ToPtr());
+  // runIntakeRollerMotorForward.OnFalse(actions::intake::ResetIntakePower(m_intake)); 
 
-  frc2::Trigger runIntakeRollerMotorReverse([this]() { return m_bill.GetSquareButton(); });
-  runIntakeRollerMotorReverse.OnTrue(actions::intake::IntakePowerReverse(m_intake));
-  runIntakeRollerMotorReverse.OnFalse(actions::intake::ResetIntakePower(m_intake)); 
+  // frc2::Trigger runIntakeRollerMotorReverse([this]() { return m_bill.GetSquareButton(); });
+  // runIntakeRollerMotorReverse.OnTrue(actions::intake::IntakePowerReverse(m_intake));
+  // runIntakeRollerMotorReverse.OnFalse(actions::intake::ResetIntakePower(m_intake)); 
 
-  frc2::Trigger runIntakeRotationMotorPowerForward([this]() { return m_bill.GetSquareButton(); });
-  runIntakeRotationMotorPowerForward.OnTrue(actions::intake::IntakeRotationPowerForward(m_intake));
-  runIntakeRotationMotorPowerForward.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));
+  // frc2::Trigger runIntakeRotationMotorPowerForward([this]() { return m_bill.GetSquareButton(); });
+  // runIntakeRotationMotorPowerForward.OnTrue(actions::intake::IntakeRotationPowerForward(m_intake));
+  // runIntakeRotationMotorPowerForward.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));
 
-  frc2::Trigger runIntakeRotationMotorPowerReverse([this]() { return m_bill.GetSquareButton(); });
-  runIntakeRotationMotorPowerReverse.OnTrue(actions::intake::IntakeRotationPowerReverse(m_intake));
-  runIntakeRotationMotorPowerReverse.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));
+  // frc2::Trigger runIntakeRotationMotorPowerReverse([this]() { return m_bill.GetSquareButton(); });
+  // runIntakeRotationMotorPowerReverse.OnTrue(actions::intake::IntakeRotationPowerReverse(m_intake));
+  // runIntakeRotationMotorPowerReverse.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));
 
-  // Intake PID Buttons
-  frc2::Trigger setIntakeRotationDown([this]() { return m_bill.GetSquareButton(); });
-  setIntakeRotationDown.OnTrue(actions::intake::IntakeRetractState(m_intake));
+  // // Intake PID Buttons
+  // frc2::Trigger setIntakeRotationDown([this]() { return m_bill.GetSquareButton(); });
+  // setIntakeRotationDown.OnTrue(actions::intake::IntakeRetractState(m_intake));
 
-  frc2::Trigger setIntakeRotationUp([this]() { return m_bill.GetSquareButton(); });
-  setIntakeRotationUp.OnTrue(actions::intake::IntakeExtendState(m_intake));
+  // frc2::Trigger setIntakeRotationUp([this]() { return m_bill.GetSquareButton(); });
+  // setIntakeRotationUp.OnTrue(actions::intake::IntakeExtendState(m_intake));
 
-  // Turret
-  frc2::Trigger runTurretRotationMotorPowerForward([this]() { return m_bill.GetL1Button(); });
-  runTurretRotationMotorPowerForward.OnTrue(actions::shooter::turret::TurretPowerForward(m_turret));
-  runTurretRotationMotorPowerForward.OnFalse(actions::shooter::turret::ResetTurretPower(m_turret));
+  // // Turret
+  // frc2::Trigger runTurretRotationMotorPowerForward([this]() { return m_bill.GetL1Button(); });
+  // runTurretRotationMotorPowerForward.OnTrue(actions::shooter::turret::TurretPowerForward(m_turret));
+  // runTurretRotationMotorPowerForward.OnFalse(actions::shooter::turret::ResetTurretPower(m_turret));
 
-  frc2::Trigger runTurretRotationMotorPowerReverse([this]() { return m_bill.GetR1Button(); });
-  runTurretRotationMotorPowerReverse.OnTrue(actions::shooter::turret::TurretPowerReverse(m_turret));
-  runTurretRotationMotorPowerReverse.OnFalse(actions::shooter::turret::ResetTurretPower(m_turret));
+  // frc2::Trigger runTurretRotationMotorPowerReverse([this]() { return m_bill.GetR1Button(); });
+  // runTurretRotationMotorPowerReverse.OnTrue(actions::shooter::turret::TurretPowerReverse(m_turret));
+  // runTurretRotationMotorPowerReverse.OnFalse(actions::shooter::turret::ResetTurretPower(m_turret));
 
-  // Turret PID Buttons
-  frc2::Trigger setTurret45Deg([this]() { return m_bill.GetSquareButton(); });
-  setTurret45Deg.OnTrue(actions::shooter::turret::PointTurretLeft(m_turret));
+  // // Turret PID Buttons
+  // frc2::Trigger setTurret45Deg([this]() { return m_bill.GetSquareButton(); });
+  // setTurret45Deg.OnTrue(actions::shooter::turret::PointTurretLeft(m_turret));
 
-  frc2::Trigger setTurret90Deg([this]() { return m_bill.GetTriangleButton(); });
-  setTurret90Deg.OnTrue(actions::shooter::turret::PointTurretStraight(m_turret));
+  // frc2::Trigger setTurret90Deg([this]() { return m_bill.GetTriangleButton(); });
+  // setTurret90Deg.OnTrue(actions::shooter::turret::PointTurretStraight(m_turret));
 
-  frc2::Trigger setTurret135Deg([this]() { return m_bill.GetCircleButton(); });
-  setTurret135Deg.OnTrue(actions::shooter::turret::PointTurretRight(m_turret));
+  // frc2::Trigger setTurret135Deg([this]() { return m_bill.GetCircleButton(); });
+  // setTurret135Deg.OnTrue(actions::shooter::turret::PointTurretRight(m_turret));
 
-  // Climber
-  frc2::Trigger runClimberUp([this]() { return m_bill.GetTriangleButton(); });
-  runClimberUp.OnTrue(actions::climber::PutClimberUp(m_climber));
-  runClimberUp.OnFalse(actions::climber::ResetClimber(m_climber));
+  // // Climber
+  // frc2::Trigger runClimberUp([this]() { return m_bill.GetTriangleButton(); });
+  // runClimberUp.OnTrue(actions::climber::PutClimberUp(m_climber));
+  // runClimberUp.OnFalse(actions::climber::ResetClimber(m_climber));
 
-  frc2::Trigger runClimberDown([this]() { return m_bill.GetCrossButton(); });
-  runClimberDown.OnTrue(actions::climber::PutClimberUp(m_climber));
-  runClimberDown.OnFalse(actions::climber::ResetClimber(m_climber));
+  // frc2::Trigger runClimberDown([this]() { return m_bill.GetCrossButton(); });
+  // runClimberDown.OnTrue(actions::climber::PutClimberUp(m_climber));
+  // runClimberDown.OnFalse(actions::climber::ResetClimber(m_climber));
 
 }
 

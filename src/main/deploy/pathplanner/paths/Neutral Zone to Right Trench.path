@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.785026660373024,
-        "y": 2.937
+        "x": 6.910422607150909,
+        "y": 1.9951208733189252
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.785026660373024,
-        "y": 0.8039999999999994
+        "x": 6.910422607150909,
+        "y": -0.13787912668107527
       },
       "isLocked": false,
       "linkedName": "Neutral Zone Right Side"
@@ -73,7 +73,7 @@
   "folder": "Shoot Twice",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

@@ -2,11 +2,11 @@
 
 namespace actions::shooter::flywheel {
     frc2::CommandPtr FlywheelPowerForward(subsystems::shooter::Flywheel *flywheel){
-        return commands::util::SetFlywheelMotorPower(flywheel, -0.15).ToPtr();
+        return commands::util::SetFlywheelMotorPower(flywheel, -0.1).ToPtr();
     }
 
     frc2::CommandPtr FlywheelPowerReverse(subsystems::shooter::Flywheel *flywheel){
-        return commands::util::SetFlywheelMotorPower(flywheel, 0.3).ToPtr();
+        return commands::util::SetFlywheelMotorPower(flywheel, 0.1).ToPtr();
     }
 
     frc2::CommandPtr ResetFlywheelPower(subsystems::shooter::Flywheel *flywheel){
