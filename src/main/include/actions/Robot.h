@@ -54,7 +54,7 @@ namespace actions
                                                                       subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake);
 
         frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
-                                          subsystems::shooter::Hood *articulation);
+                                          subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel);
                                           
         frc2::CommandPtr AdvancedShootEndWithIntakeCompression(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
                                                             subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake);

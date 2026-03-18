@@ -23,7 +23,7 @@ namespace commands {
       /* You should consider using the more terse Command factories API instead
        * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
        */
-      explicit SetIntakeState(subsystems::intake::Intake *intake, subsystems::intake::State state, double power);
+      explicit SetIntakeState(subsystems::intake::Intake *intake, double power);
     
       void Initialize() override;
     
@@ -37,7 +37,6 @@ namespace commands {
       // Components (e.g. motor controllers and sensors) should generally be
       // declared private and exposed only through public methods.
       subsystems::intake::Intake * m_intake;
-      subsystems::intake::State m_state;
       double m_power;
     };
   };

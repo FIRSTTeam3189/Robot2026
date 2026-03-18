@@ -12,7 +12,7 @@ namespace commands::util {
 
   // Called when the command is initially scheduled.
   void SetIntakeRollerMotor::Initialize() {
-    m_intake->SetRollerPower(m_rollerPower);
+    m_intake->SetDesiredRollerPower(m_rollerPower);
   }
 
   // Called repeatedly when this Command is scheduled to run

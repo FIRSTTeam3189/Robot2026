@@ -21,7 +21,7 @@ namespace commands {
         : public frc2::CommandHelper<frc2::Command, SetIntakeRollerMotor> {
      public:
      
-      SetIntakeRollerMotor(subsystems::intake::Intake *algaeIntake, double rollerPower);
+      SetIntakeRollerMotor(subsystems::intake::Intake *intake, double rollerPower);
     
       void Initialize() override;
     

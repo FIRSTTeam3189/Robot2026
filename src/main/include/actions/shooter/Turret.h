@@ -25,6 +25,8 @@ namespace actions {
             frc2::CommandPtr PointTurretStraight(subsystems::shooter::Turret *turret);
             frc2::CommandPtr PointTurretLeft(subsystems::shooter::Turret *turret);
             frc2::CommandPtr PointTurretRight(subsystems::shooter::Turret *turret);
+            frc2::CommandPtr PointTurretMax(subsystems::shooter::Turret *turret);
+
         };
     };
 };

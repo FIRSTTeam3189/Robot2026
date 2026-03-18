@@ -6,7 +6,7 @@ namespace subsystems::intake
 
                        m_intakeRollerMotor(constants::intake::kRollerMotorID),
                        m_rollerConfig(),
-                       m_intakeArticulationMotor(constants::intake::kArticulationMotorID),
+                       m_intakeArticulationMotor(constants::intake::kArticulationMotorID, "Swerve"),
                        m_articulationConfig(),
                        m_state(State::RetractIntake)
 
@@ -48,21 +48,27 @@ namespace subsystems::intake
         m_articulationConfig.Slot0.kD = constants::intake::kArticulationKD;
         // m_articulationConfig.Slot0.GravityType = ctre::phoenix6::signals::GravityTypeValue::Arm_Cosine;
 
-        // m_articulationConfig.MotionMagic.MotionMagicCruiseVelocity = constants::intake::kMotionMagicMaxVelocity;
-        // m_articulationConfig.MotionMagic.MotionMagicAcceleration = constants::intake::kMotionMagicMaxAcceleration;
-        // m_articulationConfig.MotionMagic.MotionMagicJerk = constants::intake::kMotionMagicMaxJerk;
+        m_articulationConfig.MotionMagic.MotionMagicCruiseVelocity = constants::intake::kMotionMagicMaxVelocity;
+        m_articulationConfig.MotionMagic.MotionMagicAcceleration = constants::intake::kMotionMagicMaxAcceleration;
+        m_articulationConfig.MotionMagic.MotionMagicJerk = constants::intake::kMotionMagicMaxJerk;
 
         m_intakeArticulationMotor.GetConfigurator().Apply(m_articulationConfig);
         m_intakeArticulationMotor.SetPosition(0.0_tr);
         m_intakeRollerMotor.GetConfigurator().Apply(m_rollerConfig);
 
-        SetState(State::RetractIntake, 0.0);
+        SetState(State::RetractIntake);
     }
 
     void Intake::SetIntakePosition(double position)
     {
         ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
-        m_intakeArticulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{position / constants::intake::kRotationConversionRotationsToDegrees}));
+        frc::SmartDashboard::PutNumber("Intake target turns ", position / constants::intake::kRotationConversionRotationsToDegrees);
+        m_intakeArticulationMotor.SetControl(request.WithEnableFOC(true).WithPosition(
+            units::turn_t{position / constants::intake::kRotationConversionRotationsToDegrees}));
+    }
+
+    void Intake::SetDesiredRollerPower(double power) {
+        m_desiredPower = power; 
     }
 
     void Intake::SetRollerPower(double power)
@@ -75,7 +81,7 @@ namespace subsystems::intake
         m_intakeArticulationMotor.Set(power); 
     }
 
-    void Intake::SetState(State state, double rollerPower)
+    void Intake::SetState(State state)
     {
         m_state = state;
         // Figure out target angle then set rotation to this angle
@@ -84,15 +90,25 @@ namespace subsystems::intake
         {
         case (State::ExtendIntake):
         {
-            SetIntakePosition(constants::intake::kExtendAngle.value());
-            SetRollerPower(rollerPower);
+            m_targetAngle = constants::intake::kExtendAngle.value(); 
+            // SetIntakePosition(constants::intake::kExtendAngle.value());
+            // SetRollerPower(rollerPower);
+            // SetRollerPower(rollerPower); // Set to extended position
+            break;
+        }
+        case (State::MidIntake):
+        {
+            m_targetAngle = constants::intake::kMidAngle.value(); 
+            // SetIntakePosition(constants::intake::kMidAngle.value());
+            // SetRollerPower(rollerPower);
             // SetRollerPower(rollerPower); // Set to extended position
             break;
         }
         case (State::RetractIntake):
         {
-            SetIntakePosition(constants::intake::kRetractAngle.value());
-            SetRollerPower(0.0);
+            m_targetAngle = constants::intake::kRetractAngle.value(); 
+            // SetIntakePosition(constants::intake::kRetractAngle.value());
+            // SetRollerPower(0.0);
             // SetIntakePosition(constants::intake::kIntakeRetractedPosition); // Set to default position
             break;
         }
@@ -114,10 +130,36 @@ namespace subsystems::intake
 
         frc::SmartDashboard::PutNumber("Intake roller power (actual)", m_intakeRollerMotor.Get());
         frc::SmartDashboard::PutNumber("Intake roller power (desired)", m_intakeRollerMotor.GetClosedLoopReference(0).GetValue());
+        frc::SmartDashboard::PutNumber("Intake roller power (m_desiredPower)", m_desiredPower); 
+
+        frc::SmartDashboard::PutNumber("Intake Rotation Motor Turns ", m_intakeArticulationMotor.GetPosition().GetValue().value());
+        frc::SmartDashboard::PutNumber("Intake Rotation Motor Degrees ", GetArticulationAngle().value());
+
 
         if (frc::Preferences::GetBoolean("Tuning Mode", false))
         {
         }
+
+        frc::SmartDashboard::PutNumber("Intake target angle ", m_targetAngle);
+
+        if (GetArticulationAngle() <= constants::intake::kAngleThresholdRollers) {
+            m_desiredPower = 0.1; 
+            // SetRollerPower(m_desiredPower); 
+        } else {
+            m_desiredPower = 0.0; 
+            // SetRollerPower(0.0); 
+        }
+        SetIntakePosition(m_targetAngle); 
+    }
+
+
+    units::degree_t Intake::GetArticulationAngle() {
+        double encoderValue = m_intakeArticulationMotor.GetPosition().GetValue().value(); 
+        return units::degree_t{encoderValue * constants::intake::kRotationConversionRotationsToDegrees};
+    }
+
+    double Intake::GetTargetAngle() {
+        return m_targetAngle; 
     }
 
 }

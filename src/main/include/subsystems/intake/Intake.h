@@ -35,17 +35,20 @@ namespace subsystems {
       void ConfigIntakeMotors();
 
       void SetIntake(double power);
-      void RetractIntake();
+      void SetDesiredRollerPower(double power);
       void SetIntakePosition(double position);
       void SetRotationPower(double power);
       
-      void SetState(subsystems::intake::State state, double rollerPower);
+      void SetState(subsystems::intake::State state);
       subsystems::intake::State GetState();
 
       /**
        * Will be called periodically whenever the CommandScheduler runs.
        */
       void Periodic() override;
+
+      units::degree_t GetArticulationAngle(); 
+      double GetTargetAngle(); 
 
 
     private:
@@ -58,6 +61,7 @@ namespace subsystems {
 
       subsystems::intake::State m_state;
       double m_desiredPower;
+      double m_targetAngle; 
 
     };
   };

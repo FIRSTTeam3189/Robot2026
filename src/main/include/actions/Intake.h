@@ -1,6 +1,10 @@
 #pragma once 
 
 
+#include <frc2/command/InstantCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/WaitCommand.h>
+
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Command.h>
 
@@ -24,6 +28,10 @@ namespace actions {
         frc2::CommandPtr ResetIntakeRotationPower(subsystems::intake::Intake *intake);
 
         frc2::CommandPtr IntakeExtendState(subsystems::intake::Intake *intake); 
+        frc2::CommandPtr IntakeMidState(subsystems::intake::Intake *intake);
         frc2::CommandPtr IntakeRetractState(subsystems::intake::Intake *intake);
+
+        frc2::CommandPtr ToggleIntakeState(subsystems::intake::Intake *intake); 
+
     };
 };

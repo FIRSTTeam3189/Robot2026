@@ -33,6 +33,10 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
 
+  frc::SmartDashboard::PutString("FLYWHEEL CURRENT COMMAND", m_container.GetFlywheelSubsystem()->GetCurrentCommand()->GetName());
+
+  
+
   m_autoWinners = frc::DriverStation::GetGameSpecificMessage();
   m_timeLeft = frc::DriverStation::GetMatchTime(); 
 
@@ -109,7 +113,7 @@ void Robot::RobotPeriodic() {
     case (constants::ShooterState::Manual) : {
       RobotContainer::SetShooterState(constants::ShooterState::Manual);
       m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::ManualVelocity);
-      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub);
+      // m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::AlignHub);
       break;
     }
     case (constants::ShooterState::HoodAndInterpAuto) : {
@@ -168,7 +172,6 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-  // frc::SmartDashboard::PutData("Command scheduler", &frc2::CommandScheduler::GetInstance());
 
   // m_container.PrintActiveCommands();
   

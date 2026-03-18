@@ -8,7 +8,7 @@ namespace subsystems::shooter {
 
     Turret::Turret(subsystems::swerve::Drive *swerveDrive)
       : 
-        m_turretMotor(constants::shooter::turret::kShooterRotationID),
+        m_turretMotor(constants::shooter::turret::kShooterRotationID, "Swerve"),
         m_shooterConfig(),
         m_swerveDrive(swerveDrive),
         m_state(constants::shooter::TurretTarget::PointStraight),
@@ -83,7 +83,7 @@ namespace subsystems::shooter {
              
         m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
         m_turretMotor.SetPosition(units::turn_t{constants::shooter::turret::kMinimumAngleNegative.value() / constants::shooter::turret::kRotationConversionRotationsToDegrees});
-        SetState(constants::shooter::TurretTarget::PointStraight); 
+        SetState(constants::shooter::TurretTarget::PointNeg56Deg); 
     }
     
     
@@ -146,23 +146,27 @@ namespace subsystems::shooter {
             }
             case (constants::shooter::TurretTarget::PointStraight): {
                 m_targetRotationAngle = 90.0_deg;
-                m_targetPower = 0.0;
                 break;
             }
             case (constants::shooter::TurretTarget::Point45Deg): {
                 m_targetRotationAngle = constants::auto_align::TurretAngleLeft;
-                m_targetPower = 0.0;
                 break;  
             }     
             case (constants::shooter::TurretTarget::Point135Deg): {
                 m_targetRotationAngle = constants::auto_align::TurretAngleRight;
-                m_targetPower = 0.0;
                 break;
             }   
             case (constants::shooter::TurretTarget::Point0Deg): {
                 m_targetRotationAngle = 0.0_deg;
-                m_targetPower = 0.0;
                 break;
+            }
+            case (constants::shooter::TurretTarget::PointNeg56Deg): {
+                m_targetRotationAngle = constants::shooter::turret::kMinimumAngleNegative; 
+                break; 
+            }
+            case (constants::shooter::TurretTarget::PointMaxDeg): {
+                m_targetRotationAngle = constants::shooter::turret::kMaximumAngle; 
+                break; 
             }
             default:
                 m_targetRotationAngle = 90.0_deg;

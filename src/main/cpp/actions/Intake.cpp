@@ -26,12 +26,29 @@ namespace actions::intake {
         return commands::util::SetIntakeRotationPower(intake, 0.0).ToPtr();
     }
 
-    frc2::CommandPtr IntakeExtendState(subsystems::intake::Intake *intake){
-        return commands::util::SetIntakeState(intake, subsystems::intake::State::ExtendIntake, constants::intake::kRollerIntakePower).ToPtr();
+    frc2::CommandPtr IntakeExtendState(subsystems::intake::Intake *intake) {
+        return frc2::InstantCommand([intake]() {
+                intake->SetState(subsystems::intake::State::ExtendIntake);
+            }, {intake}).ToPtr(); 
     }
 
-    frc2::CommandPtr IntakeRetractState(subsystems::intake::Intake *intake){
-        return commands::util::SetIntakeState(intake, subsystems::intake::State::RetractIntake, 0.0).ToPtr();
+    frc2::CommandPtr IntakeMidState(subsystems::intake::Intake *intake) {
+        return frc2::InstantCommand([intake]() {
+            intake->SetState(subsystems::intake::State::MidIntake);
+            // intake->SetRollerPower(constants::intake::kRollerIntakePower); 
+        }, {intake}).ToPtr(); 
     }
+
+    frc2::CommandPtr IntakeRetractState(subsystems::intake::Intake *intake) {
+        return frc2::InstantCommand([intake]() {
+            intake->SetState(subsystems::intake::State::RetractIntake);
+            // intake->SetRollerPower(0.0); 
+        }, {intake}).ToPtr();     
+    }
+
+    frc2::CommandPtr ToggleIntakeState(subsystems::intake::Intake *intake) {
+        return commands::util::SetIntakeState(intake, constants::intake::kRollerIntakePower).ToPtr();
+    }
+    
 }; 
 

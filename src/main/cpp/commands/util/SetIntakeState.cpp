@@ -4,8 +4,8 @@
 
 #include "commands/util/SetIntakeState.h"
 namespace commands::util {
-  SetIntakeState::SetIntakeState(subsystems::intake::Intake *intake, subsystems::intake::State state, double power)
-  : m_intake(intake), m_state(state), m_power(power) 
+  SetIntakeState::SetIntakeState(subsystems::intake::Intake *intake, double power)
+  : m_intake(intake), m_power(power) 
   {
     AddRequirements(intake);
   }
@@ -13,11 +13,24 @@ namespace commands::util {
 
   // Called when the command is initially scheduled.
   void SetIntakeState::Initialize() {
-    m_intake->SetState(m_state, m_power);
+    if (m_intake->GetState() == subsystems::intake::State::ExtendIntake) {
+      m_intake->SetState(subsystems::intake::State::RetractIntake); 
+      m_intake->SetDesiredRollerPower(0.0); 
+    } else {
+      m_intake->SetState(subsystems::intake::State::ExtendIntake); 
+      m_intake->SetDesiredRollerPower(m_power); 
+    } 
   }
 
   // Called repeatedly when this Command is scheduled to run
   void SetIntakeState::Execute() {
+    // if (m_intake->GetArticulationAngle() <= constants::intake::kAngleThresholdRollers){
+    //   if (m_intake->GetState() == subsystems::intake::State::ExtendIntake) {
+    //     m_intake->SetRollerPower(m_power); 
+    //   } else {
+    //     m_intake->SetRollerPower(0.0); 
+    //   }
+    // }
 
   }
 
@@ -27,6 +40,8 @@ namespace commands::util {
 
   // Returns true when the command should end.
   bool SetIntakeState::IsFinished() {
-    return true;
+    // double difference = std::abs(m_intake->GetArticulationAngle().value() - m_intake->GetTargetAngle()); 
+    // return difference <= constants::intake::kTargetAngleThreshold.value();
+    return true; 
   }
 }

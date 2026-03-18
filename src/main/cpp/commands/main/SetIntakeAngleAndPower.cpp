@@ -15,9 +15,11 @@ namespace commands::main {
   void SetIntakeAngleAndPower::Initialize() {
     frc::SmartDashboard::PutNumber("Intake State", static_cast<int>(m_intake->GetState()));
     if (m_intake->GetState() == subsystems::intake::State::ExtendIntake){
-      m_intake->SetState(subsystems::intake::State::RetractIntake, m_power);
+      m_intake->SetState(subsystems::intake::State::RetractIntake);
+      m_intake->SetDesiredRollerPower(m_power);
     } else {
-      m_intake->SetState(subsystems::intake::State::ExtendIntake, m_power);
+      m_intake->SetState(subsystems::intake::State::ExtendIntake);
+      m_intake->SetDesiredRollerPower(m_power);
     }
   }
   

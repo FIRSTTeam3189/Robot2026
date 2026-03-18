@@ -14,20 +14,24 @@
 namespace constants
 {
     namespace intake
+
     {
         constexpr int kRollerMotorID{15};
         constexpr int kArticulationMotorID{50}; // TODO change later
 
-        constexpr double kRollerIntakePower{0.96};         //-0.90
-        constexpr double kRollerReverseIntakePower{-0.96}; // 0.90
+        constexpr double kRollerIntakePower{0.70};         //-0.90
+        constexpr double kRollerReverseIntakePower{-0.70}; // 0.90
 
-        constexpr double kRotationIntakePowerForward {0.5}; 
-        constexpr double kRotationIntakePowerReverse {-0.5};
+        constexpr double kRotationIntakePowerForward {0.2}; 
+        constexpr double kRotationIntakePowerReverse {-0.2};
 
         constexpr double kRotationIntakePowerShotCompression {-0.4};
 
         constexpr units::degree_t kRetractAngle{0.0_deg}; // 0.90
-        constexpr units::degree_t kExtendAngle{120.0_deg}; // 0.90
+        constexpr units::degree_t kMidAngle {-60.0_deg};
+        constexpr units::degree_t kExtendAngle{-120.0_deg}; // 0.90
+        constexpr units::degree_t kAngleThresholdRollers {-100.0_deg}; 
+        constexpr units::degree_t kTargetAngleThreshold {8.0_deg}; 
 
         constexpr bool kArticulationMotorInverted{false};
 
@@ -35,7 +39,7 @@ namespace constants
         constexpr auto kMotionMagicMaxAcceleration{750_tr / 1.0_s / 1.0_s};         // rotations per second squared
         constexpr auto kMotionMagicMaxJerk{2000_tr / 1.0_s / 1.0_s / 1.0_s};        // rotations per second cubed
 
-        constexpr bool kRollerMotorInverted{true};
+        constexpr bool kRollerMotorInverted{false};
         constexpr double kRotationConversionRotationsToDegrees {20.0}; 
         constexpr ctre::phoenix6::signals::NeutralModeValue kRollerMotorNeutralMode{ctre::phoenix6::signals::NeutralModeValue::Brake};
 
@@ -50,13 +54,13 @@ namespace constants
         constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
         constexpr bool kRotationEnableCurrentLimit = true;
 
-        constexpr double kArticulationKS = 0.0;
-        constexpr double kArticulationKV = 0.0;
+        constexpr double kArticulationKS = 0.1;
+        constexpr double kArticulationKV = 0.12;
         constexpr double kArticulationKI = 0.0;
         constexpr double kArticulationKD = 0.0;
-        constexpr double kArticulationKG = 0.0;
+        constexpr double kArticulationKG = 0.55;
         constexpr double kArticulationKA = 0.0;
-        constexpr double kArticulationKP = 0.0;
+        constexpr double kArticulationKP = 0.22;
 
 
     };

@@ -40,9 +40,13 @@ namespace subsystems {
         void SetState(constants::shooter::FlywheelState flywheelState);
 
         void SetFlyWheelTargetPower(double power); 
-        void SetFlywheelMotorVelocity(double turnsPerSecond);
+        void SetFlywheelMotorVelocity(double RPM);
 
         double GetFlywheelTargetVelocity();
+
+        void SetFlywheelTargetRPM(double RPM);
+
+        double GetFlywheelTargetRPM();
         
 
         /**

@@ -17,6 +17,7 @@ namespace commands {
         /**
          * Will be called periodically whenever the CommandScheduler runs.
          */
+        void Initialize() override; 
         void Execute() override;
         void End(bool interrupted) override;
         bool IsFinished() override;
@@ -25,7 +26,7 @@ namespace commands {
         // Components (e.g. motor controllers and sensors) should generally be
         // declared private and exposed only through public methods.
         subsystems::shooter::Flywheel *m_flywheel;
-        units::turns_per_second_t m_velocity;
+        double m_velocity;
         };
     };
 };

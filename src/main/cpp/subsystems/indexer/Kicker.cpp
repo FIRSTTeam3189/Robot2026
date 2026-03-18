@@ -7,7 +7,7 @@
 namespace subsystems::indexer {
     
     Kicker::Kicker() :
-        m_kickerMotor(constants::indexer::kicker::kShooterKickerID),
+        m_kickerMotor(constants::indexer::kicker::kShooterKickerID, "Swerve"),
     
         m_kickerConfig(){
             ConfigKickerMotor();

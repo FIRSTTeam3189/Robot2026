@@ -8,7 +8,7 @@ namespace subsystems::shooter {
 
     Hood::Hood(subsystems::swerve::Drive *swerveDrive)
     : 
-        m_articulationMotor(constants::shooter::hood::kArticulationMotorID, "Swerve"),
+        m_articulationMotor(constants::shooter::hood::kArticulationMotorID),
         m_articulationConfig(),
         m_angleInterpolator(constants::auto_align::kPowerInterpolatorDistances, constants::auto_align::kAngleInterpolatorAngles),
         m_swerveDrive(swerveDrive),
@@ -135,6 +135,15 @@ namespace subsystems::shooter {
                 frc::SmartDashboard::PutNumber("DISTANCE TO TARGET ARTICULATOR", distanceToTarget);
                 m_targetArticulationAngle = units::degree_t{m_angleInterpolator.Predict(distanceToTarget)}; 
                 
+                m_targetArticulationAngle = units::degree_t{
+                    constants::shooter::hood::kA2*std::pow(distanceToTarget,2) +
+                    constants::shooter::hood::kA1*distanceToTarget +
+                    constants::shooter::hood::kA0
+                };
+
+                if (distanceToTarget > constants::shooter::hood::kUpperBound[0]) { // clamp it after last point in regression
+                    m_targetArticulationAngle = units::degree_t{constants::shooter::hood::kUpperBound[1]};
+                }
                 // m_targetArticulationAngle = util::align::hood::CalculateArticulationAngle(currentPose);
                 break;
             }

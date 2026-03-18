@@ -31,5 +31,9 @@ namespace actions::shooter::turret {
     frc2::CommandPtr PointTurretRight(subsystems::shooter::Turret *turret) {
         return commands::util::SetTurretAngle(turret, constants::shooter::TurretTarget::Point135Deg).ToPtr();
     }
+    frc2::CommandPtr PointTurretMax(subsystems::shooter::Turret *turret) {
+        return commands::util::SetTurretAngle(turret, constants::shooter::TurretTarget::PointMaxDeg).ToPtr();
+    }
+
 };
 
