@@ -31,7 +31,7 @@ namespace constants {
 
             constexpr bool kSoftLimitEnabledForward{true};
             constexpr bool kSoftLimitEnabledReverse{true};
-            constexpr units::turn_t kTopSoftLimit {18.55_tr};
+            constexpr units::turn_t kTopSoftLimit {14.0_tr};
             constexpr units::turn_t kBottomSoftLimit {-4.27_tr}; 
             constexpr units::turn_t kRotationOffset {0.0_tr};
 
@@ -66,7 +66,7 @@ namespace constants {
             constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
             constexpr bool kRotationEnableCurrentLimit = true;
 
-            constexpr units::degree_t kTotalROM {300.0_deg}; // in - range
+            constexpr units::degree_t kTotalROM {241.0_deg}; // in - range
             constexpr units::degree_t kMinimumAngleNegative {-56.0_deg}; // in - range
             constexpr units::degree_t kMinimumAnglePositive {360_deg + kMinimumAngleNegative}; // in + range
             constexpr units::degree_t kMaximumAngle {kTotalROM + kMinimumAngleNegative};

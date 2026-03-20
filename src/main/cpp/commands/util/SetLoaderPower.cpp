@@ -13,11 +13,12 @@ namespace commands::util {
   }
   
   // Called when the command is initially scheduled.
-  void SetLoaderPower::Initialize() {}
+  void SetLoaderPower::Initialize() {
+    m_loader->SetLoaderMotorPower(m_power);
+  }
   
   // Called repeatedly when this Command is scheduled to run
   void SetLoaderPower::Execute() {
-    m_loader->SetLoaderMotorPower(m_power);
   }
   
   // Called once the command ends or is interrupted.

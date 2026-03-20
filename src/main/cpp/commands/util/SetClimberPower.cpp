@@ -13,7 +13,9 @@ namespace commands::util {
     }
   
   // Called when the command is initially scheduled.
-  void SetClimberPower::Initialize() {}
+  void SetClimberPower::Initialize() {
+    
+  }
   
   // Called repeatedly when this Command is scheduled to run
   void SetClimberPower::Execute() {

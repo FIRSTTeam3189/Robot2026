@@ -24,13 +24,16 @@ namespace subsystems::shooter
     // This method will be called once per scheduler run
     void Flywheel::Periodic()
     {
-
+        frc::Pose2d robotPose = m_swerveDrive->GetEstimatedPose();
+        double distanceToTarget = util::align::turret::GetDistanceToTarget(robotPose).value();
+        frc::SmartDashboard::PutNumber("distance to hub", distanceToTarget);
+            
         frc::SmartDashboard::PutNumber("Test Bindings/flywheel current rpm", m_flywheelMotor.GetEncoder().GetVelocity());
         frc::SmartDashboard::PutNumber("Test Bindings/flywheel target rpm", GetFlywheelTargetVelocity());
         frc::SmartDashboard::PutNumber("Test bindings/flywheel m_rpm target", m_rpm);
         // frc::SmartDashboard::PutNumber("Test Bindings/flywheel current",  m_flywheelMotor.GetSupplyCurrent().GetValue().value());
 
-        SetFlywheelMotorVelocity(m_rpm);
+        // SetFlywheelMotorVelocity(m_rpm); FOR RUNNING AT ALL TIMES 
     }
 
     void Flywheel::ConfigFlywheelMotor()
@@ -82,9 +85,8 @@ namespace subsystems::shooter
             // double power = m_powerInterpolator.Predict(distanceToTarget);
             // frc::SmartDashboard::PutNumber("Test Bindings/flywheel target power", power);
             // m_rpm = (power * constants::shooter::flywheel::kFlywheelMaxRPM);
-
-            m_rpm = constants::shooter::flywheel::kA4 * std::pow(distanceToTarget, 4) +
-                    constants::shooter::flywheel::kA3 * std::pow(distanceToTarget, 3) +
+            
+            m_rpm = constants::shooter::flywheel::kA3 * std::pow(distanceToTarget, 3) +
                     constants::shooter::flywheel::kA2 * std::pow(distanceToTarget, 2) +
                     constants::shooter::flywheel::kA1 * distanceToTarget +
                     constants::shooter::flywheel::kA0;

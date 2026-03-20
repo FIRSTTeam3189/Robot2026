@@ -20,7 +20,7 @@
 namespace actions {
     namespace intake {  
         commands::util::SetIntakeRollerMotor IntakePowerForward(subsystems::intake::Intake *intake);
-        frc2::CommandPtr IntakePowerReverse(subsystems::intake::Intake *intake);
+        commands::util::SetIntakeRollerMotor IntakePowerReverse(subsystems::intake::Intake *intake);
         frc2::CommandPtr ResetIntakePower(subsystems::intake::Intake *intake);
 
         frc2::CommandPtr IntakeRotationPowerForward(subsystems::intake::Intake *intake);

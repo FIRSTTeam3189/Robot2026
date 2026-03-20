@@ -141,13 +141,14 @@ namespace subsystems::intake
         }
 
         frc::SmartDashboard::PutNumber("Intake target angle ", m_targetAngle);
+        frc::SmartDashboard::PutNumber("Intake state ", static_cast<int>(m_state));
 
         if (GetArticulationAngle() <= constants::intake::kAngleThresholdRollers) {
-            m_desiredPower = 0.1; 
-            // SetRollerPower(m_desiredPower); 
+            // m_desiredPower = 0.1; 
+            SetRollerPower(m_desiredPower); 
         } else {
-            m_desiredPower = 0.0; 
-            // SetRollerPower(0.0); 
+            // m_desiredPower = 0.0; 
+            SetRollerPower(0.0); 
         }
         SetIntakePosition(m_targetAngle); 
     }

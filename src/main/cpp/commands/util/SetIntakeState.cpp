@@ -13,12 +13,11 @@ namespace commands::util {
 
   // Called when the command is initially scheduled.
   void SetIntakeState::Initialize() {
+    m_intake->SetDesiredRollerPower(m_power); 
     if (m_intake->GetState() == subsystems::intake::State::ExtendIntake) {
       m_intake->SetState(subsystems::intake::State::RetractIntake); 
-      m_intake->SetDesiredRollerPower(0.0); 
     } else {
       m_intake->SetState(subsystems::intake::State::ExtendIntake); 
-      m_intake->SetDesiredRollerPower(m_power); 
     } 
   }
 

@@ -52,13 +52,13 @@ namespace subsystems::vision {
                 m_aprilTagFieldLayout.GetTagPose(target.GetFiducialId()).value().ToPose2d(), 
                 m_cameraToRobotTransform);
     
-            if (frc::DriverStation::GetAlliance()) {
-                if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
-                    visionEstimatedRobotPose = frc::Pose2d(visionEstimatedRobotPose.X() + 0.439_m, visionEstimatedRobotPose.Y(), visionEstimatedRobotPose.Rotation()); 
-                } else {
-                    visionEstimatedRobotPose = frc::Pose2d(visionEstimatedRobotPose.X() - 0.439_m, visionEstimatedRobotPose.Y(), visionEstimatedRobotPose.Rotation()); 
-                }
-            }
+            // if (frc::DriverStation::GetAlliance()) {
+            //     if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
+            //         visionEstimatedRobotPose = frc::Pose2d(visionEstimatedRobotPose.X() + 0.439_m, visionEstimatedRobotPose.Y(), visionEstimatedRobotPose.Rotation()); 
+            //     } else {
+            //         visionEstimatedRobotPose = frc::Pose2d(visionEstimatedRobotPose.X() - 0.439_m, visionEstimatedRobotPose.Y(), visionEstimatedRobotPose.Rotation()); 
+            //     }
+            // }
     
             // frc::Pose2d visionEstimatedRobotPose = photon::PhotonUtils::EstimateFieldToRobot(
             //     m_heightOffset, // camera height

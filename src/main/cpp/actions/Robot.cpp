@@ -7,10 +7,10 @@ namespace actions::robot
     {
         return frc2::SequentialCommandGroup(
             // SetTurretAngle(turret, TurretTarget::AlignHub),
-            // SetHoodAngle(articulation, HoodTarget::Degrees20),
+            // SetHoodAngle(articulation, HoodTarget::),
             frc2::ParallelCommandGroup(
                 frc2::SequentialCommandGroup(
-                    commands::util::SetFlywheelMotorPower(flywheel, 0.8), 
+                    commands::util::SetFlywheelMotorVelocity(flywheel, flywheel->GetFlywheelTargetRPM()), 
                     commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower)),
                     commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
                 )
@@ -21,11 +21,11 @@ namespace actions::robot
                               subsystems::indexer::Loader *loader, subsystems::shooter::Hood *articulation)
     {
         return frc2::SequentialCommandGroup(
-                   // commands::util::SetFlywheelMotorPower(flywheel, 0.0),
-                   commands::util::SetLoaderPower(loader, 0.0),
-                   commands::util::SetShooterKickerPower(kicker, 0.0),
-                   commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees0))
-            .ToPtr();
+            commands::util::SetFlywheelMotorVelocity(flywheel, 0.0),
+            commands::util::SetLoaderPower(loader, 0.0),
+            commands::util::SetShooterKickerPower(kicker, 0.0),
+            commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees0)
+        ).ToPtr();
     }
 
     frc2::CommandPtr ShootWithVelocity(subsystems::shooter::Flywheel *flywheel, double rpm)
@@ -38,15 +38,27 @@ namespace actions::robot
     {
         return frc2::ParallelCommandGroup(
             frc2::SequentialCommandGroup(
+                commands::util::SetFlywheelMotorVelocity(flywheel, flywheel->GetFlywheelTargetRPM()),
                 frc2::WaitCommand(constants::indexer::loader::kShootDelay),
-                commands::util::SetLoaderPower(loader, constants::indexer::loader::kLoadFuelPower),
+                commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
                 commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)),
             commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::AligntoHub));
     }
 
-    frc2::ParallelCommandGroup AdvancedShootWithIntakeCompression(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
-                                                                  subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake)
+    frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
+                                        subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel)
     {
+        return frc2::SequentialCommandGroup(
+            commands::util::SetLoaderPower(loader, 0.0),
+            commands::util::SetShooterKickerPower(kicker, 0.0),
+            commands::util::SetFlywheelMotorVelocity(flywheel, 0.0),
+            commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees0)
+        ).ToPtr();
+    }
+
+    frc2::ParallelCommandGroup AdvancedShootWithIntakeCompression(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
+        subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake)
+        {
         return frc2::ParallelCommandGroup(
             frc2::SequentialCommandGroup(
                 frc2::WaitCommand(constants::indexer::loader::kShootDelay),
@@ -55,21 +67,28 @@ namespace actions::robot
             commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::AligntoHub),
             commands::util::SetIntakeRotationPower(intake, constants::intake::kRotationIntakePowerShotCompression));
     }
-
-    frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
-                                      subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel)
-    {
+        
+    frc2::CommandPtr EjectFuel(subsystems::intake::Intake *intake, subsystems::indexer::Loader *loader, 
+                                subsystems::indexer::Kicker *kicker) {
         return frc2::SequentialCommandGroup(
-                   commands::util::SetLoaderPower(loader, 0.0),
-                   commands::util::SetShooterKickerPower(kicker, 0.0),
-                   commands::util::SetFlywheelMotorPower(flywheel, 0.0),
-                   commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees0))
-            .ToPtr();
+            commands::util::SetIntakeRollerMotor(intake, constants::intake::kRollerReverseIntakePower),
+            commands::util::SetLoaderPower(loader, constants::indexer::loader::kReverseRollerPower),
+            commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPowerReverse)
+        ).ToPtr(); 
     }
 
+    frc2::CommandPtr EjectFuelEnd(subsystems::intake::Intake *intake, subsystems::indexer::Loader *loader, 
+                                subsystems::indexer::Kicker *kicker) {
+        return frc2::SequentialCommandGroup(
+            commands::util::SetIntakeRollerMotor(intake, constants::intake::kRollerIntakePower),
+            commands::util::SetLoaderPower(loader, 0.0),
+            commands::util::SetShooterKickerPower(kicker, 0.0)
+        ).ToPtr(); 
+    }
+        
     frc2::CommandPtr AdvancedShootEndWithIntakeCompression(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
-                                                           subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake)
-    {
+        subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake)
+        {
         return frc2::SequentialCommandGroup(
                    commands::util::SetLoaderPower(loader, 0.0),
                    commands::util::SetShooterKickerPower(kicker, 0.0),

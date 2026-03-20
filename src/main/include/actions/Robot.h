@@ -56,6 +56,12 @@ namespace actions
         frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
                                           subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel);
                                           
+        frc2::CommandPtr EjectFuel(subsystems::intake::Intake *intake, subsystems::indexer::Loader *loader, 
+                                   subsystems::indexer::Kicker *kicker);
+
+        frc2::CommandPtr EjectFuelEnd(subsystems::intake::Intake *intake, subsystems::indexer::Loader *loader, 
+                                    subsystems::indexer::Kicker *kicker);
+
         frc2::CommandPtr AdvancedShootEndWithIntakeCompression(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
                                                             subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake);
 

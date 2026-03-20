@@ -9,23 +9,22 @@ namespace commands::util {
     : m_flywheel(flywheel),
         m_velocity(velocity)
     {
-        SetName("flywheel test"); 
+        SetName("SetFlywheelMotorVelocity"); 
         AddRequirements(flywheel);
     }
 
     void SetFlywheelMotorVelocity::Initialize() {
-        // nah
-    }
-    
-    void SetFlywheelMotorVelocity::Execute() {
         m_flywheel->SetFlywheelMotorVelocity(m_velocity);
     }
     
+    void SetFlywheelMotorVelocity::Execute() {
+    }
+    
     void SetFlywheelMotorVelocity::End(bool interrupted) {
-        // m_flywheel->SetFlywheelMotorPower(0.0);
+        // m_flywheel->SetFlywheelMotorVelocity(0.0);
     }
 
     bool SetFlywheelMotorVelocity::IsFinished() {
-        return false;
+        return true;
     }
 }

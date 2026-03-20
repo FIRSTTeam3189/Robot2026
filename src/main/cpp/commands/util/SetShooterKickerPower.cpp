@@ -14,10 +14,10 @@ namespace commands::util {
     
     void SetShooterKickerPower::Initialize() {
         
+        m_kicker->SetKickerMotorPower(m_power);
     }
     
     void SetShooterKickerPower::Execute() {
-        m_kicker->SetKickerMotorPower(m_power);
     }
     
     void SetShooterKickerPower::End(bool interrupted) {

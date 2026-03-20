@@ -51,11 +51,10 @@ namespace constants {
 
             constexpr units::volt_t kFeedForwardVoltage {0.5_V};
 
-            constexpr double kA4 {70.18};
-            constexpr double kA3 {-887.7};
-            constexpr double kA2 {4075.0};
-            constexpr double kA1 {-7705};
-            constexpr double kA0 {7294};
+            constexpr double kA3 {4.08703};
+            constexpr double kA2 {-44.17696};
+            constexpr double kA1 {565.668};
+            constexpr double kA0 {1277.63912};
             
         };
     };

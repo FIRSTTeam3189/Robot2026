@@ -19,8 +19,8 @@ namespace constants
         constexpr int kRollerMotorID{15};
         constexpr int kArticulationMotorID{50}; // TODO change later
 
-        constexpr double kRollerIntakePower{0.70};         //-0.90
-        constexpr double kRollerReverseIntakePower{-0.70}; // 0.90
+        constexpr double kRollerIntakePower{0.60};         //-0.90
+        constexpr double kRollerReverseIntakePower{-0.60}; // 0.90
 
         constexpr double kRotationIntakePowerForward {0.2}; 
         constexpr double kRotationIntakePowerReverse {-0.2};

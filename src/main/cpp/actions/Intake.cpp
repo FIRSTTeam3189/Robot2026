@@ -6,8 +6,8 @@ namespace actions::intake {
         return commands::util::SetIntakeRollerMotor(intake, constants::intake::kRollerIntakePower);
     }
 
-    frc2::CommandPtr IntakePowerReverse(subsystems::intake::Intake *intake){
-        return commands::util::SetIntakeRollerMotor(intake, constants::intake::kRollerReverseIntakePower).ToPtr();
+    commands::util::SetIntakeRollerMotor IntakePowerReverse(subsystems::intake::Intake *intake){
+        return commands::util::SetIntakeRollerMotor(intake, constants::intake::kRollerReverseIntakePower);
     }
 
     frc2::CommandPtr ResetIntakePower(subsystems::intake::Intake *intake){

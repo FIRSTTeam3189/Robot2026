@@ -63,10 +63,10 @@ namespace constants {
             constexpr double kResetShooterPower {-1.0};
 
 
-            constexpr double kSRotation {0.6}; // Static voltage applied to overcome friction
-            constexpr double kVRotation {0.85}; // Volts applied per meter per second
+            constexpr double kSRotation {0.75}; // Static voltage applied to overcome friction
+            constexpr double kVRotation {1.0}; // Volts applied per meter per second
             constexpr double kARotation {0.0}; // Volts applied per meter per second squared
-            constexpr double kPRotation {4.0}; // Volts applied per meter error    
+            constexpr double kPRotation {5.0}; // Volts applied per meter error    
             constexpr double kIRotation {0.0}; // Volts applied per meter integral error
             constexpr double kDRotation {0.0}; // Volts applied per meter velocity error
 
@@ -94,10 +94,10 @@ namespace constants {
             constexpr units::degree_t kArticulationAngleDecrement {-1.0_deg};
 
             // articulation angle regression constants
-            constexpr double kA2 {-0.54710882};
-            constexpr double kA1 {5.78783607};
-            constexpr double kA0 {12.80774277};
-            const double kUpperBound[2] = {5.1, 28.0};
+            constexpr double kA2 {0.409328};
+            constexpr double kA1 {-0.0909958};
+            constexpr double kA0 {14.10187};
+            const double kUpperBound[2] = {5.24, 28.0};
 
         };
     };

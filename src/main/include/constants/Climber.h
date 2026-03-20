@@ -24,7 +24,7 @@ namespace constants {
         // constexpr double kExtensionConversionRotationsToMeters {1.0};
         constexpr double kClimberPowerUp {0.5};
         constexpr double kClimberPowerDown {-0.5};
-        constexpr double kResetClimberPower {-1.0};
+        constexpr double kResetClimberPower {0.0};
 
         constexpr units::ampere_t kExtensionContinuousCurrentLimit = units::ampere_t{35.0};
         constexpr units::ampere_t kExtensionPeakCurrentLimit = units::ampere_t{60.0};
