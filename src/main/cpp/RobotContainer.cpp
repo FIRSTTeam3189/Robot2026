@@ -61,42 +61,32 @@ void RobotContainer::ConfigureDriverBindings() {
   shootFuelButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
   shootFuelButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_swerveDrive, &m_driveState, &m_bill));
 
-  // frc2::Trigger shootFuelWithIntakeCompression([this](){ return m_bill.GetR1Button(); });
-  // shootFuelWithIntakeCompression.OnTrue(actions::robot::AdvancedShootWithIntakeCompression(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
-  // shootFuelWithIntakeCompression.OnFalse(actions::robot::AdvancedShootEndWithIntakeCompression(m_kicker, m_loader, m_articulation, m_intake));
+  frc2::Trigger shootFuelWithIntakeCompression([this](){ return m_bill.GetR1Button(); });
+  shootFuelWithIntakeCompression.OnTrue(actions::robot::AdvancedShootWithIntakeCompression(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
+  shootFuelWithIntakeCompression.OnFalse(actions::robot::AdvancedShootEndWithIntakeCompression(m_kicker, m_loader, m_articulation, m_intake));
 
-  frc2::Trigger setAlignStateButton([this]() { return m_bill.GetPOV() == 90;}); 
-  setAlignStateButton.OnTrue(actions::robot::ShooterStateAutomatic(&m_shooterState));
-
-  // fixed velocity, 90 deg turret, fixed hood 
-  frc2::Trigger setFixedStateButton([this]() { return m_bill.GetPOV() == 0;}); 
-  setFixedStateButton.OnTrue(actions::robot::ShooterStateFixed(&m_shooterState));
-
-  frc2::Trigger setResetStateButton([this]() { return m_bill.GetPOV() == 270;}); 
-  setResetStateButton.OnTrue(actions::robot::ShooterStateReset(&m_shooterState));
-
-  // incrementable velocity and hood, and auto turret 
-  frc2::Trigger setManualStateButton([this]() { return m_bill.GetPOV() == 180;}); 
-  setManualStateButton.OnTrue(actions::robot::ShooterStateManual(&m_shooterState));
+  frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();}); 
+  setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
+  setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
 
   frc2::Trigger toggleIntakeStateButton([this]() { return m_bill.GetL1Button(); }); 
   toggleIntakeStateButton.OnTrue(actions::intake::ToggleIntakeState(m_intake));
   
-  frc2::Trigger ejectFuelButton([this] { return m_bill.GetR1Button(); }); 
-  ejectFuelButton.OnTrue(actions::robot::EjectFuel(m_intake, m_loader, m_kicker));
-  ejectFuelButton.OnFalse(actions::robot::EjectFuelEnd(m_intake, m_loader, m_kicker));
+  // frc2::Trigger ejectFuelButton([this] { return m_bill.GetR1Button(); }); 
+  // ejectFuelButton.OnTrue(actions::robot::EjectFuel(m_intake, m_loader, m_kicker));
+  // ejectFuelButton.OnFalse(actions::robot::EjectFuelEnd(m_intake, m_loader, m_kicker));
 
-  frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetTriangleButton(); });
-  incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
+  // frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetTriangleButton(); });
+  // incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
 
-  frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetCrossButton(); });
-  decrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
+  // frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetCrossButton(); });
+  // decrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
 
-  frc2::Trigger incrementArticulationButton([this]() { return m_bill.GetSquareButton(); });
-  incrementArticulationButton.OnTrue(actions::shooter::hood::IncrementArticulationAngle(m_articulation)); 
+  // frc2::Trigger incrementArticulationButton([this]() { return m_bill.GetSquareButton(); });
+  // incrementArticulationButton.OnTrue(actions::shooter::hood::IncrementArticulationAngle(m_articulation)); 
 
-  frc2::Trigger decrementArticulationButton([this]() { return m_bill.GetCircleButton(); }); 
-  decrementArticulationButton.OnTrue(actions::shooter::hood::DecrementArticulationAngle(m_articulation)); 
+  // frc2::Trigger decrementArticulationButton([this]() { return m_bill.GetCircleButton(); }); 
+  // decrementArticulationButton.OnTrue(actions::shooter::hood::DecrementArticulationAngle(m_articulation)); 
 }
 
 void RobotContainer::RegisterAutoCommands() {

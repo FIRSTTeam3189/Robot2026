@@ -25,7 +25,7 @@ namespace constants
         constexpr double kRotationIntakePowerForward {0.2}; 
         constexpr double kRotationIntakePowerReverse {-0.2};
 
-        constexpr double kRotationIntakePowerShotCompression {-0.4};
+        constexpr double kRotationIntakePowerShotCompression {0.1};
 
         constexpr units::degree_t kRetractAngle{0.0_deg}; // 0.90
         constexpr units::degree_t kMidAngle {-60.0_deg};
@@ -54,13 +54,13 @@ namespace constants
         constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
         constexpr bool kRotationEnableCurrentLimit = true;
 
-        constexpr double kArticulationKS = 0.1;
-        constexpr double kArticulationKV = 0.12;
+        constexpr double kArticulationKS = 0.225;
+        constexpr double kArticulationKV = 0.2;
         constexpr double kArticulationKI = 0.0;
         constexpr double kArticulationKD = 0.0;
-        constexpr double kArticulationKG = 0.55;
+        constexpr double kArticulationKG = 0.65;
         constexpr double kArticulationKA = 0.0;
-        constexpr double kArticulationKP = 0.22;
+        constexpr double kArticulationKP = 0.29z;
 
 
     };
