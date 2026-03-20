@@ -46,13 +46,13 @@ void Robot::RobotPeriodic() {
     } else if (m_autoWinners == "R") {
       m_autoWon = false;
     }
-  } else if (!frc::DriverStation::GetAlliance() == frc::DriverStation::kRed) {
+  } else {
     if (m_autoWinners == "R") {
       m_autoWon = true;
     } else if (m_autoWinners == "B") {
       m_autoWon = false;
     }
-    }
+  }
 
   if (m_autoWon) {
     if (m_timeLeft.value() <= 30) {

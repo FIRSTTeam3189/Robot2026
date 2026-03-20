@@ -48,13 +48,23 @@ namespace actions
         frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
                                                  subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
                                                  subsystems::shooter::Hood *articulation);
+                                                 
+        frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
+                                        subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel);
+
+        frc2::ParallelCommandGroup AdvancedShootSlowSwerves(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
+                                                            subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                                            subsystems::shooter::Hood *articulation, subsystems::swerve::Drive *drive,
+                                                            subsystems::swerve::State *driveState, frc::PS5Controller *bill);
+
+        frc2::CommandPtr AdvancedShootSlowSwervesEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
+                                                     subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel,
+                                                     subsystems::swerve::Drive *drive, subsystems::swerve::State *driveState, 
+                                                     frc::PS5Controller *bill);
 
         frc2::ParallelCommandGroup AdvancedShootWithIntakeCompression(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
                                                                       subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
                                                                       subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake);
-
-        frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
-                                          subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel);
                                           
         frc2::CommandPtr EjectFuel(subsystems::intake::Intake *intake, subsystems::indexer::Loader *loader, 
                                    subsystems::indexer::Kicker *kicker);

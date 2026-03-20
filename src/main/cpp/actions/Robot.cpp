@@ -56,6 +56,35 @@ namespace actions::robot
         ).ToPtr();
     }
 
+    frc2::ParallelCommandGroup AdvancedShootSlowSwerves(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
+                                                        subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
+                                                        subsystems::shooter::Hood *articulation, subsystems::swerve::Drive *drive,
+                                                        subsystems::swerve::State *driveState, frc::PS5Controller *bill)
+    {
+        return frc2::ParallelCommandGroup(
+            frc2::SequentialCommandGroup(
+                actions::swerve::SlowDownSwerves(drive, driveState, bill),
+                commands::util::SetFlywheelMotorVelocity(flywheel, flywheel->GetFlywheelTargetRPM()),
+                frc2::WaitCommand(constants::indexer::loader::kShootDelay),
+                commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
+                commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)),
+            commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::AligntoHub));
+    }
+
+    frc2::CommandPtr AdvancedShootSlowSwervesEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
+                                                 subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel,
+                                                 subsystems::swerve::Drive *drive, subsystems::swerve::State *driveState, 
+                                                 frc::PS5Controller *bill)
+    {
+        return frc2::SequentialCommandGroup(
+            actions::swerve::DefaultSwerveSpeed(drive, driveState, bill),
+            commands::util::SetLoaderPower(loader, 0.0),
+            commands::util::SetShooterKickerPower(kicker, 0.0),
+            commands::util::SetFlywheelMotorVelocity(flywheel, 0.0),
+            commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::Degrees0)
+        ).ToPtr();
+    }
+
     frc2::ParallelCommandGroup AdvancedShootWithIntakeCompression(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
         subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake)
         {

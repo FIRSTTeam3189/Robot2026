@@ -53,9 +53,13 @@ void RobotContainer::ConfigureDriverBindings() {
   // slowSwervesButton.OnTrue(actions::swerve::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
   // slowSwervesButton.OnFalse(actions::swerve::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
 
+  // frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
+  // shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
+  // shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel));
+
   frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
-  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
-  shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel));
+  shootFuelButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
+  shootFuelButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_swerveDrive, &m_driveState, &m_bill));
 
   // frc2::Trigger shootFuelWithIntakeCompression([this](){ return m_bill.GetR1Button(); });
   // shootFuelWithIntakeCompression.OnTrue(actions::robot::AdvancedShootWithIntakeCompression(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
@@ -243,6 +247,7 @@ void RobotContainer::ConfigureTestBindings() {
   // frc2::Trigger setIntakeRotationMid([this]() { return m_test.GetTriangleButton(); });
   // setIntakeRotationMid.OnTrue(actions::intake::IntakeMidState(m_intake));
 
+  // frc2::Trigger setTurret45Deg([this](
   // frc2::Trigger setIntakeRotationUp([this]() { return m_test.GetCrossButton(); });
   // setIntakeRotationUp.OnTrue(actions::intake::IntakeExtendState(m_intake));
 
