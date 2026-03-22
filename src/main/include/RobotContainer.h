@@ -107,6 +107,7 @@ class RobotContainer {
   subsystems::swerve::Drive* GetSwerveSubsystem(); 
   subsystems::shooter::Flywheel* GetFlywheelSubsystem();
   subsystems::swerve::State GetDriveState(); 
+  frc::PS5Controller* GetBill(); 
 
   static void SetShooterState(constants::ShooterState shooterState);
   static constants::ShooterState GetShooterState();

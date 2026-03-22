@@ -20,7 +20,8 @@ namespace actions {
             frc2::CommandPtr ResetFlywheelPower(subsystems::shooter::Flywheel *flywheel);
             frc2::CommandPtr IncrementFlywheelVelocity(subsystems::shooter::Flywheel *flywheel); 
             frc2::CommandPtr DecrementFlywheelVelocity(subsystems::shooter::Flywheel *flywheel);
-            frc2::CommandPtr TestFlywheelFixedVelocity(subsystems::shooter::Flywheel *flywheel);  
+            frc2::CommandPtr TestFlywheelFixedVelocity(subsystems::shooter::Flywheel *flywheel); 
+            frc2::InstantCommand ResetFlywheelVelocity(subsystems::shooter::Flywheel *flywheel); 
         };
     };
 };

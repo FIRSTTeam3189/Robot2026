@@ -28,8 +28,9 @@ namespace actions::intake {
 
     frc2::CommandPtr IntakeExtendState(subsystems::intake::Intake *intake) {
         return frc2::InstantCommand([intake]() {
-                intake->SetState(subsystems::intake::State::ExtendIntake);
-            }, {intake}).ToPtr(); 
+            intake->SetDesiredRollerPower(constants::intake::kRollerIntakePower); 
+            intake->SetState(subsystems::intake::State::ExtendIntake);
+        }, {intake}).ToPtr(); 
     }
 
     frc2::CommandPtr IntakeMidState(subsystems::intake::Intake *intake) {
@@ -41,8 +42,8 @@ namespace actions::intake {
 
     frc2::CommandPtr IntakeRetractState(subsystems::intake::Intake *intake) {
         return frc2::InstantCommand([intake]() {
+            intake->SetDesiredRollerPower(0.0); 
             intake->SetState(subsystems::intake::State::RetractIntake);
-            // intake->SetRollerPower(0.0); 
         }, {intake}).ToPtr();     
     }
 

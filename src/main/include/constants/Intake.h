@@ -54,13 +54,13 @@ namespace constants
         constexpr units::second_t kRotationPeakCurrentDuration = 0.1_s; // seconds
         constexpr bool kRotationEnableCurrentLimit = true;
 
-        constexpr double kArticulationKS = 0.225;
-        constexpr double kArticulationKV = 0.2;
+        constexpr double kArticulationKS = 0.2;
+        constexpr double kArticulationKV = 0.15;
         constexpr double kArticulationKI = 0.0;
         constexpr double kArticulationKD = 0.0;
         constexpr double kArticulationKG = 0.65;
         constexpr double kArticulationKA = 0.0;
-        constexpr double kArticulationKP = 0.29z;
+        constexpr double kArticulationKP = 0.225;
 
 
     };

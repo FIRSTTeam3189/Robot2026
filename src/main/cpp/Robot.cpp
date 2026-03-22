@@ -87,6 +87,9 @@ void Robot::RobotPeriodic() {
   frc::SmartDashboard::PutBoolean("Should score?", m_shouldScore);
 
   frc::SmartDashboard::PutNumber("Current Drive State", static_cast<int>(m_container.GetDriveState())); 
+  // uncomment if you want to slow swerves for shooting and also use AdvancedShootSlowSwerves in button and pass in swerve, drive state and bill
+  // m_container.GetSwerveSubsystem()->SetDefaultCommand(commands::main::Drive(m_container.GetBill(), m_container.GetSwerveSubsystem(), m_container.GetDriveState()));
+
 
   constants::ShooterState shooterState = RobotContainer::GetShooterState();
   frc::SmartDashboard::PutNumber("Current Battery Voltage", frc::RobotController::GetBatteryVoltage().value());

@@ -45,6 +45,8 @@ namespace subsystems {
         double GetFlywheelTargetVelocity();
 
         void SetFlywheelTargetRPM(double RPM);
+        
+        void SetFlywheelMotorVelocityToTarget();
 
         double GetFlywheelTargetRPM();
         

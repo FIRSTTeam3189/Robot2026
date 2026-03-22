@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/Timer.h>
 
 #include "subsystems/indexer/Loader.h"
 
@@ -41,6 +42,8 @@ namespace commands {
       // declared private and exposed only through public methods.
       subsystems::indexer::Loader *m_loader;
       double m_power;
+      frc::Timer m_timer;
+      
     };
   };
 };

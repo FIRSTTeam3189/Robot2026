@@ -30,6 +30,12 @@ namespace actions::shooter::flywheel {
         return commands::util::SetFlywheelMotorVelocity(flywheel, 5000).ToPtr(); 
     }
 
+    frc2::InstantCommand ResetFlywheelVelocity(subsystems::shooter::Flywheel *flywheel) {
+        return frc2::InstantCommand([flywheel]() {
+            flywheel->SetFlywheelMotorVelocity(0.0); 
+        }, {flywheel});
+    }
+
 };
 
 

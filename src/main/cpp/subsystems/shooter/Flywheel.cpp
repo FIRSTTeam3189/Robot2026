@@ -114,10 +114,17 @@ namespace subsystems::shooter
         }
     }
 
+    
     void Flywheel::SetFlywheelMotorVelocity(double RPM)
     {
+        frc::SmartDashboard::PutNumber("Test bindings/Did flywheel get RPM?", RPM); 
         // Uncomment if you want to reimplement TalonFX
         m_flywheelController.SetSetpoint(RPM, rev::spark::SparkFlex::ControlType::kVelocity);
+    }
+
+    void Flywheel::SetFlywheelMotorVelocityToTarget()
+    {
+        m_flywheelController.SetSetpoint(m_rpm, rev::spark::SparkFlex::ControlType::kVelocity);
     }
 
     void Flywheel::SetFlywheelTargetRPM(double RPM)

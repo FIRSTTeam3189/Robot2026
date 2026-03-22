@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 6.910422607150909,
-        "y": 1.9951208733189252
+        "y": 1.5607078048760252
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.886769727797346,
-        "y": 1.0428565327607089
+        "y": 0.6084434643178089
       },
       "isLocked": false,
       "linkedName": "Neutral Zone Right Side"

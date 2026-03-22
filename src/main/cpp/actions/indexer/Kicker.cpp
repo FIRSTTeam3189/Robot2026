@@ -12,5 +12,11 @@ namespace actions::indexer::kicker {
     frc2::CommandPtr ResetKicker(subsystems::indexer::Kicker *kicker) {
         return commands::util::SetShooterKickerPower(kicker, 0.0).ToPtr();
     }
+
+    frc2::InstantCommand ResetKickerInstant(subsystems::indexer::Kicker *kicker) {
+        return frc2::InstantCommand([kicker]() {
+            kicker->SetKickerMotorPower(0.0); 
+        }, {kicker}); 
+    }
 };
 

@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
+#include <frc/Timer.h>
 #include "subsystems/indexer/Kicker.h"
 
 namespace commands {
@@ -28,6 +29,7 @@ namespace commands {
       // declared private and exposed only through public methods.
       subsystems::indexer::Kicker * m_kicker;
       double m_power;
+      frc::Timer m_timer; 
     };
   };
 };

@@ -72,7 +72,7 @@ namespace util::align::turret
         // Calculate the offset of the turret based on the robot's heading
         // Effectively set the length of the turretOffsetWithHeading to the magnitude of the turretOffset
         Vector2d turretOffsetWithHeading = robotHeading.Normalize() * turretOffset.Length();
-        ;
+        
 
         // Get the poses as vectors
         Vector2d turretVec = Vector2d(robotPose) + turretOffsetWithHeading;

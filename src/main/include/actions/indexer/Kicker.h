@@ -3,6 +3,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Command.h>
+#include <frc2/command/InstantCommand.h>
 
 #include "commands/util/SetShooterKickerPower.h"
 
@@ -17,6 +18,7 @@ namespace actions {
             frc2::CommandPtr RunKickerForward(subsystems::indexer::Kicker *kicker);
             frc2::CommandPtr RunKickerBackward(subsystems::indexer::Kicker *kicker);
             frc2::CommandPtr ResetKicker(subsystems::indexer::Kicker *kicker);
+            frc2::InstantCommand ResetKickerInstant(subsystems::indexer::Kicker *kicker);
         };
     };
 };

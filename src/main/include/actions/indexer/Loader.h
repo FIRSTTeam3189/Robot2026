@@ -2,6 +2,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Command.h>
+#include <frc2/command/InstantCommand.h>
 
 #include "commands/util/SetLoaderPower.h"
 
@@ -16,6 +17,7 @@ namespace actions {
             frc2::CommandPtr RunLoaderForward(subsystems::indexer::Loader *loader);
             frc2::CommandPtr RunLoaderBackward(subsystems::indexer::Loader *loader);
             frc2::CommandPtr ResetLoader(subsystems::indexer::Loader *loader);
+            frc2::InstantCommand ResetLoaderInstant(subsystems::indexer::Loader *loader); 
         };
     };
 };

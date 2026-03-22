@@ -13,7 +13,7 @@
 
 namespace constants {
     namespace climber {
-        constexpr int kClimberMotorID {31};
+        constexpr int kClimberMotorID {20};
         
         constexpr bool kTopSoftLimitEnabled {false};
         constexpr bool kBottomSoftLimitEnabled {false};

@@ -14,10 +14,10 @@ namespace commands::util {
     }
 
     void SetFlywheelMotorVelocity::Initialize() {
-        m_flywheel->SetFlywheelMotorVelocity(m_velocity);
     }
     
     void SetFlywheelMotorVelocity::Execute() {
+        m_flywheel->SetFlywheelMotorVelocityToTarget();
     }
     
     void SetFlywheelMotorVelocity::End(bool interrupted) {
@@ -25,6 +25,6 @@ namespace commands::util {
     }
 
     bool SetFlywheelMotorVelocity::IsFinished() {
-        return true;
+        return false;
     }
 }
