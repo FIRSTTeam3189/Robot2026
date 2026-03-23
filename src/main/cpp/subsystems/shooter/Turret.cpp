@@ -170,7 +170,6 @@ namespace subsystems::shooter {
             }
             default:
                 m_targetRotationAngle = 90.0_deg;
-                m_targetPower = 0.0;
                 break;  
         }
         // Rotation will be set periodicially

@@ -223,7 +223,6 @@ void RobotContainer::ConfigureTestBindings() {
   // frc2::Trigger runIntakeRollerMotorReverse([this]() { return m_test.GetCrossButton(); });
   // runIntakeRollerMotorReverse.OnTrue(actions::intake::IntakePowerReverse(m_intake));
   // runIntakeRollerMotorReverse.OnFalse(actions::intake::ResetIntakePower(m_intake)); 
-
   // frc2::Trigger runIntakeRotationMotorPowerForward([this]() { return m_test.GetL1Button(); });
   // runIntakeRotationMotorPowerForward.OnTrue(actions::intake::IntakeRotationPowerForward(m_intake));
   // runIntakeRotationMotorPowerForward.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));

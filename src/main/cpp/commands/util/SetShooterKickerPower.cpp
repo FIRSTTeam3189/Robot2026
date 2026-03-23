@@ -14,19 +14,20 @@ namespace commands::util {
     }
     
     void SetShooterKickerPower::Initialize() {
-        m_kicker->SetKickerMotorPower(m_power);
+        // m_kicker->SetKickerMotorPower(m_power);
+        m_timer.Start(); 
     }
     
     void SetShooterKickerPower::Execute() {
-        // units::time::second_t elapsed = m_timer.Get();
-        // frc::SmartDashboard::PutNumber("timer stuff/kicker timer seconds passed", elapsed.value()); 
-        // double targetPower = m_power;  
-        // if (elapsed >= 2.0_s && elapsed <= 2.5_s) { //unstuck balls for 0.5s
-        //     targetPower = -m_power; 
-        // } else if (elapsed > 2.5_s) {
-        //     m_timer.Restart(); 
-        // }
-        // m_kicker->SetKickerMotorPower(targetPower);
+        units::time::second_t elapsed = m_timer.Get();
+        frc::SmartDashboard::PutNumber("timer stuff/kicker timer seconds passed", elapsed.value()); 
+        double targetPower = m_power;  
+        if (elapsed >= 2.0_s && elapsed <= 2.5_s) { //unstuck balls for 0.5s
+            targetPower = -m_power; 
+        } else if (elapsed > 2.5_s) {
+            m_timer.Restart(); 
+        }
+        m_kicker->SetKickerMotorPower(targetPower);
     }
     
     void SetShooterKickerPower::End(bool interrupted) {
@@ -34,6 +35,7 @@ namespace commands::util {
     }
     
     bool SetShooterKickerPower::IsFinished() {
-        return true;
+        // return true;
+        return false; 
     }
 }
