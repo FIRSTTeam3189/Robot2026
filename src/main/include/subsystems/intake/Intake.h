@@ -41,14 +41,16 @@ namespace subsystems {
       
       void SetState(subsystems::intake::State state);
       subsystems::intake::State GetState();
-
+      
       /**
        * Will be called periodically whenever the CommandScheduler runs.
        */
       void Periodic() override;
-
+      
       units::degree_t GetArticulationAngle(); 
       double GetTargetAngle(); 
+      bool WithinTargetThreshold();
+
 
 
     private:

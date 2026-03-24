@@ -112,6 +112,11 @@ namespace subsystems::intake
             // SetIntakePosition(constants::intake::kIntakeRetractedPosition); // Set to default position
             break;
         }
+        case (State::CompressIntakeUp): 
+        {
+            m_targetAngle = constants::intake::kCompressAngle.value(); 
+            break; 
+        }
         default:
             break;
         }
@@ -161,6 +166,11 @@ namespace subsystems::intake
 
     double Intake::GetTargetAngle() {
         return m_targetAngle; 
+    }
+
+    bool Intake::WithinTargetThreshold() {
+        double error = std::abs(GetArticulationAngle().value() - m_targetAngle); 
+        return error <= constants::intake::kTargetAngleThreshold.value(); 
     }
 
 }

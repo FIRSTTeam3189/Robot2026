@@ -81,17 +81,22 @@ void RobotContainer::ConfigureDriverBindings() {
   // ejectFuelButton.OnTrue(actions::robot::EjectFuel(m_intake, m_loader, m_kicker));
   // ejectFuelButton.OnFalse(actions::robot::EjectFuelEnd(m_intake, m_loader, m_kicker));
 
-  // frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetTriangleButton(); });
-  // incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
+  frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetTriangleButton(); });
+  incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
 
-  // frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetCrossButton(); });
-  // decrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
+  frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetCrossButton(); });
+  decrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
 
-  // frc2::Trigger incrementArticulationButton([this]() { return m_bill.GetSquareButton(); });
-  // incrementArticulationButton.OnTrue(actions::shooter::hood::IncrementArticulationAngle(m_articulation)); 
+  frc2::Trigger incrementArticulationButton([this]() { return m_bill.GetSquareButton(); });
+  incrementArticulationButton.OnTrue(actions::shooter::hood::IncrementArticulationAngle(m_articulation)); 
 
-  // frc2::Trigger decrementArticulationButton([this]() { return m_bill.GetCircleButton(); }); 
-  // decrementArticulationButton.OnTrue(actions::shooter::hood::DecrementArticulationAngle(m_articulation)); 
+  frc2::Trigger decrementArticulationButton([this]() { return m_bill.GetCircleButton(); }); 
+  decrementArticulationButton.OnTrue(actions::shooter::hood::DecrementArticulationAngle(m_articulation)); 
+
+  frc2::Trigger runIndexerReverseButton([this]() { return m_bill.GetR1Button(); });
+  runIndexerReverseButton.OnTrue(actions::robot::RunIndexerReverse(m_loader, m_kicker)); 
+  runIndexerReverseButton.OnFalse(actions::robot::RunIndexerReverseEnd(m_loader, m_kicker)); 
+
 }
 
 void RobotContainer::RegisterAutoCommands() {

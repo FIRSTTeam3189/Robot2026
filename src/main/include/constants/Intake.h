@@ -29,9 +29,12 @@ namespace constants
 
         constexpr units::degree_t kRetractAngle{0.0_deg}; // 0.90
         constexpr units::degree_t kMidAngle {-60.0_deg};
+        constexpr units::degree_t kCompressAngle {-100.0_deg}; 
         constexpr units::degree_t kExtendAngle{-120.0_deg}; // 0.90
         constexpr units::degree_t kAngleThresholdRollers {-100.0_deg}; 
-        constexpr units::degree_t kTargetAngleThreshold {8.0_deg}; 
+        constexpr units::degree_t kTargetAngleThreshold {6.0_deg}; 
+
+        constexpr units::time::second_t kIntakeShakeRepeat {3.0_s}; // repeat every 3 seconds 
 
         constexpr bool kArticulationMotorInverted{false};
 

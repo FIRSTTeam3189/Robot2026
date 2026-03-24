@@ -172,7 +172,7 @@ class RobotContainer {
 
   subsystems::swerve::State m_driveState = subsystems::swerve::State::HeadingControl;
 
-  inline static constants::ShooterState m_shooterState = constants::ShooterState::Automatic;
+  inline static constants::ShooterState m_shooterState = constants::ShooterState::Manual;
 
 
   bool m_nomNomMode = false; 
