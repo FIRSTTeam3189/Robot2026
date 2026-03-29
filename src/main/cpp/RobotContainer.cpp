@@ -44,76 +44,73 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger resetPoseButton([this](){ return m_bill.GetTouchpadButton(); });
   resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive));
 
+  frc2::Trigger runKickerMotorForward([this]() { return m_test.GetTriangleButton(); });
+  runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
+  runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
+
   // frc2::Trigger runIntakeRollerMotorForward([this]() { return m_bill.GetL1Button(); });
   // runIntakeRollerMotorForward.OnTrue(actions::intake::IntakePowerForward(m_intake).ToPtr());
   // runIntakeRollerMotorForward.OnFalse(actions::intake::ResetIntakePower(m_intake)); 
 
   // // global states / 
-  // frc2::Trigger slowSwervesButton([this]() { return m_bill.GetL2Button(); });
-  // slowSwervesButton.OnTrue(actions::swerve::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
-  // slowSwervesButton.OnFalse(actions::swerve::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
+  frc2::Trigger slowSwervesButton([this]() { return m_bill.GetR1Button() || m_bill.GetR2Button(); });
+  slowSwervesButton.OnTrue(actions::swerve::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
+  slowSwervesButton.OnFalse(actions::swerve::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
 
   frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
-  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
-  shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel));
+  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
+  shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake));
+
+
 
   // uncomment to slow swerves while driving and uncomment the line in 
-  // frc2::Trigger shootFuelButton([this](){ return m_bill.GetR2Button(); });
-  // shootFuelButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
-  // shootFuelButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_swerveDrive, &m_driveState, &m_bill));
+  frc2::Trigger shootFuelDumpButton([this](){ return m_bill.GetR1Button(); });
+  shootFuelDumpButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
+  shootFuelDumpButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill));
 
-  // frc2::Trigger shootFuelWithIntakeCompression([this](){ return m_bill.GetR1Button(); });
-  // shootFuelWithIntakeCompression.OnTrue(actions::robot::AdvancedShootWithIntakeCompression(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
-  // shootFuelWithIntakeCompression.OnFalse(actions::robot::AdvancedShootEndWithIntakeCompression(m_kicker, m_loader, m_articulation, m_intake));
-
-  frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();}); 
-  setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
-  setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
+  // frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();}); 
+  // setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
+  // setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
 
   // frc2::Trigger toggleIntakeStateButton([this]() { return m_bill.GetL1Button(); }); 
   // toggleIntakeStateButton.OnTrue(actions::intake::ToggleIntakeState(m_intake));
 
   frc2::Trigger extendIntakeButton([this]() { return m_bill.GetL1Button(); }); 
-  extendIntakeButton.OnTrue(actions::intake::IntakeExtendState(m_intake));
-  extendIntakeButton.OnFalse(actions::intake::IntakeRetractState(m_intake));
+  extendIntakeButton.OnTrue(actions::intake::IntakeExtendState(m_intake).ToPtr());
+  extendIntakeButton.OnFalse(actions::intake::IntakeRetractState(m_intake).ToPtr());
   
   // frc2::Trigger ejectFuelButton([this] { return m_bill.GetR1Button(); }); 
   // ejectFuelButton.OnTrue(actions::robot::EjectFuel(m_intake, m_loader, m_kicker));
   // ejectFuelButton.OnFalse(actions::robot::EjectFuelEnd(m_intake, m_loader, m_kicker));
 
-  frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetTriangleButton(); });
-  incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
+  // frc2::Trigger incrementFlywheelVelocityButton([this]() { return m_bill.GetTriangleButton(); });
+  // incrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::IncrementFlywheelVelocity(m_flywheel)); 
 
-  frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetCrossButton(); });
-  decrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
+  // frc2::Trigger decrementFlywheelVelocityButton([this]() { return m_bill.GetCrossButton(); });
+  // decrementFlywheelVelocityButton.OnTrue(actions::shooter::flywheel::DecrementFlywheelVelocity(m_flywheel)); 
 
-  frc2::Trigger incrementArticulationButton([this]() { return m_bill.GetSquareButton(); });
-  incrementArticulationButton.OnTrue(actions::shooter::hood::IncrementArticulationAngle(m_articulation)); 
+  // frc2::Trigger incrementArticulationButton([this]() { return m_bill.GetSquareButton(); });
+  // incrementArticulationButton.OnTrue(actions::shooter::hood::IncrementArticulationAngle(m_articulation)); 
 
-  frc2::Trigger decrementArticulationButton([this]() { return m_bill.GetCircleButton(); }); 
-  decrementArticulationButton.OnTrue(actions::shooter::hood::DecrementArticulationAngle(m_articulation)); 
-
-  frc2::Trigger runIndexerReverseButton([this]() { return m_bill.GetR1Button(); });
-  runIndexerReverseButton.OnTrue(actions::robot::RunIndexerReverse(m_loader, m_kicker)); 
-  runIndexerReverseButton.OnFalse(actions::robot::RunIndexerReverseEnd(m_loader, m_kicker)); 
-
+  // frc2::Trigger decrementArticulationButton([this]() { return m_bill.GetCircleButton(); }); 
+  // decrementArticulationButton.OnTrue(actions::shooter::hood::DecrementArticulationAngle(m_articulation)); 
 }
 
 void RobotContainer::RegisterAutoCommands() {
   // ! Note: commands should have a maximum time/deadline to be safe
-
+  
   // Start of Auto Events
   pathplanner::NamedCommands::registerCommand("PrintAutoMessage", frc2::InstantCommand([this]{
     for (int i = 0; i < 10; i++) {
       std::cout << "Auto started/ended\n"; }},{}).ToPtr());
 
-  pathplanner::NamedCommands::registerCommand("Intake", actions::intake::IntakeExtendState(m_intake));
-  pathplanner::NamedCommands::registerCommand("Intake Retract", actions::intake::IntakeRetractState(m_intake));
-  pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel));
+  pathplanner::NamedCommands::registerCommand("Intake", actions::intake::IntakeExtendState(m_intake).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Retract Intake", actions::intake::IntakeRetractState(m_intake).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake));
   pathplanner::NamedCommands::registerCommand("Set Pose Left Trench", actions::SetLeftTrenchAutoPose(m_swerveDrive));
   pathplanner::NamedCommands::registerCommand("Set Pose Right Trench", actions::SetRightTrenchAutoPose(m_swerveDrive));
-} 
+}
 
 void RobotContainer::CreateAutoPaths() {
   frc::SmartDashboard::PutData("Auto Routines", &m_chooser);

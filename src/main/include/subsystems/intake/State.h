@@ -2,6 +2,6 @@
 
 namespace subsystems {
   namespace intake {
-    enum class State {ExtendIntake, MidIntake, RetractIntake, CompressIntakeUp};
+    enum class State {ExtendIntake, MidIntake, RetractIntake, ShakeIntakeUp, ShakeIntakeDown};
   };
 };

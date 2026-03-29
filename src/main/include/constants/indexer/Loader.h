@@ -28,6 +28,9 @@ namespace constants {
 
             constexpr bool kLoaderMotorInverted {false};
 
+            constexpr units::time::second_t kOscillatePeriod {2.0_s}; 
+            constexpr units::time::second_t kOscillateDuration {0.25_s}; 
+
             constexpr units::second_t kLoaderDelay {0.5_s}; 
 
             constexpr units::second_t kShootDelay {0.25_s}; 

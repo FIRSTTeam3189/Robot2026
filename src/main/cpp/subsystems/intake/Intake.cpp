@@ -38,7 +38,7 @@ namespace subsystems::intake
         m_articulationConfig.CurrentLimits.SupplyCurrentLimitEnable = constants::intake::kRotationEnableCurrentLimit;
 
         m_articulationConfig.MotorOutput.Inverted = constants::intake::kArticulationMotorInverted;
-        // m_articulationConfig.MotorOutput.NeutralMode = constants::intake::kRotationNeutralMode;
+        m_articulationConfig.MotorOutput.NeutralMode = constants::intake::kRotationNeutralMode;
 
         m_articulationConfig.Slot0.kS = constants::intake::kArticulationKS;
         m_articulationConfig.Slot0.kV = constants::intake::kArticulationKV;
@@ -112,11 +112,16 @@ namespace subsystems::intake
             // SetIntakePosition(constants::intake::kIntakeRetractedPosition); // Set to default position
             break;
         }
-        case (State::CompressIntakeUp): 
+        case (State::ShakeIntakeUp):
         {
-            m_targetAngle = constants::intake::kCompressAngle.value(); 
+            m_targetAngle = constants::intake::kShakeUpAngle.value(); 
             break; 
         }
+        case (State::ShakeIntakeDown):
+        {
+            m_targetAngle = constants::intake::kShakeDownAngle.value(); 
+            break; 
+        } 
         default:
             break;
         }
@@ -166,11 +171,6 @@ namespace subsystems::intake
 
     double Intake::GetTargetAngle() {
         return m_targetAngle; 
-    }
-
-    bool Intake::WithinTargetThreshold() {
-        double error = std::abs(GetArticulationAngle().value() - m_targetAngle); 
-        return error <= constants::intake::kTargetAngleThreshold.value(); 
     }
 
 }

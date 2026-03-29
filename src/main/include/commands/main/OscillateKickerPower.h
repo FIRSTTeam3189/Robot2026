@@ -4,17 +4,17 @@
 
 #pragma once
 
+#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
-#include <frc/Timer.h> 
-
-#include "subsystems/intake/Intake.h"
+#include <frc/Timer.h>
+#include "subsystems/indexer/Kicker.h"
 
 namespace commands {
   namespace main {
-    class ShakeIntake : public frc2::CommandHelper<frc2::Command, ShakeIntake> {
+    class OscillateKickerPower : public frc2::CommandHelper<frc2::Command, OscillateKickerPower> {
      public:
-      explicit ShakeIntake(subsystems::intake::Intake *intake, double power);
+      explicit OscillateKickerPower(subsystems::indexer::Kicker *kicker, double power);
     
       /**
        * Will be called periodically whenever the CommandScheduler runs.
@@ -27,13 +27,9 @@ namespace commands {
      private:
       // Components (e.g. motor controllers and sensors) should generally be
       // declared private and exposed only through public methods.
-      subsystems::intake::Intake * m_intake;
+      subsystems::indexer::Kicker * m_kicker;
       double m_power;
       frc::Timer m_timer; 
-      short m_shakes = 0; 
-    
     };
   };
 };
-
-

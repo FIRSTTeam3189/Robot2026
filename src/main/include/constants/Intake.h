@@ -29,12 +29,13 @@ namespace constants
 
         constexpr units::degree_t kRetractAngle{0.0_deg}; // 0.90
         constexpr units::degree_t kMidAngle {-60.0_deg};
-        constexpr units::degree_t kCompressAngle {-100.0_deg}; 
-        constexpr units::degree_t kExtendAngle{-120.0_deg}; // 0.90
+        constexpr units::degree_t kExtendAngle {-120.0_deg}; // 0.90
+        constexpr units::degree_t kShakeUpAngle {-20.0_deg}; 
+        constexpr units::degree_t kShakeDownAngle {-100.0_deg}; 
         constexpr units::degree_t kAngleThresholdRollers {-100.0_deg}; 
-        constexpr units::degree_t kTargetAngleThreshold {6.0_deg}; 
+        constexpr units::degree_t kTargetAngleThreshold {8.0_deg}; 
 
-        constexpr units::time::second_t kIntakeShakeRepeat {3.0_s}; // repeat every 3 seconds 
+        constexpr units::time::second_t kShakeDelay {0.6_s}; 
 
         constexpr bool kArticulationMotorInverted{false};
 
@@ -45,6 +46,7 @@ namespace constants
         constexpr bool kRollerMotorInverted{false};
         constexpr double kRotationConversionRotationsToDegrees {20.0}; 
         constexpr ctre::phoenix6::signals::NeutralModeValue kRollerMotorNeutralMode{ctre::phoenix6::signals::NeutralModeValue::Brake};
+        constexpr ctre::phoenix6::signals::NeutralModeValue kRotationNeutralMode{ctre::phoenix6::signals::NeutralModeValue::Brake};
 
         constexpr bool kSoftLimitEnabledForward = false;
         constexpr bool kSoftLimitEnabledReverse = false;

@@ -26,27 +26,53 @@ namespace actions::intake {
         return commands::util::SetIntakeRotationPower(intake, 0.0).ToPtr();
     }
 
-    frc2::CommandPtr IntakeExtendState(subsystems::intake::Intake *intake) {
+    frc2::InstantCommand IntakeExtendState(subsystems::intake::Intake *intake) {
         return frc2::InstantCommand([intake]() {
             intake->SetDesiredRollerPower(constants::intake::kRollerIntakePower); 
             intake->SetState(subsystems::intake::State::ExtendIntake);
-        }, {intake}).ToPtr(); 
+        }, {intake}); 
     }
-
-    frc2::CommandPtr IntakeMidState(subsystems::intake::Intake *intake) {
+    
+    
+    frc2::InstantCommand IntakeMidState(subsystems::intake::Intake *intake) {
         return frc2::InstantCommand([intake]() {
             intake->SetState(subsystems::intake::State::MidIntake);
             // intake->SetRollerPower(constants::intake::kRollerIntakePower); 
-        }, {intake}).ToPtr(); 
+        }, {intake}); 
     }
-
-    frc2::CommandPtr IntakeRetractState(subsystems::intake::Intake *intake) {
+    
+    frc2::InstantCommand IntakeRetractState(subsystems::intake::Intake *intake) {
         return frc2::InstantCommand([intake]() {
             intake->SetDesiredRollerPower(0.0); 
             intake->SetState(subsystems::intake::State::RetractIntake);
-        }, {intake}).ToPtr();     
+        }, {intake});     
+    }
+    
+    frc2::InstantCommand IntakeShakeUpState(subsystems::intake::Intake *intake) {
+        return frc2::InstantCommand([intake]() {
+            intake->SetDesiredRollerPower(0.0); 
+            intake->SetState(subsystems::intake::State::ShakeIntakeUp);
+        }, {intake}); 
     }
 
+    frc2::InstantCommand IntakeShakeDownState(subsystems::intake::Intake *intake) {
+        return frc2::InstantCommand([intake]() {
+            intake->SetDesiredRollerPower(constants::intake::kRollerIntakePower); 
+            intake->SetState(subsystems::intake::State::ShakeIntakeDown);
+        }, {intake}); 
+    }
+
+    frc2::RepeatCommand ShakeIntake(subsystems::intake::Intake *intake) {
+        return frc2::RepeatCommand(
+            frc2::SequentialCommandGroup(
+                actions::intake::IntakeShakeUpState(intake),
+                frc2::WaitCommand(constants::intake::kShakeDelay),
+                actions::intake::IntakeShakeDownState(intake),
+                frc2::WaitCommand(constants::intake::kShakeDelay)
+            )
+        ); 
+    }
+    
     frc2::CommandPtr ToggleIntakeState(subsystems::intake::Intake *intake) {
         return commands::util::SetIntakeState(intake, constants::intake::kRollerIntakePower).ToPtr();
     }

@@ -219,8 +219,6 @@ namespace subsystems::shooter {
         m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
     }
     
-    
-    
     Vector2d Turret::GetRobotVelocity() {
         frc::ChassisSpeeds robotSpeeds = m_swerveDrive->GetRobotRelativeSpeeds();
     

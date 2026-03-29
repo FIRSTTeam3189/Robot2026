@@ -7,8 +7,7 @@
 namespace commands::util {
     SetShooterKickerPower::SetShooterKickerPower(subsystems::indexer::Kicker *kicker, double power)
       : m_kicker(kicker),
-        m_power(power),
-        m_timer()
+        m_power(power)
     {
         AddRequirements(kicker);
     }
@@ -21,7 +20,6 @@ namespace commands::util {
     }
     
     void SetShooterKickerPower::End(bool interrupted) {
-        // m_kicker->SetKickerMotorPower(0.0);
     }
     
     bool SetShooterKickerPower::IsFinished() {

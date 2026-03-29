@@ -7,8 +7,7 @@
 namespace commands::util {
   SetLoaderPower::SetLoaderPower(subsystems::indexer::Loader *loader, double power)
     : m_loader(loader),
-      m_power(power),
-      m_timer()
+      m_power(power)
   {
       AddRequirements(loader);
   }
@@ -24,7 +23,6 @@ namespace commands::util {
   
   // Called once the command ends or is interrupted.
   void SetLoaderPower::End(bool interrupted) {
-    // m_loader->SetLoaderMotorPower(0.0);
   }
   
   // Returns true when the command should end.

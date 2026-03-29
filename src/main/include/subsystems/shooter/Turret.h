@@ -32,6 +32,7 @@
 #include <cmath> 
 
 
+
 namespace subsystems {
   namespace shooter {
     class Turret : public frc2::SubsystemBase {
@@ -65,7 +66,8 @@ namespace subsystems {
 
         void SetState(constants::shooter::TurretTarget state);
 
-        Vector2d GetRobotVelocity(); 
+        Vector2d GetRobotVelocity();
+        
         
         private:
         // HARDWARE (subsystem owns motors)
