@@ -5,13 +5,21 @@
 #include <ctre/phoenix6/StatusSignal.hpp>
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/core/CoreTalonFX.hpp>
+#include <ctre/phoenix6/sim/TalonFXSimState.hpp>
+#include <ctre/phoenix6/sim/CANcoderSimState.hpp>
+
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/Preferences.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/RobotController.h>
+#include <frc/simulation/DCMotorSim.h>
+#include <frc/system/plant/LinearSystemId.h>
+
 #include <math.h>
 #include <iostream>
 #include <string>
+
 #include "constants/Global.h"
 #include "constants/swerve/SwerveModule.h"
 
@@ -28,6 +36,7 @@ class SwerveModule {
  public:
   SwerveModule(int moduleNumber, int driveMotorID, int angleMotorID,
                int CANcoderID, units::turn_t CANcoderOffset);
+  void SimulationPeriodic();
   void ConfigDriveMotor();
   void ConfigAngleMotor(int CANcoderID);
   void ConfigCANcoder();
@@ -48,6 +57,28 @@ class SwerveModule {
   ctre::phoenix6::hardware::TalonFX m_driveMotor;
   ctre::phoenix6::hardware::TalonFX m_angleMotor;
   ctre::phoenix6::hardware::CANcoder m_CANcoder;
+  ctre::phoenix6::sim::TalonFXSimState& m_driveMotorSim;
+  ctre::phoenix6::sim::TalonFXSimState& m_angleMotorSim;
+  ctre::phoenix6::sim::CANcoderSimState& m_CANcoderSim;
+    
+  frc::sim::DCMotorSim m_driveMotorSimModel {
+    frc::LinearSystemId::DCMotorSystem(
+      frc::DCMotor::KrakenX60FOC(1),
+      SwerveModuleConstants::kDriveMotorMOI,
+      SwerveModuleConstants::kDriveGearRatio
+    ),
+    frc::DCMotor::KrakenX60FOC(1)
+  }; 
+
+  frc::sim::DCMotorSim m_angleMotorSimModel{
+    frc::LinearSystemId::DCMotorSystem(
+        frc::DCMotor::KrakenX44(1),
+        SwerveModuleConstants::kAngleMotorMOI,
+        SwerveModuleConstants::kAngleGearRatio
+    ),
+    frc::DCMotor::KrakenX44(1)
+  };
+
   PIDValues m_PIDValues;
 
   int m_moduleNumber;

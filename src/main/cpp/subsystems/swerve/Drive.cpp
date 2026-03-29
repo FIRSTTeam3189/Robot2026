@@ -7,21 +7,19 @@
 
 namespace subsystems::swerve {
 
-    Drive::Drive(subsystems::vision::PoseEstimatorHelper
-    
-     *helper) : 
+    Drive::Drive(subsystems::vision::PoseEstimatorHelper *helper) : 
     m_modules{
-      {+constants::swerve::swerve_drive::kXDistanceFromCenter, +constants::swerve::swerve_drive::kYDistanceFromCenter},
-      {+constants::swerve::swerve_drive::kXDistanceFromCenter, -constants::swerve::swerve_drive::kYDistanceFromCenter},
-      {-constants::swerve::swerve_drive::kXDistanceFromCenter, +constants::swerve::swerve_drive::kYDistanceFromCenter},
-      {-constants::swerve::swerve_drive::kXDistanceFromCenter, -constants::swerve::swerve_drive::kYDistanceFromCenter},
-      {0, SwerveModuleConstants::kFrontLeftDriveID, SwerveModuleConstants::kFrontLeftAngleID,
+      .m_frontLeftLocation = {+constants::swerve::swerve_drive::kXDistanceFromCenter, +constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_frontRightLocation = {+constants::swerve::swerve_drive::kXDistanceFromCenter, -constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_backLeftLocation = {-constants::swerve::swerve_drive::kXDistanceFromCenter, +constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_backRightLocation = {-constants::swerve::swerve_drive::kXDistanceFromCenter, -constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_frontLeft = {0, SwerveModuleConstants::kFrontLeftDriveID, SwerveModuleConstants::kFrontLeftAngleID,
        SwerveModuleConstants::kFrontLeftCANcoderID, SwerveModuleConstants::kFrontLeftOffset},
-      {1, SwerveModuleConstants::kFrontRightDriveID, SwerveModuleConstants::kFrontRightAngleID,
+      .m_frontRight = {1, SwerveModuleConstants::kFrontRightDriveID, SwerveModuleConstants::kFrontRightAngleID,
        SwerveModuleConstants::kFrontRightCANcoderID, SwerveModuleConstants::kFrontRightOffset},
-      {2, SwerveModuleConstants::kBackLeftDriveID, SwerveModuleConstants::kBackLeftAngleID,
+      .m_backLeft = {2, SwerveModuleConstants::kBackLeftDriveID, SwerveModuleConstants::kBackLeftAngleID,
        SwerveModuleConstants::kBackLeftCANcoderID, SwerveModuleConstants::kBackLeftOffset},
-      {3, SwerveModuleConstants::kBackRightDriveID, SwerveModuleConstants::kBackRightAngleID,
+      .m_backRight = {3, SwerveModuleConstants::kBackRightDriveID, SwerveModuleConstants::kBackRightAngleID,
        SwerveModuleConstants::kBackRightCANcoderID, SwerveModuleConstants::kBackRightOffset}
     }, 
     // addresses to access of each swerve module motor
@@ -33,6 +31,7 @@ namespace subsystems::swerve {
     ), 
     m_poseHelper(helper),
     m_pigeon(constants::swerve::swerve_drive::kGyroID, "Swerve"),
+    m_pigeonSim(m_pigeon.GetSimState()),
     m_modulePositions(
         m_modules.m_frontLeft.GetPosition(true),
         m_modules.m_frontRight.GetPosition(true),
@@ -49,7 +48,7 @@ namespace subsystems::swerve {
         frc::SwerveDrivePoseEstimator<4U>* poseEstimator = new frc::SwerveDrivePoseEstimator<4> (constants::swerve::swerve_drive::kKinematics, m_pigeon.GetRotation2d(), 
         m_modulePositions, frc::Pose2d{}, constants::vision::kEncoderTrustCoefficients, constants::vision::kMainVisionTrustCoefficients);
         m_poseHelper->SetPoseEstimator(poseEstimator);
-        
+
         pathplanner::RobotConfig guiConfig = pathplanner::RobotConfig::fromGUISettings();
     
         // / Setup autobuilder for pathplannerlib
@@ -203,12 +202,23 @@ namespace subsystems::swerve {
     
         frc::SmartDashboard::PutNumber("SWERVE DRIVE FL ANGLE: ", m_modules.m_frontLeft.GetRawAnglePower());
         frc::SmartDashboard::PutNumber("SWERVE DRIVE FL DRIVE: ", m_modules.m_frontLeft.GetRawDrivePower());
-    
         
         UpdateEstimator();
         GetRobotRelativeSpeeds();
         RefreshAllSignals();
     }
+
+    void Drive::SimulationPeriodic() {
+        for (SwerveModule* module : m_moduleArray) {
+            module->SimulationPeriodic();
+        }
+
+        frc::ChassisSpeeds speeds = GetRobotRelativeSpeeds();
+
+        m_pigeonSimYaw += units::degree_t{ speeds.omega.value() };
+        m_pigeonSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+        m_pigeonSim.SetRawYaw(m_pigeonSimYaw);
+    };
     
     void Drive::RefreshAllSignals() {
         frc::SmartDashboard::PutString("Swerve signal status", ctre::phoenix6::BaseStatusSignal::WaitForAll(0.02_s, m_allSignals).GetName());

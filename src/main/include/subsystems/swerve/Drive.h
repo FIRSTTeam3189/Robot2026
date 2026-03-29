@@ -15,6 +15,8 @@
 #include <frc/Preferences.h>
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/TimedRobot.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <math.h>
 #include <iostream>
@@ -64,6 +66,7 @@ namespace subsystems {
          * Will be called periodically whenever the CommandScheduler runs.
          */
         void Periodic() override;
+        void SimulationPeriodic() override;
 
       private:
 
@@ -74,6 +77,8 @@ namespace subsystems {
         wpi::array<SwerveModule*, 4> m_moduleArray;
         subsystems::vision::PoseEstimatorHelper *m_poseHelper;
         ctre::phoenix6::hardware::Pigeon2 m_pigeon;
+        ctre::phoenix6::sim::Pigeon2SimState& m_pigeonSim;
+        units::degree_t m_pigeonSimYaw {0};
         wpi::array<frc::SwerveModulePosition, 4> m_modulePositions;
         std::string m_drivePKey;
         std::string m_driveIKey;

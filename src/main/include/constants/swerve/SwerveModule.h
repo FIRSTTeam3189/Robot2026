@@ -9,6 +9,7 @@
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
+#include <units/moment_of_inertia.h>
 #include "constants/Global.h"
 
 #include "constants/swerve/SwerveModule.h"
@@ -134,8 +135,8 @@
 
         // Motor + sensor inversions
         constexpr bool kDriveMotorInverted = true;
-        constexpr bool kAngleMotorInverted = false;
-        constexpr bool kCANcoderInverted = true;
+        constexpr bool kAngleMotorInverted = true;
+        constexpr bool kCANcoderInverted = true; //! Do not invert angle and CAN 
 
         constexpr units::volt_t kMaxAngleVoltage {12.0};
         // Current limits -- allows continuous operation at certain amps, or a peak of greater amps for <threshold time
@@ -189,8 +190,13 @@
         constexpr double kWheelRadiusMeters {0.0444};
         constexpr double kWheelCircumferenceMeters {2.0 * PI * kWheelRadiusMeters};
 
+        // Ratio of Rotor spins to Wheel spins
         constexpr double kDriveGearRatio {4.42};
         constexpr double kAngleGearRatio {25.91};
+
+        // TODO: Replace with actual moment of inertia values
+        constexpr units::moment_of_inertia::kilogram_square_meter_t kDriveMotorMOI {0.025};
+        constexpr units::moment_of_inertia::kilogram_square_meter_t kAngleMotorMOI {0.004};
 
         constexpr double kRotationsPerMeter {1.0 / kWheelCircumferenceMeters};
     }

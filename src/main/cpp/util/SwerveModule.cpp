@@ -6,6 +6,9 @@ SwerveModule::SwerveModule(int moduleNumber, int driveMotorID, int angleMotorID,
 m_driveMotor(driveMotorID, "Swerve"),
 m_angleMotor(angleMotorID, "Swerve"),
 m_CANcoder(CANcoderID, "Swerve"),
+m_driveMotorSim(m_driveMotor.GetSimState()),
+m_angleMotorSim(m_angleMotor.GetSimState()),
+m_CANcoderSim(m_CANcoder.GetSimState()),
 m_PIDValues{SwerveModuleConstants::kPDrive, SwerveModuleConstants::kIDrive, SwerveModuleConstants::kDDrive,
             SwerveModuleConstants::kPAngle, SwerveModuleConstants::kIAngle, SwerveModuleConstants::kDAngle},
 m_moduleNumber(moduleNumber),
@@ -20,7 +23,6 @@ m_CANcoderOffset(CANcoderOffset)
     m_signals.emplace_back(&m_anglePosition);
     m_signals.emplace_back(&m_driveVelocity);
     m_signals.emplace_back(&m_angleVelocity);
-
 }
 
 void SwerveModule::ConfigDriveMotor() {
@@ -99,6 +101,42 @@ void SwerveModule::ConfigAngleMotor(int CANcoderID) {
     m_angleConfigs.MotorOutput.NeutralMode = SwerveModuleConstants::kAngleNeutralMode;
 
     m_angleMotor.GetConfigurator().Apply(m_angleConfigs);
+}
+
+void SwerveModule::SimulationPeriodic() {
+    units::volt_t voltage{ frc::RobotController::GetBatteryVoltage() };
+    m_driveMotorSim.SetSupplyVoltage(voltage);
+    m_angleMotorSim.SetSupplyVoltage(voltage);
+    m_CANcoderSim.SetSupplyVoltage(voltage);
+
+    // Feed the input for the drive sim system
+    units::volt_t driveVoltage = m_driveMotorSim.GetMotorVoltage();
+    units::volt_t angleVoltage = m_angleMotorSim.GetMotorVoltage();
+
+    m_driveMotorSimModel.SetInputVoltage(driveVoltage);
+    m_driveMotorSimModel.Update(20_ms);
+
+    m_angleMotorSimModel.SetInputVoltage(angleVoltage);
+    m_angleMotorSimModel.Update(20_ms);
+
+    m_driveMotorSim.SetRawRotorPosition(
+        SwerveModuleConstants::kDriveGearRatio * m_driveMotorSimModel.GetAngularPosition()
+    );
+
+    m_driveMotorSim.SetRotorVelocity(
+        SwerveModuleConstants::kDriveGearRatio * m_driveMotorSimModel.GetAngularVelocity()
+    );
+
+    m_angleMotorSim.SetRawRotorPosition(
+        SwerveModuleConstants::kAngleGearRatio * m_angleMotorSimModel.GetAngularPosition()
+    );
+
+    m_angleMotorSim.SetRotorVelocity(
+        SwerveModuleConstants::kAngleGearRatio * m_angleMotorSimModel.GetAngularVelocity()
+    );
+
+    m_CANcoderSim.SetRawPosition(m_angleMotorSimModel.GetAngularPosition());
+    m_CANcoderSim.SetVelocity(m_angleMotorSimModel.GetAngularVelocity());
 }
 
 void SwerveModule::ConfigCANcoder() {
