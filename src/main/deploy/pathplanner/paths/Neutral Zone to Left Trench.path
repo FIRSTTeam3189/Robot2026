@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.785026660373024,
-        "y": 5.437
+        "x": 6.91,
+        "y": 6.115
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.575600489744467,
-        "y": 7.559283686596599
+        "x": 6.702185714285715,
+        "y": 7.714828571428571
       },
       "isLocked": false,
       "linkedName": "Neutral Zone Left Side"
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 3.1170396841644052,
-        "y": 6.8915157898152435
+        "x": 2.933,
+        "y": 7.1
       },
       "prevControl": {
-        "x": 3.6409445756071817,
-        "y": 7.637421490905288
+        "x": 3.527685714285714,
+        "y": 7.559342857142857
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Score 1 Left End"
     }
   ],
   "rotationTargets": [
@@ -58,7 +58,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.651,
+    "maxVelocity": 2.5,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -67,13 +67,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -56.6236913205513
+    "rotation": -59.08043225318725
   },
   "reversed": false,
   "folder": "Shoot Twice",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

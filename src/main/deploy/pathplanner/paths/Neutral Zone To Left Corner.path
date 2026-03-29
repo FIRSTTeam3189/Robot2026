@@ -1,0 +1,100 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.91,
+        "y": 6.115
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.702185714285715,
+        "y": 7.714828571428571
+      },
+      "isLocked": false,
+      "linkedName": "Neutral Zone Left Side"
+    },
+    {
+      "anchor": {
+        "x": 5.440947686300161,
+        "y": 7.430745600151036
+      },
+      "prevControl": {
+        "x": 7.146425982076714,
+        "y": 7.398424522133104
+      },
+      "nextControl": {
+        "x": 3.7871657664714995,
+        "y": 7.4620869632090105
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.5216285714285711,
+        "y": 7.533428571428571
+      },
+      "prevControl": {
+        "x": 0.7716285714285711,
+        "y": 7.533428571428571
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9162324604235198,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.266376696134868,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.23,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Auto Shoot",
+      "waypointRelativePos": 1.2325581395348837,
+      "endWaypointRelativePos": 2.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Shoot Twice",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

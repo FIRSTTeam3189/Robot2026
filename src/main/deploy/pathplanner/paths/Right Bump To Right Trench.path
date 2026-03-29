@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9316571428571425,
+        "y": 2.791114285714285
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.9316571428571425,
+        "y": 2.7911142857142845
+      },
+      "isLocked": false,
+      "linkedName": "Right Bump Score"
+    },
+    {
+      "anchor": {
+        "x": 3.627,
+        "y": 0.694
+      },
+      "prevControl": {
+        "x": 2.627,
+        "y": 0.694
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right Trench Starting"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Shoot Twice",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 38.990994042505456
+  },
+  "useDefaultConstraints": true
+}

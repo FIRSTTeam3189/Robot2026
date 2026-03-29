@@ -4,53 +4,53 @@
     {
       "anchor": {
         "x": 6.910422607150909,
-        "y": 1.5607078048760252
+        "y": 1.9100285714285712
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.012152088093307,
-        "y": 0.04003359401114448
+        "x": 6.789289152118522,
+        "y": 1.6857413568631023
       },
       "isLocked": false,
       "linkedName": "Neutral Zone Right Side"
     },
     {
       "anchor": {
-        "x": 5.506792197444463,
-        "y": 0.6827742571730198
+        "x": 5.926233387262049,
+        "y": 0.57885016320457
       },
       "prevControl": {
-        "x": 7.116417878518226,
-        "y": 0.8582004864657768
+        "x": 7.4120419796192545,
+        "y": 0.5214845509561814
       },
       "nextControl": {
-        "x": 3.7212293127371447,
-        "y": 0.4881733833721323
+        "x": 3.3758533746423867,
+        "y": 0.6773178336989717
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9331022564446623,
-        "y": 1.116105312808902
+        "x": 3.0094,
+        "y": 1.1585142857142854
       },
       "prevControl": {
-        "x": 3.495636099795258,
-        "y": 0.6491769644242953
+        "x": 3.2505853755037553,
+        "y": 0.4581668155294074
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Score 1 Right End"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.9162324604235198,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 2.5393649376075924
     },
     {
-      "waypointRelativePos": 1.266376696134868,
+      "waypointRelativePos": 1.1800684878700656,
       "rotationDegrees": 0.0
     }
   ],
@@ -58,7 +58,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.651,
+    "maxVelocity": 2.5,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 38.990994042505456
   },
   "reversed": false,
   "folder": "Shoot Twice",
