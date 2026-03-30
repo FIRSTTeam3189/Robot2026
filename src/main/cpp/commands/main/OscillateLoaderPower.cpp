@@ -28,7 +28,7 @@ namespace commands::main {
 
     double targetPower = m_power; 
     if (elapsed >= periodStart && elapsed <= periodStop) { //unstuck balls for 0.5s
-        targetPower = -m_power; 
+        targetPower = -0.95; 
     } else if (elapsed > periodStop) {
       m_timer.Restart();
     } 

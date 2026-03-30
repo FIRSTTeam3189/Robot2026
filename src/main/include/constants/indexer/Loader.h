@@ -23,13 +23,13 @@ namespace constants {
 
             constexpr int kLoaderCurrentLimit {45};
 
-            constexpr double kLoadFuelPower {0.50}; 
-            constexpr double kReverseRollerPower {-0.5};
+            constexpr double kLoadFuelPower {1.0}; 
+            constexpr double kReverseRollerPower {-1.0};
 
             constexpr bool kLoaderMotorInverted {false};
 
             constexpr units::time::second_t kOscillatePeriod {2.0_s}; 
-            constexpr units::time::second_t kOscillateDuration {0.25_s}; 
+            constexpr units::time::second_t kOscillateDuration {0.15_s}; 
 
             constexpr units::second_t kLoaderDelay {0.5_s}; 
 

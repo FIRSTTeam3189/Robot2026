@@ -42,12 +42,12 @@ namespace actions::robot
             // actions::intake::ShakeIntake(intake),
             frc2::SequentialCommandGroup(
                 frc2::WaitCommand(constants::indexer::loader::kShootDelay),
-                // commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
-                // commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
-                frc2::ParallelCommandGroup(
-                    commands::main::OscillateLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
-                    commands::main::OscillateKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
-                )
+                commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
+                commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
+                // frc2::ParallelCommandGroup(
+                //     commands::main::OscillateLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
+                //     commands::main::OscillateKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
+                // )
             ),
             commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::AligntoHub),
             commands::util::SetFlywheelMotorVelocity(flywheel, flywheel->GetFlywheelTargetRPM())
@@ -79,12 +79,15 @@ namespace actions::robot
                 actions::intake::ShakeIntake(intake),
                 frc2::SequentialCommandGroup(
                     frc2::WaitCommand(constants::indexer::loader::kShootDelay),
-                    // commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
-                    // commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
-                    frc2::ParallelCommandGroup(
-                        commands::main::OscillateLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
-                        commands::main::OscillateKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
-                    )
+                    commands::util::SetLoaderPower(loader, constants::indexer::loader::kLoadFuelPower),
+                    commands::util::SetShooterKickerPower(kicker, -constants::indexer::kicker::kKickerMotorPower),
+                    frc2::WaitCommand(constants::indexer::loader::kShootDelay),
+                    commands::util::SetLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
+                    commands::util::SetShooterKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
+                    // frc2::ParallelCommandGroup(
+                    //     commands::main::OscillateLoaderPower(loader, -constants::indexer::loader::kLoadFuelPower),
+                    //     commands::main::OscillateKickerPower(kicker, constants::indexer::kicker::kKickerMotorPower)
+                    // )
                 ),
                 commands::util::SetHoodAngle(articulation, constants::shooter::HoodTarget::AligntoHub),
                 commands::util::SetFlywheelMotorVelocity(flywheel, flywheel->GetFlywheelTargetRPM())

@@ -68,9 +68,9 @@ void RobotContainer::ConfigureDriverBindings() {
   shootFuelDumpButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
   shootFuelDumpButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill));
 
-  // frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();}); 
-  // setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
-  // setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
+  frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();}); 
+  setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
+  setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
 
   // frc2::Trigger toggleIntakeStateButton([this]() { return m_bill.GetL1Button(); }); 
   // toggleIntakeStateButton.OnTrue(actions::intake::ToggleIntakeState(m_intake));
@@ -106,6 +106,8 @@ void RobotContainer::RegisterAutoCommands() {
 
   pathplanner::NamedCommands::registerCommand("Intake", actions::intake::IntakeExtendState(m_intake).ToPtr());
   pathplanner::NamedCommands::registerCommand("Retract Intake", actions::intake::IntakeRetractState(m_intake).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
+  pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill)); 
   pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
   pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake));
   pathplanner::NamedCommands::registerCommand("Set Pose Left Trench", actions::SetLeftTrenchAutoPose(m_swerveDrive));

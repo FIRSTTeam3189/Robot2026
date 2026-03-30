@@ -35,56 +35,6 @@ void Robot::RobotPeriodic() {
 
   frc::SmartDashboard::PutString("FLYWHEEL CURRENT COMMAND", m_container.GetFlywheelSubsystem()->GetCurrentCommand()->GetName());
 
-  
-
-  m_autoWinners = frc::DriverStation::GetGameSpecificMessage();
-  m_timeLeft = frc::DriverStation::GetMatchTime(); 
-
-  if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
-    if (m_autoWinners == "B") {
-      m_autoWon = true;
-    } else if (m_autoWinners == "R") {
-      m_autoWon = false;
-    }
-  } else {
-    if (m_autoWinners == "R") {
-      m_autoWon = true;
-    } else if (m_autoWinners == "B") {
-      m_autoWon = false;
-    }
-  }
-
-  if (m_autoWon) {
-    if (m_timeLeft.value() <= 30) {
-      m_shouldScore = true;
-    } else if (m_timeLeft.value() <= 55) {
-      m_shouldScore = true;
-    } else if (m_timeLeft.value() <= 80) {
-      m_shouldScore = false;
-    } else if (m_timeLeft.value() <= 105) {
-      m_shouldScore = true;
-    } else if (m_timeLeft.value() <= 130) {
-      m_shouldScore = false;
-    } else if (m_timeLeft.value() <= 160) {
-      m_shouldScore = true;
-    }
-  } else if (m_autoWon == false) {
-    if (m_timeLeft.value() <= 30) {
-      m_shouldScore = true;
-    } else if (m_timeLeft.value() <= 55) {
-      m_shouldScore = false;
-    } else if (m_timeLeft.value() <= 80) {
-      m_shouldScore = true;
-    } else if (m_timeLeft.value() <= 105) {
-      m_shouldScore = false;
-    } else if (m_timeLeft.value() <= 160) {
-      m_shouldScore = true;
-    }
-  }
-
-
-  frc::SmartDashboard::PutBoolean("Won auto?", m_autoWon);
-  frc::SmartDashboard::PutBoolean("Should score?", m_shouldScore);
 
   frc::SmartDashboard::PutNumber("Current Drive State", static_cast<int>(m_container.GetDriveState())); 
   // uncomment if you want to slow swerves for shooting and also use AdvancedShootSlowSwerves in button and pass in swerve, drive state and bill
@@ -193,6 +143,57 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
+
+
+  m_autoWinners = frc::DriverStation::GetGameSpecificMessage();
+  m_timeLeft = frc::DriverStation::GetMatchTime(); 
+
+  if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue) {
+    if (m_autoWinners == "B") {
+      m_autoWon = true;
+    } else if (m_autoWinners == "R") {
+      m_autoWon = false;
+    }
+  } else {
+    if (m_autoWinners == "R") {
+      m_autoWon = true;
+    } else if (m_autoWinners == "B") {
+      m_autoWon = false;
+    }
+  }
+
+  if (m_autoWon) {
+    if (m_timeLeft.value() <= 30) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 55) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 80) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 105) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 130) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 160) {
+      m_shouldScore = true;
+    }
+  } else if (m_autoWon == false) {
+    if (m_timeLeft.value() <= 30) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 55) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 80) {
+      m_shouldScore = true;
+    } else if (m_timeLeft.value() <= 105) {
+      m_shouldScore = false;
+    } else if (m_timeLeft.value() <= 160) {
+      m_shouldScore = true;
+    }
+  }
+
+
+  frc::SmartDashboard::PutBoolean("Won auto?", m_autoWon);
+  frc::SmartDashboard::PutBoolean("Should score?", m_shouldScore);
+  frc::SmartDashboard::PutNumber("Time Left For Shift", m_timeLeft.value());
   // m_container.PrintActiveCommands();
 
 }

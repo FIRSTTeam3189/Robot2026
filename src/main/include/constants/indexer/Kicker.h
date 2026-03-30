@@ -15,11 +15,11 @@ namespace constants {
     namespace indexer {
         namespace kicker {
             constexpr int kShooterKickerID{22};
-            constexpr double kKickerMotorPower {0.75}; 
-            constexpr double kKickerMotorPowerReverse {0.75}; 
+            constexpr double kKickerMotorPower {1.00}; 
+            constexpr double kKickerMotorPowerReverse {-1.0}; 
             
             constexpr units::time::second_t kOscillatePeriod {2.0_s}; 
-            constexpr units::time::second_t kOscillateDuration {0.25_s}; 
+            constexpr units::time::second_t kOscillateDuration {0.15_s}; 
 
             constexpr bool kKickerMotorInverted {true};
             constexpr ctre::phoenix6::signals::NeutralModeValue kKickerNeutralMode {ctre::phoenix6::signals::NeutralModeValue::Brake};
