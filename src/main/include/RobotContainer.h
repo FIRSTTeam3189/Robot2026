@@ -44,8 +44,6 @@
 #include "subsystems/indexer/Loader.h"
 #include "subsystems/climber/Climber.h"
 
-
-
 // #include "subsystems/Limelight.h"
 
 #include "constants/Controller.h"
@@ -111,7 +109,7 @@ class RobotContainer {
 
   static void SetShooterState(constants::ShooterState shooterState);
   static constants::ShooterState GetShooterState();
-
+  
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed

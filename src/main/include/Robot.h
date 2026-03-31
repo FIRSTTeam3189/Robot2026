@@ -11,6 +11,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <ctre/phoenix6/SignalLogger.hpp>
 
+#include "simulation/SimulatedArena.h"
+
 #include "RobotContainer.h"
 
 class Robot : public frc::TimedRobot {

@@ -35,8 +35,6 @@ void Robot::RobotPeriodic() {
 
   frc::SmartDashboard::PutString("FLYWHEEL CURRENT COMMAND", m_container.GetFlywheelSubsystem()->GetCurrentCommand()->GetName());
 
-  
-
   m_autoWinners = frc::DriverStation::GetGameSpecificMessage();
   m_timeLeft = frc::DriverStation::GetMatchTime(); 
 
@@ -205,12 +203,18 @@ void Robot::TestPeriodic() {}
 /**
  * This function is called once when the robot is first started up.
  */
-void Robot::SimulationInit() {}
+void Robot::SimulationInit() {
+  auto& simArena = simulation::SimulatedArena::GetInstance();
+  simArena.PlaceGamePiecesOnField();
+}
 
 /**
  * This function is called periodically whilst in simulation.
  */
-void Robot::SimulationPeriodic() {}
+void Robot::SimulationPeriodic() {
+  auto& simArena = simulation::SimulatedArena::GetInstance();
+  simArena.SimulationPeriodic();
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
