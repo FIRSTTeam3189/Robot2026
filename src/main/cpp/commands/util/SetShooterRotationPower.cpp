@@ -12,15 +12,19 @@ namespace commands::util {
         AddRequirements(shooter);
     }
     
-    void SetShooterRotationPower::Execute() {
+    void SetShooterRotationPower::Initialize() {
         m_turret->SetTurretRotationMotorPower(m_power);
     }
     
+    void SetShooterRotationPower::Execute() {
+        // m_turret->SetTurretRotationMotorPower(m_power);
+    }
+    
     void SetShooterRotationPower::End(bool interrupted) {
-        m_turret->SetTurretRotationMotorPower(0.0);
+        // m_turret->SetTurretRotationMotorPower(0.0);
     }
     
     bool SetShooterRotationPower::IsFinished() {
-        return false;
+        return true;
     }
 }

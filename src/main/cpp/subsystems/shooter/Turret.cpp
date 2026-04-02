@@ -38,8 +38,11 @@ namespace subsystems::shooter {
         if (frc::Preferences::GetBoolean("Tuning Mode", false) == !(!(!false))) {
             UpdatePreferences();
         }
-    
-        SetTurretAngle(m_targetRotationAngle);
+        
+        if (m_state != constants::shooter::TurretTarget::Manual) {
+            SetTurretAngle(m_targetRotationAngle);
+        }
+
     }
     
     units::degree_t Turret::GetCurrentTargetAngle() {
@@ -82,6 +85,21 @@ namespace subsystems::shooter {
             
              
         m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
+        m_turretMotor.SetPosition(units::turn_t{constants::shooter::turret::kMinimumAngleNegative.value() / constants::shooter::turret::kRotationConversionRotationsToDegrees});
+        SetState(constants::shooter::TurretTarget::PointNeg56Deg); 
+    }
+
+    void Turret::DisableReverseSoftLimit() {
+        m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+        m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
+    }
+
+    void Turret::EnableReverseSoftLimit() {
+        m_shooterConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = constants::shooter::turret::kSoftLimitEnabledReverse;
+        m_turretMotor.GetConfigurator().Apply(m_shooterConfig);
+    }
+
+    void Turret::ZeroTurret() {
         m_turretMotor.SetPosition(units::turn_t{constants::shooter::turret::kMinimumAngleNegative.value() / constants::shooter::turret::kRotationConversionRotationsToDegrees});
         SetState(constants::shooter::TurretTarget::PointNeg56Deg); 
     }
@@ -138,7 +156,7 @@ namespace subsystems::shooter {
                 frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
                 frc::Pose2d targetPose = util::align::turret::CalculateTargetPose(currentPose);
     
-                targetPose = util::align::turret::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), m_targetField); 
+                targetPose = util::align::turret::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), GetRobotAngularVelocity(), m_targetField); 
     
                 m_targetRotationAngle = units::degree_t{util::align::turret::GetTargetAngle(currentPose, targetPose, constants::auto_align::kTurretOffset,
                                                                                     m_turretField, m_velocityField)};
@@ -163,9 +181,12 @@ namespace subsystems::shooter {
             case (constants::shooter::TurretTarget::PointNeg56Deg): {
                 m_targetRotationAngle = constants::shooter::turret::kMinimumAngleNegative; 
                 break; 
-            }
+            }             
             case (constants::shooter::TurretTarget::PointMaxDeg): {
                 m_targetRotationAngle = constants::shooter::turret::kMaximumAngle; 
+                break; 
+            }
+            case (constants::shooter::TurretTarget::Manual): {
                 break; 
             }
             default:
@@ -235,5 +256,21 @@ namespace subsystems::shooter {
         
         return {fieldRelativeSpeeds.vx.value(), fieldRelativeSpeeds.vy.value()}; 
     }
+
+    units::angular_velocity::radians_per_second_t Turret::GetRobotAngularVelocity() {
+        frc::ChassisSpeeds robotSpeeds = m_swerveDrive->GetRobotRelativeSpeeds();
+    
+        frc::ChassisSpeeds fieldRelativeSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+            robotSpeeds.vx, 
+            robotSpeeds.vy, 
+            robotSpeeds.omega, 
+            m_swerveDrive->GetNormalizedYaw()
+        );
+    
+        frc::SmartDashboard::PutNumber("Robot Velocities/omega", fieldRelativeSpeeds.omega.value());
+        
+        return fieldRelativeSpeeds.omega; 
+    }
+
 }
 

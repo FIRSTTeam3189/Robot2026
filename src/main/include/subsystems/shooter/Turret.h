@@ -66,8 +66,15 @@ namespace subsystems {
 
         void SetState(constants::shooter::TurretTarget state);
 
+        void ZeroTurret(); 
+
+        void DisableReverseSoftLimit();
+
+        void EnableReverseSoftLimit();
+
         Vector2d GetRobotVelocity();
-        
+
+        units::angular_velocity::radians_per_second_t GetRobotAngularVelocity(); 
         
         private:
         // HARDWARE (subsystem owns motors)

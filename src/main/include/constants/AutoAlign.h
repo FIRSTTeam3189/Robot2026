@@ -79,7 +79,7 @@ namespace constants {
         const Vector2d kTurretOffset(0.15, 0.0); 
 
         constexpr double kMinimumVelocityMultiplier {0.02}; 
-        constexpr double kVelocityMultiplier {1.3}; 
+        constexpr double kVelocityMultiplier {1.45}; 
 
         const std::vector<double> kPowerInterpolatorDistances = {1.0, 1.5, 2.0, 2.5, 3.0}; 
         const std::vector<double> kPowerInterpolatorPowers = {0.53, 0.60, 0.68, 0.75, 0.80}; 
@@ -96,8 +96,9 @@ namespace constants {
         constexpr units::meter_t kBlueTrenchRight {5.200_m};
         constexpr units::meter_t kRedTrenchLeft {11.350_m};
 
-
         constexpr units::meter_t kHubWidth {1.2_m}; 
+
+        // constexpr units::angular_velocity::radians_per_second_t kAngularVelocityThreshold {0.0_rad_p}
         
     };
 };

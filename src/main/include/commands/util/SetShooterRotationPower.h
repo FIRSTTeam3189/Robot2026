@@ -17,6 +17,8 @@ namespace commands {
       /**
        * Will be called periodically whenever the CommandScheduler runs.
        */
+
+      void Initialize() override; 
       void Execute() override;
       void End(bool interrupted) override;
       bool IsFinished() override;
@@ -24,9 +26,7 @@ namespace commands {
      private:
       // Components (e.g. motor controllers and sensors) should generally be
       // declared private and exposed only through public methods.
-      subsystems::shooter::Turret
-    
-     *m_turret;
+      subsystems::shooter::Turret *m_turret;
       double m_power;
     };
   };

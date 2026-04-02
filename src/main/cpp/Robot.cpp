@@ -75,6 +75,12 @@ void Robot::RobotPeriodic() {
       m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::AutoVelocity);
       break;
     }
+    case (constants::ShooterState::ManualTurretOnly) : {
+      RobotContainer::SetShooterState(constants::ShooterState::ManualTurretOnly);
+      m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::Manual);
+      m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::AutoVelocity);
+      break; 
+    }
   }
 }
 
@@ -136,6 +142,10 @@ void Robot::TeleopInit() {
    if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Cancel();
   }
+  m_container.GetFlywheelSubsystem()->SetFlywheelMotorPower(0.0); 
+  m_container.GetLoaderSubsystem()->SetLoaderMotorPower(0.0);
+  m_container.GetKickerSubsystem()->SetKickerMotorPower(0.0); 
+  m_container.GetIntakeSubsystem()->SetState(subsystems::intake::State::RetractIntake); 
   // m_container.Getshooter()->SetState(constants::shooter::TurretTarget::AlignHub); 
 }
 

@@ -3,8 +3,8 @@
 namespace util::align::turret
 {
 
-    frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity,
-                                         frc::Field2d &velocityField)
+    frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity, 
+                                         units::angular_velocity::radians_per_second_t angularVelocity, frc::Field2d &velocityField)
     {
         Vector2d targetVec(targetPose); // Account for velocity
         double robotSpeed = robotVelocity.Length();
@@ -19,6 +19,27 @@ namespace util::align::turret
 
         return targetPose;
     }
+
+    // Vector2d GetRotationCompensationVector(frc::Pose2d robotPose, frc::Pose2d targetPose, units::angular_velocity::radians_per_second_t angularVelocity) {
+    //     if (angularVelocity < constants::auto_align::kAngularVelocityThreshold) {
+    //         return {0.0, 0.0}; 
+    //     }
+    //     if (frc::DriverStation::GetAlliance())
+    //     {
+    //         if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
+    //         {
+    //             if (angularVelocity.value() > 0) {
+                    
+    //             }
+    //         }
+    //         else
+    //         {
+
+    //         }
+    //     }
+
+    //     return {0.0, 0.0}; 
+    // }
 
     frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose)
     {

@@ -106,6 +106,11 @@ class RobotContainer {
   util::interpolator::Data* GetInterpolatorData(); 
   subsystems::swerve::Drive* GetSwerveSubsystem(); 
   subsystems::shooter::Flywheel* GetFlywheelSubsystem();
+  subsystems::indexer::Loader* GetLoaderSubsystem();
+  subsystems::indexer::Kicker* GetKickerSubsystem();
+  
+  subsystems::intake::Intake* GetIntakeSubsystem(); 
+
   subsystems::swerve::State GetDriveState(); 
   frc::PS5Controller* GetBill(); 
 

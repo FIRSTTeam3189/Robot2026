@@ -78,7 +78,24 @@ void RobotContainer::ConfigureDriverBindings() {
   frc2::Trigger extendIntakeButton([this]() { return m_bill.GetL1Button(); }); 
   extendIntakeButton.OnTrue(actions::intake::IntakeExtendState(m_intake).ToPtr());
   extendIntakeButton.OnFalse(actions::intake::IntakeRetractState(m_intake).ToPtr());
-  
+
+  frc2::Trigger runTurretLeftButton([this]() { return m_bill.GetCircleButton();}); 
+  runTurretLeftButton.OnTrue(frc2::SequentialCommandGroup(
+    frc2::InstantCommand([this]() {
+      SetShooterState(constants::ShooterState::ManualTurretOnly); 
+      m_turret->DisableReverseSoftLimit(); 
+    }, {m_turret}), 
+    commands::util::SetShooterRotationPower(m_turret, -0.07)
+  ).ToPtr());
+  runTurretLeftButton.OnFalse(frc2::SequentialCommandGroup(
+    commands::util::SetShooterRotationPower(m_turret, 0.0),
+    frc2::InstantCommand([this]() {
+      m_turret->ZeroTurret(); 
+      m_turret->EnableReverseSoftLimit(); 
+      SetShooterState(constants::ShooterState::Automatic); 
+    }, {m_turret})
+  ).ToPtr());  
+
   // frc2::Trigger ejectFuelButton([this] { return m_bill.GetR1Button(); }); 
   // ejectFuelButton.OnTrue(actions::robot::EjectFuel(m_intake, m_loader, m_kicker));
   // ejectFuelButton.OnFalse(actions::robot::EjectFuelEnd(m_intake, m_loader, m_kicker));
@@ -106,8 +123,8 @@ void RobotContainer::RegisterAutoCommands() {
 
   pathplanner::NamedCommands::registerCommand("Intake", actions::intake::IntakeExtendState(m_intake).ToPtr());
   pathplanner::NamedCommands::registerCommand("Retract Intake", actions::intake::IntakeRetractState(m_intake).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
-  pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill)); 
+  pathplanner::NamedCommands::registerCommand("Auto Shoot Dump", actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr()); 
+  pathplanner::NamedCommands::registerCommand("Auto Shoot Dump End", actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill)); 
   pathplanner::NamedCommands::registerCommand("Auto Shoot", actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
   pathplanner::NamedCommands::registerCommand("Auto Shoot End", actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake));
   pathplanner::NamedCommands::registerCommand("Set Pose Left Trench", actions::SetLeftTrenchAutoPose(m_swerveDrive));
@@ -315,9 +332,21 @@ subsystems::swerve::Drive* RobotContainer::GetSwerveSubsystem() {
   return m_swerveDrive; 
 }
 
+subsystems::intake::Intake* RobotContainer::GetIntakeSubsystem() {
+  return m_intake; 
+}
+
 
 subsystems::shooter::Flywheel* RobotContainer::GetFlywheelSubsystem() {
   return m_flywheel;
+}
+  
+subsystems::indexer::Loader* RobotContainer::GetLoaderSubsystem() {
+  return m_loader;
+}
+
+subsystems::indexer::Kicker* RobotContainer::GetKickerSubsystem() {
+  return m_kicker;
 }
   
   

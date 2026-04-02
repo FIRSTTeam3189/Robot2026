@@ -33,7 +33,6 @@ namespace actions::robot
         return commands::util::SetFlywheelMotorVelocity(flywheel, rpm).ToPtr();
     }
 
-    // ! timer shoot 
     frc2::ParallelCommandGroup AdvancedShoot(subsystems::shooter::Turret *turret, subsystems::shooter::Flywheel *flywheel,
                                              subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader, 
                                              subsystems::shooter::Hood *articulation, subsystems::intake::Intake *intake)
@@ -54,7 +53,6 @@ namespace actions::robot
         );
     }
 
-    // // ! timer shoot
     frc2::CommandPtr AdvancedShootEnd(subsystems::indexer::Kicker *kicker, subsystems::indexer::Loader *loader,
                                       subsystems::shooter::Hood *articulation, subsystems::shooter::Flywheel *flywheel,
                                       subsystems::intake::Intake *intake)
