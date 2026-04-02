@@ -15,10 +15,15 @@ namespace constants {
         constexpr double kPhotonVisionStdDevPerMeter {0.25};  // TODOOOOOOO
 
         
-
+        // 41 degrees measure from plate to camera
+        // 2.4 in radius 
+        // 0.04 m offset from the bottom side of triangle formed with camera and mounting plate
+        // 0.0254 m is the center point where the camera actually lies approx with measuring tape 
         const std::string kPhotonTurretFrontCamera {"Front Turret Camera"};
-        constexpr units::meter_t kPhotonTurretFrontCameraXOffset {-0.3_m}; 
-        constexpr units::meter_t kPhotonTurretFrontCameraYOffset {-0.14_m}; 
+        // constexpr units::meter_t kPhotonTurretFrontCameraXOffset {-0.3048508_m}; 
+        // constexpr units::meter_t kPhotonTurretFrontCameraYOffset {-0.1843532_m}; without offset 
+        constexpr units::meter_t kPhotonTurretFrontCameraXOffset {-0.330_m}; // with 0.0254 offset 
+        constexpr units::meter_t kPhotonTurretFrontCameraYOffset {-0.1843_m}; 
         constexpr units::meter_t kPhotonTurretFrontCameraZOffset {0.0_m};
         constexpr units::meter_t kPhotonTurretFrontCameraHeight {0.0_m};
         constexpr units::degree_t kPhotonTurretFrontCameraPitchOffset {0.0_deg}; 
