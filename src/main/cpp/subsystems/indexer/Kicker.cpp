@@ -18,6 +18,7 @@ namespace subsystems::indexer {
     
         m_kickerConfig.MotorOutput.Inverted = constants::indexer::kicker::kKickerMotorInverted;
         m_kickerConfig.MotorOutput.NeutralMode = constants::indexer::kicker::kKickerNeutralMode;
+        m_kickerConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 1.0_s;
     
         m_kickerMotor.GetConfigurator().Apply(m_kickerConfig);
     }

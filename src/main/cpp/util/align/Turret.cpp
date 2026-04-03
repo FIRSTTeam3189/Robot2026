@@ -51,11 +51,18 @@ namespace util::align::turret
 
                 if (robotPose.X() < constants::auto_align::kBlueHubPose.X())
                 {
+                    // scoring here - blue 
                     targetPose = constants::auto_align::kBlueHubPose;
                 }
                 else
-                {
-                    targetPose = constants::auto_align::kFerryBluePose;
+                {    
+                    // ferrying here - blue 
+                    if (robotPose.Y() < constants::auto_align::kBlueHubPose.Y()) {
+                        targetPose = constants::auto_align::kFerryBlueBottomPose; 
+                    } else {
+                        targetPose = constants::auto_align::kFerryBlueTopPose; 
+                    }
+                    // targetPose = constants::auto_align::kFerryBluePose;
                     // targetPose = frc::Pose2d(constants::auto_align::kMidpointOnFieldBlue, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
                 }
             }
@@ -63,11 +70,18 @@ namespace util::align::turret
             {
                 if (robotPose.X() > constants::auto_align::kRedHubPose.X())
                 {
+                    // scoring here - red 
                     targetPose = constants::auto_align::kRedHubPose;
                 }
                 else
                 {
-                    targetPose = constants::auto_align::kFerryRedPose;
+                    // ferrying here - red 
+                    if (robotPose.Y() < constants::auto_align::kRedHubPose.Y()) {
+                        targetPose = constants::auto_align::kFerryRedBottomPose; 
+                    } else {
+                        targetPose = constants::auto_align::kFerryRedTopPose; 
+                    }
+                    // targetPose = constants::auto_align::kFerryRedPose;
                     // targetPose = frc::Pose2d(constants::auto_align::kMidpointOnFieldRed, robotPose.Y(), frc::Rotation2d(0.0_deg)); // rot dont matter
                 }
             }

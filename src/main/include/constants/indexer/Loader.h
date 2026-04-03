@@ -33,7 +33,7 @@ namespace constants {
 
             constexpr units::second_t kLoaderDelay {0.5_s}; 
 
-            constexpr units::second_t kShootDelay {0.25_s}; 
+            constexpr units::second_t kShootDelay {0.35_s}; 
             
             constexpr rev::spark::SparkBaseConfig::IdleMode kRotationNeutralMode {rev::spark::SparkBaseConfig::IdleMode::kBrake};
         };

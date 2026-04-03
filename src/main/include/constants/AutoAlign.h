@@ -56,7 +56,12 @@ namespace constants {
         constexpr frc::Pose2d kFerryRightPose {3.07_m, 6.397_m, frc::Rotation2d(0.0_deg)};
 
         constexpr frc::Pose2d kFerryBluePose {0.466_m, 4.126_m, frc::Rotation2d{0.0_deg}}; 
+        constexpr frc::Pose2d kFerryBlueTopPose {1.675_m, 5.983_m, frc::Rotation2d{0.0_deg}}; 
+        constexpr frc::Pose2d kFerryBlueBottomPose {1.675_m, 1.941_m, frc::Rotation2d{0.0_deg}}; 
+
         constexpr frc::Pose2d kFerryRedPose {16.010_m, 4.126_m, frc::Rotation2d{0.0_deg}}; 
+        constexpr frc::Pose2d kFerryRedTopPose {14.843_m, 5.983_m, frc::Rotation2d{0.0_deg}}; 
+        constexpr frc::Pose2d kFerryRedBottomPose {14.843_m, 1.941_m, frc::Rotation2d{0.0_deg}}; 
 
         constexpr units::meter_t kMidpointOnFieldBlue {2.397_m};
         constexpr units::meter_t kMidpointOnFieldRed {14.381_m};
