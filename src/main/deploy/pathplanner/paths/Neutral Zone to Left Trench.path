@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.933,
-        "y": 7.1
+        "x": 2.9659075589621495,
+        "y": 7.430745600151036
       },
       "prevControl": {
-        "x": 3.527685714285714,
-        "y": 7.559342857142857
+        "x": 3.6583106316728786,
+        "y": 7.434181605293905
       },
       "nextControl": null,
       "isLocked": false,
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.08043225318725
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Shoot Twice",

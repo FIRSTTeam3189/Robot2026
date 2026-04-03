@@ -20,24 +20,24 @@
         "y": 0.659849779677312
       },
       "prevControl": {
-        "x": 7.4033452967730895,
-        "y": 0.6024841674289234
+        "x": 7.381584422487971,
+        "y": 0.9196232690849653
       },
       "nextControl": {
-        "x": 3.3671566917962217,
-        "y": 0.7583174501717137
+        "x": 5.513075524127882,
+        "y": 0.5880841597208052
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.806846822554476,
-        "y": 1.2676737666156532
+        "x": 2.982257435648439,
+        "y": 0.694
       },
       "prevControl": {
-        "x": 3.480892264887972,
-        "y": 0.4105467781295533
+        "x": 4.695171303728536,
+        "y": 0.6699010447781362
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,14 +47,10 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.9162324604235198,
-      "rotationDegrees": 2.5393649376075924
+      "rotationDegrees": 2.6510919129189108
     },
     {
       "waypointRelativePos": 1.1800684878700656,
-      "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 1.606951261821546,
       "rotationDegrees": 0.0
     }
   ],
@@ -71,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 38.990994042505456
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Shoot Twice",

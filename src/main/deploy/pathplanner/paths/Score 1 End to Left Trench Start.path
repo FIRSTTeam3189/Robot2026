@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.933,
-        "y": 7.1
+        "x": 2.9659075589621495,
+        "y": 7.430745600151036
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1986068055347143,
-        "y": 7.4570406487413505
+        "x": 3.3397350436172646,
+        "y": 7.4093481739660545
       },
       "isLocked": false,
       "linkedName": "Score 1 Left End"
@@ -20,12 +20,12 @@
         "y": 7.44
       },
       "prevControl": {
-        "x": 3.3201850545857368,
-        "y": 7.418545409010559
+        "x": 3.3529666086534666,
+        "y": 7.426990260680991
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Trench Starting"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 2.5,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Shoot Twice",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.08043225318725
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
