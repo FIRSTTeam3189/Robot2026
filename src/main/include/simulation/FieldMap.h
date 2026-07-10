@@ -30,7 +30,7 @@ public:
      * 
      * @return b2BodyDef
      */
-    b2BodyDef CreateObstacleDef() {
+    b2BodyDef CreateBodyDef() {
         b2BodyDef obstacleBodyDef;
         obstacleBodyDef.type = b2BodyType::b2_staticBody;
 
@@ -45,7 +45,7 @@ public:
      * @param fieldAbsolutePosition The center point of the convex shape.
      */
     void AddConvexShape(const std::vector<b2Vec2>& vertices, frc::Pose2d fieldAbsolutePosition) {
-        b2BodyDef convexObstacle = CreateObstacleDef();
+        b2BodyDef convexObstacle = CreateBodyDef();
         convexObstacle.position.Set(
             fieldAbsolutePosition.X().value(),
             fieldAbsolutePosition.Y().value()
@@ -67,7 +67,7 @@ public:
      * @param endPoint The end point of the line segment
      */
     void AddBorderLine(frc::Translation2d startPoint, frc::Translation2d endPoint) {
-        b2BodyDef lineObstacle = CreateObstacleDef();
+        b2BodyDef lineObstacle = CreateBodyDef();
 
         b2Vec2 middlePosition = b2Vec2(
             (startPoint.X().value() + endPoint.X().value()) / 2,
@@ -96,7 +96,7 @@ public:
      * @param fieldAbsolutePosition The center position of the rectangle
      */
     void AddRectangularObstacle(double width, double height, frc::Pose2d fieldAbsolutePosition) {
-        b2BodyDef rectangleObstacle = CreateObstacleDef();
+        b2BodyDef rectangleObstacle = CreateBodyDef();
         
         rectangleObstacle.position.Set(
             fieldAbsolutePosition.X().value(), 

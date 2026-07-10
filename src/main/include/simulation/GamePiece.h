@@ -12,7 +12,7 @@
 #include <units/mass.h>
 
 #include "simulation/box2d/box2d.h"
-#include "constants/Simulation.h"
+#include "constants/simulation/SimulatedArena.h"
 
 
 namespace simulation::pieces {
@@ -46,7 +46,7 @@ namespace simulation::pieces {
         GamePiece(PieceInfo pieceInfo, b2World* physicsWorld, frc::Pose3d initialPose);
         virtual ~GamePiece() = default;
 
-        virtual void SimulationPeriodic();
+        virtual void SimulationSubTick(int subtickNum);
         virtual void AirborneStep(units::second_t deltaTime);
 
         void Launch(const LaunchInfo& config);

@@ -1,103 +1,71 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
+#include <units/angle.h>
+
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/phoenix6/TalonFX.hpp>
-#include <ctre/phoenix6/signals/SpnEnums.hpp>
-#include <ctre/phoenix6/StatusSignal.hpp>
-#include <ctre/phoenix6/CANcoder.hpp>
-#include <ctre/phoenix6/core/CoreTalonFX.hpp>
+#include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Translation2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/kinematics/SwerveModulePosition.h>
-#include <frc/Preferences.h>
-#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/smartdashboard/Field2d.h>
-#include <frc/TimedRobot.h>
+
 #include <pathplanner/lib/auto/AutoBuilder.h>
-#include <math.h>
-#include <iostream>
-#include <string>
-#include <frc/geometry/Translation2d.h>
-#include "subsystems/vision/PoseEstimatorHelper.h"
-#include "util/SwerveModule.h"
-#include <ctre/phoenix6/Pigeon2.hpp>
-#include "constants/Vision.h"
+
 #include "constants/Automatic.h"
+#include "constants/Global.h"
+#include "constants/Vision.h"
+
 #include "subsystems/swerve/State.h"
-#include "subsystems/swerve/Modules.h"
 
-namespace subsystems {
-  
-  namespace swerve {
+
+namespace subsystems::swerve {
+    /**
+     * The interface class for a drivetrain.
+     * Anything that inherits this class must implement
+     * all of the pure virtual methods (methods that
+     * start with virtual and end in = 0) or else the
+     * program will not compile.
+     */
     class Drive : public frc2::SubsystemBase {
-      public:
-        Drive(subsystems::vision::PoseEstimatorHelper *helper);
-        void ConfigGyro();
-        
-        void Stop();
-        void Operate(units::meters_per_second_t xSpeed,
-                              units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
-                              bool fieldRelative,
-                              frc::Translation2d centerOfRotation);
-        void UpdateEstimator();
-        void DriveRobotRelative(frc::ChassisSpeeds speeds);
-        void SetModuleStates(std::array<frc::SwerveModuleState, 4> desiredStates);
-        units::degree_t GetNormalizedYaw();
-        units::degree_t GetNormalizedYawPigeon();
-        void RefreshAllSignals();
-        void ConfigSignals();
-        void SetBrakeMode(constants::BrakeMode mode);
-        void SetPose(frc::Pose2d pose, bool justRotation);
-        void SetAutoPose(frc::Pose2d pose, bool justRotation);
-        pathplanner::PathPlannerTrajectory GetOnFlyTrajectory();
-        void SetSlowMode(bool slow);
-        frc::Pose2d GetEstimatedPose();
-        frc::ChassisSpeeds GetRobotRelativeSpeeds();
+    public:
+        virtual ~Drive() = default;
 
-        void LogModuleStates(wpi::array<frc::SwerveModulePosition, 4> modulePositions);
+        // Non-interface methods. The default implementations
+        // of these methods are defined in the base class Drive.cpp,
+        // but you can override these implementations in a subclass
+        // if needed
+		virtual void ConfigurePathPlannerAutoBuilder();
+
+        // Motion methods
+        virtual void Stop() = 0;
+        virtual void Operate(
+          units::meters_per_second_t xSpeed,
+          units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
+          bool fieldRelative,
+          frc::Translation2d centerOfRotation
+        ) = 0;
+        virtual void DriveRobotRelative(frc::ChassisSpeeds speeds) = 0;
+        virtual void SetModuleStates(std::array<frc::SwerveModuleState, 4> desiredStates) = 0;
+
+        // Pose/odometry methods
+        virtual void UpdateEstimator() = 0;
+        virtual units::degree_t GetNormalizedYaw() = 0;
+        virtual void SetBrakeMode(constants::BrakeMode mode) = 0;
+        virtual void SetPose(frc::Pose2d pose, bool justRotation) = 0;
+        virtual void SetAutoPose(frc::Pose2d pose, bool justRotation) = 0;
+        virtual frc::Pose2d GetEstimatedPose() = 0;
+
+        // Sensor methods
+        virtual frc::ChassisSpeeds GetRobotRelativeSpeeds() = 0;
+
+        // Configuration methods
+        virtual void SetSlowMode(bool slow) = 0;
+        virtual void SetTimestampOffset(units::second_t offset) = 0;
+        virtual void LogModuleStates(wpi::array<frc::SwerveModulePosition, 4> modulePositions) = 0;
         // frc2::SequentialCommandGroup GetPathfindingPath(std::shared_ptr<pathplanner::PathPlannerPath> m_scorePath, std::shared_ptr<pathplanner::PathPlannerPath> m_retreatPath, std::string coralLevelHeightCommand);
-        void SetTimestampOffset(units::second_t offset);
-
-        /**
-         * Will be called periodically whenever the CommandScheduler runs.
-         */
-        void Periodic() override;
-        void SimulationPeriodic() override;
-
-      private:
-
-        // Components (e.g. motor controllers and sensors) should generally be
-        // declared private and exposed only through public methods.
-        Modules m_modules;
-
-        wpi::array<SwerveModule*, 4> m_moduleArray;
-        subsystems::vision::PoseEstimatorHelper *m_poseHelper;
-        ctre::phoenix6::hardware::Pigeon2 m_pigeon;
-        ctre::phoenix6::sim::Pigeon2SimState& m_pigeonSim;
-        units::degree_t m_pigeonSimYaw {0};
-        wpi::array<frc::SwerveModulePosition, 4> m_modulePositions;
-        std::string m_drivePKey;
-        std::string m_driveIKey;
-        std::string m_driveDKey;
-        std::string m_anglePKey;
-        std::string m_angleIKey;
-        std::string m_angleDKey;
-        std::string m_rotationSKey;
-
-        double m_rotationS = constants::swerve::swerve_drive::kSRot;
-
-        std::vector<ctre::phoenix6::BaseStatusSignal*> m_allSignals;
-
-        ctre::phoenix6::configs::Pigeon2Configuration m_pigeonConfigs{};
-
-        std::string_view m_tuningModeKey = "Tuning Mode";
-        std::string_view m_diagnosticsKey = "Full Diagnostics";
-        bool m_slowMode = false;
-        units::second_t m_timestampOffset;
-    };
-  }; 
-};
+	
+		private:
+		
+	};
+}

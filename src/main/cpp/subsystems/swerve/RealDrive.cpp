@@ -1,0 +1,331 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+// if this code doesnt work ethan might eat me in a bucket
+
+#include "subsystems/swerve/RealDrive.h"
+
+namespace subsystems::swerve {
+    RealDrive::RealDrive(subsystems::vision::PoseEstimatorHelper *helper) : 
+    m_modules{
+      .m_frontLeftLocation = {+constants::swerve::swerve_drive::kXDistanceFromCenter, +constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_frontRightLocation = {+constants::swerve::swerve_drive::kXDistanceFromCenter, -constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_backLeftLocation = {-constants::swerve::swerve_drive::kXDistanceFromCenter, +constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_backRightLocation = {-constants::swerve::swerve_drive::kXDistanceFromCenter, -constants::swerve::swerve_drive::kYDistanceFromCenter},
+      .m_frontLeft = {0, SwerveModuleConstants::kFrontLeftDriveID, SwerveModuleConstants::kFrontLeftAngleID,
+       SwerveModuleConstants::kFrontLeftCANcoderID, SwerveModuleConstants::kFrontLeftOffset},
+      .m_frontRight = {1, SwerveModuleConstants::kFrontRightDriveID, SwerveModuleConstants::kFrontRightAngleID,
+       SwerveModuleConstants::kFrontRightCANcoderID, SwerveModuleConstants::kFrontRightOffset},
+      .m_backLeft = {2, SwerveModuleConstants::kBackLeftDriveID, SwerveModuleConstants::kBackLeftAngleID,
+       SwerveModuleConstants::kBackLeftCANcoderID, SwerveModuleConstants::kBackLeftOffset},
+      .m_backRight = {3, SwerveModuleConstants::kBackRightDriveID, SwerveModuleConstants::kBackRightAngleID,
+       SwerveModuleConstants::kBackRightCANcoderID, SwerveModuleConstants::kBackRightOffset}
+    }, 
+    // addresses to access of each swerve module motor
+    m_moduleArray(
+        &m_modules.m_frontLeft,
+        &m_modules.m_frontRight,
+        &m_modules.m_backLeft,
+        &m_modules.m_backRight
+    ), 
+    m_poseHelper(helper),
+    m_pigeon(constants::swerve::swerve_drive::kGyroID, "Swerve"),
+    m_pigeonSim(m_pigeon.GetSimState()),
+    m_modulePositions(
+        m_modules.m_frontLeft.GetPosition(true),
+        m_modules.m_frontRight.GetPosition(true),
+        m_modules.m_backLeft.GetPosition(true),
+        m_modules.m_backRight.GetPosition(true)
+        //initializes the gyroscope and pose helpers for pose estimator
+    ),
+    m_timestampOffset(0.0_s)
+    {
+        (void)constants::vision::kSyncBytes[0];
+    
+        ConfigGyro();
+        ConfigSignals();
+        frc::SwerveDrivePoseEstimator<4U>* poseEstimator = new frc::SwerveDrivePoseEstimator<4> (constants::swerve::swerve_drive::kKinematics, m_pigeon.GetRotation2d(), 
+        m_modulePositions, frc::Pose2d{}, constants::vision::kEncoderTrustCoefficients, constants::vision::kMainVisionTrustCoefficients);
+        m_poseHelper->SetPoseEstimator(poseEstimator);
+
+        ConfigurePathPlannerAutoBuilder();
+    
+        frc::Preferences::SetBoolean(m_tuningModeKey, false);
+        frc::Preferences::SetBoolean(m_diagnosticsKey, true);
+        
+        m_drivePKey = "DriveP";
+        m_driveIKey = "DriveI";
+        m_driveDKey = "DriveD";
+        m_anglePKey = "AngleP";
+        m_angleIKey = "AngleI";
+        m_angleDKey = "AngleD";
+        m_rotationSKey = "RotS";
+    
+        frc::Preferences::SetDouble(m_drivePKey, SwerveModuleConstants::kPDrive);
+        frc::Preferences::SetDouble(m_driveIKey, SwerveModuleConstants::kIDrive);
+        frc::Preferences::SetDouble(m_driveDKey, SwerveModuleConstants::kDDrive);
+        frc::Preferences::SetDouble(m_anglePKey, SwerveModuleConstants::kPAngle);
+        frc::Preferences::SetDouble(m_angleIKey, SwerveModuleConstants::kIAngle);
+        frc::Preferences::SetDouble(m_angleDKey, SwerveModuleConstants::kDAngle);
+        frc::Preferences::SetDouble(m_rotationSKey, constants::swerve::swerve_drive::kSRot);
+    }
+    
+    frc::Pose2d RealDrive::GetEstimatedPose() {
+        UpdateEstimator();
+        return m_poseHelper->GetEstimatedPose();
+    }
+    
+    // frc2::SequentialCommandGroup RealDrive::GetPathfindingPath(std::shared_ptr<pathplanner::PathPlannerPath> scorePath, std::shared_ptr<pathplanner::PathPlannerPath> retreatpath, std:string coralLevelHeightCommand){
+    
+    // }
+    
+    void RealDrive::SetPose(frc::Pose2d pose, bool justRotation) {
+        UpdateEstimator();
+        if (justRotation) {
+            frc::Pose2d currentPose = GetEstimatedPose();
+            m_poseHelper->ResetPose(GetNormalizedYawPigeon(), m_modulePositions, frc::Pose2d{currentPose.X(), currentPose.Y(), pose.Rotation()});
+        }
+        else {
+            m_poseHelper->ResetPose(GetNormalizedYawPigeon(), m_modulePositions, pose);
+        }
+        for (int i = 0; i < 10; i++) {
+            m_pigeon.SetYaw(pose.Rotation().Degrees());
+        }
+    }
+    
+    void RealDrive::SetAutoPose(frc::Pose2d pose, bool justRotation) {
+        UpdateEstimator();
+        if (justRotation) {
+            frc::Pose2d currentPose = GetEstimatedPose();
+            m_poseHelper->ResetPose(GetNormalizedYawPigeon(), m_modulePositions, frc::Pose2d{currentPose.X(), currentPose.Y(), pose.Rotation()});
+        }
+        else {
+            m_poseHelper->ResetPose(GetNormalizedYawPigeon(), m_modulePositions, pose);
+        }
+        //sets pose to current pose
+        frc::SmartDashboard::PutNumber("Auto starting pose x", pose.X().value());
+        frc::SmartDashboard::PutNumber("Auto starting pose y", pose.Y().value());
+        frc::SmartDashboard::PutNumber("Auto starting pose rot", pose.Rotation().Degrees().value());
+    }
+    
+    void RealDrive::DriveRobotRelative(frc::ChassisSpeeds speeds) {
+        // // !!!! 
+        // // ????
+        // speeds.vx = -speeds.vx;
+        // speeds.vy = -speeds.vy;
+    
+        if (speeds.omega > units::radians_per_second_t(0.0)){
+            speeds.omega += units::radians_per_second_t(m_rotationS);
+        } else if (speeds.omega < units::radians_per_second_t(0.0)) {
+            speeds.omega -= units::radians_per_second_t(m_rotationS);
+        }
+    
+        wpi::array<frc::SwerveModuleState, 4U> states = constants::swerve::swerve_drive::kKinematics.ToSwerveModuleStates(speeds);
+        // auto [fl, fr, bl, br] = states;
+        constants::swerve::swerve_drive::kKinematics.DesaturateWheelSpeeds(&states, constants::automatic::kMaxAutoModuleSpeed);
+    
+        // double autoDesiredStates[] = 
+        // {(double)fl.angle.Degrees(), (double)fl.speed,
+        //  (double)fr.angle.Degrees(), (double)fr.speed,
+        //  (double)bl.angle.Degrees(), (double)bl.speed,
+        //  (double)br.angle.Degrees(), (double)br.speed};
+    
+        // frc::SmartDashboard::PutNumberArray("Auto Desired States", autoDesiredStates);
+        // frc::SmartDashboard::PutNumber("Robot relative desired x speed", speeds.vx.value());
+        // frc::SmartDashboard::PutNumber("Robot relative desired y speed", speeds.vy.value());
+        // frc::SmartDashboard::PutNumber("Robot relative desired omega speed", speeds.omega.value());
+    
+        SetModuleStates(states);
+    }
+    
+    frc::ChassisSpeeds RealDrive::GetRobotRelativeSpeeds() {
+        frc::SwerveModuleState frontLeftModuleState = m_modules.m_frontLeft.GetState(true);
+        frc::SwerveModuleState frontRightModuleState = m_modules.m_frontRight.GetState(true);
+        frc::SwerveModuleState backLeftModuleState = m_modules.m_backLeft.GetState(true);
+        frc::SwerveModuleState backRightModuleState = m_modules.m_backRight.GetState(true);
+    
+        frc::ChassisSpeeds speeds = constants::swerve::swerve_drive::kKinematics.ToChassisSpeeds(
+            frontLeftModuleState, frontRightModuleState, backLeftModuleState, backRightModuleState);
+    
+      
+        // frc::SmartDashboard::PutNumber("Robot relative x speed", speeds.vx.value());
+        // frc::SmartDashboard::PutNumber("Robot relative y speed", speeds.vy.value());
+        // frc::SmartDashboard::PutNumber("Robot relative omega speed", speeds.omega.value());
+        return speeds;
+    }
+    
+    void RealDrive::SetModuleStates(std::array<frc::SwerveModuleState, 4> desiredStates) {
+        m_modules.m_frontLeft.SetDesiredState(desiredStates[0]);
+        m_modules.m_frontRight.SetDesiredState(desiredStates[1]);
+        m_modules.m_backLeft.SetDesiredState(desiredStates[2]);
+        m_modules.m_backRight.SetDesiredState(desiredStates[3]);
+    }
+    
+    // This method will be called once per scheduler run
+    void RealDrive::Periodic() {
+        if (frc::Preferences::GetBoolean(m_tuningModeKey, false)) {
+            m_modules.m_frontLeft.UpdatePreferences();
+            m_modules.m_frontRight.UpdatePreferences();
+            m_modules.m_backLeft.UpdatePreferences();
+            m_modules.m_backRight.UpdatePreferences();
+    
+            // Update rotation S value
+            m_rotationS = frc::Preferences::GetDouble(m_rotationSKey, constants::swerve::swerve_drive::kSRot);
+        }
+    
+        frc::SmartDashboard::PutNumber("SWERVE DRIVE FL ANGLE: ", m_modules.m_frontLeft.GetRawAnglePower());
+        frc::SmartDashboard::PutNumber("SWERVE DRIVE FL DRIVE: ", m_modules.m_frontLeft.GetRawDrivePower());
+        
+        UpdateEstimator();
+        GetRobotRelativeSpeeds();
+        RefreshAllSignals();
+    }
+
+    void RealDrive::SimulationPeriodic() {
+        for (SwerveModule* module : m_moduleArray) {
+            module->SimulationPeriodic();
+        }
+
+        frc::ChassisSpeeds speeds = GetRobotRelativeSpeeds();
+
+        m_pigeonSimYaw += units::degree_t{ speeds.omega.value() };
+        m_pigeonSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+        m_pigeonSim.SetRawYaw(m_pigeonSimYaw);
+    };
+    
+    void RealDrive::RefreshAllSignals() {
+        frc::SmartDashboard::PutString("Swerve signal status", ctre::phoenix6::BaseStatusSignal::WaitForAll(0.02_s, m_allSignals).GetName());
+    }
+    
+    void RealDrive::ConfigSignals() {
+        // Takes in robot frequency Talon FX using 
+        for(int i=0; i < 4; i++) {
+            std::vector<ctre::phoenix6::BaseStatusSignal *> signals = m_moduleArray[i]->GetSignals();
+            for(int j=0; j < 4; j++) {
+                m_allSignals.emplace_back(signals[j]);
+            }
+        }
+    
+        ctre::phoenix6::BaseStatusSignal::SetUpdateFrequencyForAll(constants::swerve::swerve_drive::kRefreshRate, m_allSignals);
+    }
+    
+    units::degree_t RealDrive::GetNormalizedYaw() {
+        double normalizedYaw = m_poseHelper->GetEstimatedPose().Rotation().Degrees().value();
+    
+        frc::SmartDashboard::PutNumber("Normalized Yaw", normalizedYaw);
+        return units::degree_t{normalizedYaw};
+    }
+    
+    units::degree_t RealDrive::GetNormalizedYawPigeon() {
+        // Normalizes yaw to (-180, 180)
+        double yaw =  m_pigeon.GetYaw().GetValue().value(); 
+        // (-360, 360)
+        double normalizedYaw = fmod(yaw, 360.0);
+        // (-180, 180)
+        if (normalizedYaw > 180)
+            normalizedYaw -= 360;
+        else if (normalizedYaw < -180)
+            normalizedYaw += 360;
+    
+        frc::SmartDashboard::PutNumber("Normalized Yaw Pigeon", normalizedYaw);
+        return units::degree_t{normalizedYaw};
+    }
+    
+    void RealDrive::ConfigGyro() {
+        m_pigeon.GetConfigurator().Apply(ctre::phoenix6::configs::Pigeon2Configuration{});
+        m_pigeonConfigs.MountPose.MountPoseYaw = constants::swerve::swerve_drive::kGyroMountPoseYaw;
+        m_pigeon.GetConfigurator().Apply(m_pigeonConfigs);
+    }
+    
+    void RealDrive::Operate(units::meters_per_second_t xSpeed, 
+                            units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
+                            bool fieldRelative,
+                            frc::Translation2d centerOfRotation
+                            ) {
+    
+        // Add static ff value depending on direction of travel (rot)
+        if (rot > units::radians_per_second_t(0.0)){
+            rot += units::radians_per_second_t(m_rotationS);
+        } else if (rot < units::radians_per_second_t(0.0)) {
+            rot -= units::radians_per_second_t(m_rotationS);
+        }
+    
+        wpi::array<frc::SwerveModuleState, 4U> states = constants::swerve::swerve_drive::kKinematics.ToSwerveModuleStates(
+                      (fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+                            xSpeed, ySpeed, rot, GetNormalizedYaw())
+                                : frc::ChassisSpeeds{xSpeed, ySpeed, rot}),
+                                centerOfRotation);
+    
+        
+        auto [fl, fr, bl, br] = states;
+    
+        if (m_slowMode) {
+            constants::swerve::swerve_drive::kKinematics.DesaturateWheelSpeeds(&states, SwerveModuleConstants::kMaxSpeed * constants::swerve::swerve_drive::kSlowModeDriveMultiplier);
+        } else {
+            constants::swerve::swerve_drive::kKinematics.DesaturateWheelSpeeds(&states, SwerveModuleConstants::kMaxSpeed);
+        }
+    
+        double AdvantageScopeDesiredStates[] = 
+        {(double)fl.angle.Degrees(), (double)fl.speed,
+         (double)fr.angle.Degrees(), (double)fr.speed,
+         (double)bl.angle.Degrees(), (double)bl.speed,
+         (double)br.angle.Degrees(), (double)br.speed};
+    
+        frc::SmartDashboard::PutNumberArray("AdvantageScope Desired States", AdvantageScopeDesiredStates);
+    
+        SetModuleStates(states);
+    }
+    
+    
+    void RealDrive::UpdateEstimator() {
+        // Get current positions and update
+        m_modulePositions[0] = m_modules.m_frontLeft.GetPosition(true);
+        m_modulePositions[1] = m_modules.m_frontRight.GetPosition(true);
+        m_modulePositions[2] = m_modules.m_backLeft.GetPosition(true);
+        m_modulePositions[3] = m_modules.m_backRight.GetPosition(true);
+        // m_poseHelper->UpdatePoseEstimator(m_modulePositions, frc::Rotation2d(GetNormalizedYaw()));
+        units::second_t robotTime = frc::Timer::GetTimestamp();
+        m_poseHelper->UpdatePoseEstimator(robotTime + m_timestampOffset, m_modulePositions, frc::Rotation2d(GetNormalizedYawPigeon()));
+        LogModuleStates(m_modulePositions);
+    }
+    
+    void RealDrive::LogModuleStates(wpi::array<frc::SwerveModulePosition, 4> modulePositions) {
+        double AdvantageScopeMeasuredStates[] = 
+            {modulePositions[0].angle.Degrees().value(), m_moduleArray[0]->GetDriveSpeed().value(),
+            modulePositions[1].angle.Degrees().value(), m_moduleArray[1]->GetDriveSpeed().value(),
+            modulePositions[2].angle.Degrees().value(), m_moduleArray[2]->GetDriveSpeed().value(),
+            modulePositions[3].angle.Degrees().value(), m_moduleArray[3]->GetDriveSpeed().value()};
+        frc::SmartDashboard::PutNumberArray("AdvantageScope Measured States", AdvantageScopeMeasuredStates);
+    
+        // // TODO comment out after testing
+        // frc::SmartDashboard::PutNumber("Front left drive power", m_modules.m_frontLeft.GetRawDrivePower());
+        // frc::SmartDashboard::PutNumber("Front left angle power", m_modules.m_frontLeft.GetRawAnglePower());
+        // frc::SmartDashboard::PutNumber("Front right drive power", m_modules.m_frontRight.GetRawDrivePower());
+        // frc::SmartDashboard::PutNumber("Front right angle power", m_modules.m_frontRight.GetRawAnglePower());
+        // frc::SmartDashboard::PutNumber("Back left drive power", m_modules.m_backLeft.GetRawDrivePower());
+        // frc::SmartDashboard::PutNumber("Back left angle power", m_modules.m_backLeft.GetRawAnglePower());
+        // frc::SmartDashboard::PutNumber("Back right drive power", m_modules.m_backRight.GetRawDrivePower());
+        // frc::SmartDashboard::PutNumber("Back right angle power", m_modules.m_backRight.GetRawAnglePower());
+    }
+    
+    void RealDrive::SetSlowMode(bool slow) {
+        m_slowMode = slow;
+    }
+    
+    void RealDrive::Stop() {
+        m_modules.m_frontLeft.Stop();
+        m_modules.m_frontRight.Stop();
+        m_modules.m_backLeft.Stop();
+        m_modules.m_backRight.Stop();
+    }
+    
+    void RealDrive::SetBrakeMode(constants::BrakeMode mode) {
+        for (auto mod: m_moduleArray) {
+            mod->SetBrakeMode(mode);
+        }
+    }
+    
+    void RealDrive::SetTimestampOffset(units::second_t offset) {
+        m_timestampOffset = offset;
+    }
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #define _USE_MATH_DEFINES
+#include <math.h> //! DO NOT REMOVE IF YOU DON'T WANT M_PI TO BE UNDEFINED AND BREAK YOUR ENTIRE SCRIPT !!!!!!!!!!!!!!!!!! :(
 #include <cmath> 
 #include <frc/geometry/Pose2d.h>
 

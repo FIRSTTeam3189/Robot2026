@@ -15,6 +15,7 @@ namespace simulation::pieces {
     PieceInfo RebuiltFuel::GetPieceInfo() {
         auto fuelShape = std::make_unique<b2CircleShape>();
         b2BodyDef fuelBodyDef;
+        
         fuelBodyDef.linearDamping = 0.3f;
         fuelBodyDef.angularDamping = 5.0f;
         fuelBodyDef.allowSleep = true;

@@ -1,7 +1,7 @@
 #include "simulation/SimulatedArena.h"
 #include "simulation/seasonspecific/Rebuilt2026/RebuiltArena.h"
 
-#include "constants/Simulation.h"
+#include "constants/simulation/SimulatedArena.h"
 
 
 namespace simulation {
@@ -18,6 +18,7 @@ namespace simulation {
             obstacleFixtureDef.density = 1;
             obstacleFixtureDef.restitution = 0.5;
 
+            // SPARE ME GOD
             b2Body* obstacleBody = m_physicsWorld->CreateBody(&obstacle.bodyDef);
             obstacleBody->CreateFixture(&obstacleFixtureDef);
         }
@@ -33,10 +34,19 @@ namespace simulation {
     }
 
     void SimulatedArena::SimulationPeriodic() {
-        m_physicsWorld->Step(constants::simulation::kLoopPeriod.value(), 4, 2);
+        for (int i = 0; i < constants::simulation::simulated_arena::kSubTicks; i++) 
+            SimulationSubTick(i);
+    }
+
+    void SimulatedArena::SimulationSubTick(int subtickNum) {
+        m_physicsWorld->Step(constants::simulation::simulated_arena::kLoopPeriod.value(), 4, 2);
 
         for (auto& gamePiece : m_gamePieces) { 
-            gamePiece->SimulationPeriodic();
+            gamePiece->SimulationSubTick(subtickNum);
+        }
+
+        for (auto& driveTrainSim : m_driveTrainSimulations) {
+            driveTrainSim->SimulationSubTick(subtickNum);
         }
     }
     
@@ -59,6 +69,10 @@ namespace simulation {
             break;
         }
     }
+
+    void SimulatedArena::AddDriveTrainSimulation(std::unique_ptr<drive::SwerveDriveSimulation> driveTrainSim) {
+        m_driveTrainSimulations.emplace_back(std::move(driveTrainSim));
+    };
     
     void SimulatedArena::AddGamePiece(std::unique_ptr<pieces::GamePiece> gamePiece) {
         m_gamePieces.emplace_back(std::move(gamePiece));
@@ -104,13 +118,13 @@ namespace simulation {
         return gamePieces;
     }
 
-    void SimulatedArena::PublishNetworkTables() {
-        std::vector<frc::Pose3d> poses = GetInstance().GetGamePiecesPosesByType("Fuel");
-
+    void SimulatedArena::AddSimulatable(Simulatable& simulatable) {
+        m_simulatables.emplace_back(&simulatable);
     }
 
-    void SimulatedArena::AddSimulatable(Simulatable& simulatable) {
-        // m_simulatables.emplace_back(&simulatable);
+
+    b2World* SimulatedArena::GetPhysicsWorld() const {
+        return m_physicsWorld;
     }
 
     SimulatedArena::~SimulatedArena() {

@@ -25,9 +25,12 @@
 #include "simulation/FieldMap.h"
 #include "simulation/GamePiece.h"
 #include "simulation/box2d/box2d.h"
+#include "simulation/drive/SwerveDriveSimulation.h"
+
 
 
 namespace simulation {
+
     class SimulatedArena {
     public:
         /**
@@ -82,7 +85,7 @@ namespace simulation {
         /**
          * 
          */
-        void AddDriveTrainSimulation();
+        void AddDriveTrainSimulation(std::unique_ptr<drive::SwerveDriveSimulation> driveTrainSim);
         
         /**
          * Adds the given game piece to the current simulation
@@ -117,6 +120,11 @@ namespace simulation {
 
         void AddSimulatable(Simulatable& simulatable);
 
+        /**
+         * Returns the b2World instance for the physics simulation
+         */
+        b2World* GetPhysicsWorld() const;
+
         ~SimulatedArena();
 
         // Prevents ways of creating base class like:
@@ -136,6 +144,7 @@ namespace simulation {
          * call GetInstance() instead.
          */
         SimulatedArena(FieldMap obstacleMap);
+        void SimulationSubTick(int subtickNum);
         b2World* m_physicsWorld;
         FieldMap m_obstacleMap;
         
@@ -144,6 +153,8 @@ namespace simulation {
         
         int m_redScore{ 0 };
         int m_blueScore{ 0 };
+
+        std::vector<std::unique_ptr<drive::SwerveDriveSimulation>> m_driveTrainSimulations;
         
         frc::Timer m_matchClock;
         std::vector<simulation::Simulatable*> m_simulatables;

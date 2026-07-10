@@ -19,11 +19,11 @@ namespace simulation::pieces {
         m_body->CreateFixture(&pieceFixture);
     }
 
-    void GamePiece::SimulationPeriodic() {
+    void GamePiece::SimulationSubTick(int subtickNum) {
         switch (m_state) {
             case GamePieceState::Airborne:
-                for (int i = 0; i < constants::simulation::kSubTicks; i++) 
-                    AirborneStep(constants::simulation::kSubDeltaTime);
+                for (int i = 0; i < constants::simulation::simulated_arena::kSubTicks; i++) 
+                    AirborneStep(constants::simulation::simulated_arena::kSubDeltaTime);
 
                 break;
 

@@ -17,6 +17,7 @@
 #include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitCommand.h>
+#include <frc/RobotBase.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "commands/main/Drive.h"
@@ -43,6 +44,8 @@
 #include "subsystems/shooter/Flywheel.h"
 #include "subsystems/indexer/Loader.h"
 #include "subsystems/climber/Climber.h"
+#include "subsystems/swerve/RealDrive.h"
+#include "subsystems/swerve/SimDrive.h"
 
 // #include "subsystems/Limelight.h"
 
@@ -120,7 +123,9 @@ class RobotContainer {
   // frc::GenericHID m_buttonBoard{constants::controller::kButtonBoardPort}; 
   // The robot's subsystems are defined here..p.
   subsystems::vision::PoseEstimatorHelper *m_poseEstimator = new subsystems::vision::PoseEstimatorHelper();
-  subsystems::swerve::Drive *m_swerveDrive = new subsystems::swerve::Drive(m_poseEstimator);
+  subsystems::swerve::Drive *m_swerveDrive = frc::RobotBase::IsReal()
+    ? static_cast<subsystems::swerve::Drive*>(new subsystems::swerve::RealDrive(m_poseEstimator)) 
+    : static_cast<subsystems::swerve::Drive*>(new subsystems::swerve::SimDrive(m_poseEstimator));
   
   subsystems::indexer::Loader *m_loader = new subsystems::indexer::Loader(); 
   subsystems::indexer::Kicker *m_kicker = new subsystems::indexer::Kicker(); 
