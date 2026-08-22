@@ -57,16 +57,20 @@ namespace subsystems::vision
         m_poseEstimator->ResetPosition(rotation, modulePositions, pose);
     }
 
+
+
     void PoseEstimatorHelper::AddVisionMeasurement(frc::Pose2d pose, units::second_t timestamp, wpi::array<double, 3> visionMeasurementStdDevs, VisionCamera camera)
     {
-        m_poseEstimator->SetVisionMeasurementStdDevs(visionMeasurementStdDevs);
+            m_poseEstimator->SetVisionMeasurementStdDevs(visionMeasurementStdDevs);
 
         // Currently setting pose rotation to estimated rotation rather than vision-deduced one
         // Gyro is already fairly accurate and prevents noisy rotation data for driving/auto
         // Sets pose angle to 0
         pose = pose.TransformBy(frc::Transform2d(0.0_m, 0.0_m, -pose.Rotation()));
         // Then sets pose angle to estimated pose angle
-        pose = pose.TransformBy(frc::Transform2d(0.0_m, 0.0_m, GetEstimatedPose().Rotation()));
+        pose = pose.TransformBy(frc::Transform2d(0.0_m, 0.0_m, m_poseEstimator->SampleAt(timestamp).value_or(GetEstimatedPose()).Rotation()));
+        // basically this makes it so that it uses what the rotation of the pose was at the timestamp rather than what it currently is
+        // so it wont accidentally set the rotation of a pose 100 ms ago to the rotation of the current pose (also returns the current pose if sampleat() returns nothing)
 
         // Add vision estimated poses to corresponding fields
         switch (camera)

@@ -79,7 +79,7 @@ void Robot::RobotPeriodic() {
       RobotContainer::SetShooterState(constants::ShooterState::ManualTurretOnly);
       m_container.GetShooterSubsystem()->SetState(constants::shooter::TurretTarget::Manual);
       m_container.GetFlywheelSubsystem()->SetState(constants::shooter::FlywheelState::AutoVelocity);
-      break; 
+      break;
     }
   }
 }
@@ -186,7 +186,7 @@ void Robot::TeleopPeriodic() {
     } else if (m_timeLeft.value() <= 160) {
       m_shouldScore = true;
     }
-  } else if (m_autoWon == false) {
+  } else {
     if (m_timeLeft.value() <= 30) {
       m_shouldScore = true;
     } else if (m_timeLeft.value() <= 55) {

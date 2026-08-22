@@ -66,7 +66,7 @@ namespace subsystems {
 
         void SetState(constants::shooter::TurretTarget state);
 
-        void ZeroTurret(); 
+        void ZeroTurret();
 
         void DisableReverseSoftLimit();
 

@@ -18,7 +18,7 @@
 
 namespace subsystems {
   namespace vision {
-    enum class VisionCamera { FrontCamera, RightCamera, LeftCamera };
+    enum class VisionCamera { FrontCamera, RightCamera, LeftCamera, Questnav };
 
     class PoseEstimatorHelper : public frc2::SubsystemBase {
     public:

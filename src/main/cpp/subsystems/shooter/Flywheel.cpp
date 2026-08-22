@@ -134,7 +134,7 @@ namespace subsystems::shooter
 
     double Flywheel::GetFlywheelTargetRPM()
     {
-        return m_rpm;
+        return m_rpm * constants::shooter::flywheel::kFlywheelMultiplier;
     }
 
     double Flywheel::GetFlywheelTargetVelocity()

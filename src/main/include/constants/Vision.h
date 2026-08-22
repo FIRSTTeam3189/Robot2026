@@ -10,6 +10,7 @@ namespace constants {
         // !!! RAHHHH 
         // TODO
         constexpr wpi::array<double, 3> kMainVisionTrustCoefficients {0.2, 0.2, 10.0};
+        constexpr wpi::array<double, 3> kQuestnavTrustCoefficients {0.01, 0.01, 1.0};
         constexpr double kMainVisionStdDevPerMeter {0.3};
         constexpr wpi::array<double, 3> kPhotonVisionTrustCoefficients {0.5, 0.5, 10.0};
         constexpr double kPhotonVisionStdDevPerMeter {0.25};  // TODOOOOOOO
@@ -38,12 +39,21 @@ namespace constants {
         constexpr units::degree_t kPhotonTurretRightCameraYawOffset {-90.0_deg};
 
         const std::string kPhotonTurretLeftCamera {"Left Cam"};
-        constexpr units::meter_t kPhotonTurretLeftCameraXOffset {-0.29_m}; 
-        constexpr units::meter_t kPhotonTurretLeftCameraYOffset {-0.21_m}; 
+        constexpr units::meter_t kPhotonTurretLeftCameraXOffset {-0.29_m};
+        constexpr units::meter_t kPhotonTurretLeftCameraYOffset {-0.21_m};
         constexpr units::meter_t kPhotonTurretLeftCameraZOffset {0.0_m};
         constexpr units::meter_t kPhotonTurretLeftCameraHeight {0.0_m};
-        constexpr units::degree_t kPhotonTurretLeftCameraPitchOffset {0.0_deg}; 
-        constexpr units::degree_t kPhotonTurretLeftCameraYawOffset {90.0_deg}; 
+        constexpr units::degree_t kPhotonTurretLeftCameraPitchOffset {0.0_deg};
+        constexpr units::degree_t kPhotonTurretLeftCameraYawOffset {90.0_deg};
+
+        // Mounting offset from robot center to the Quest headset.
+        // TODO: not physically mounted yet -- measure and update once mounted.
+        constexpr units::meter_t kQuestMountXOffset {0.0635_m};
+        constexpr units::meter_t kQuestMountYOffset {0.4064_m};
+        constexpr units::meter_t kQuestMountZOffset {-0.1651_m};
+        constexpr units::degree_t kQuestMountRollOffset {0.0_deg};
+        constexpr units::degree_t kQuestMountPitchOffset {0.0_deg};
+        constexpr units::degree_t kQuestMountYawOffset {90.0_deg};
 
         constexpr int kBaudRate {115200};
         constexpr int kBufferSize {1024};

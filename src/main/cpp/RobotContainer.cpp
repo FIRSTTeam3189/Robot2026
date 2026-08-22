@@ -30,6 +30,7 @@ RobotContainer::RobotContainer() {
   
   // Configure the button bindings
   ConfigureDriverBindings();
+  ConfigureCoDriverBindings();
   ConfigureTestBindings();
   CreateAutoPaths();
 }
@@ -40,13 +41,10 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureDriverBindings() {
   // Bill controls
 
+
   // functional
   frc2::Trigger resetPoseButton([this](){ return m_bill.GetTouchpadButton(); });
-  resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive));
-
-  frc2::Trigger runKickerMotorForward([this]() { return m_test.GetTriangleButton(); });
-  runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
-  runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
+  resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive, m_questNav));
 
   // frc2::Trigger runIntakeRollerMotorForward([this]() { return m_bill.GetL1Button(); });
   // runIntakeRollerMotorForward.OnTrue(actions::intake::IntakePowerForward(m_intake).ToPtr());
@@ -68,7 +66,7 @@ void RobotContainer::ConfigureDriverBindings() {
   shootFuelDumpButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
   shootFuelDumpButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill));
 
-  frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();}); 
+  frc2::Trigger setAlignStateButton([this]() { return m_bill.GetL2Button();});
   setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
   setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
 
@@ -194,6 +192,9 @@ void RobotContainer::PrintActiveCommands() {
 
 void RobotContainer::ConfigureTestBindings() {
 
+  frc2::Trigger toggleQuest([this]() { return m_test.GetCrossButton(); });
+  toggleQuest.OnTrue(actions::ToggleQuestnav(m_questNav));
+
  // Flywheel
   // frc2::Trigger runFlywheelMotorForward([this]() { return m_test.GetTriangleButton(); });
   // runFlywheelMotorForward.OnTrue(actions::shooter::flywheel::FlywheelPowerForward(m_flywheel));
@@ -252,11 +253,6 @@ void RobotContainer::ConfigureTestBindings() {
   // runIntakeRotationMotorPowerReverse.OnTrue(actions::intake::IntakeRotationPowerReverse(m_intake));
   // runIntakeRotationMotorPowerReverse.OnFalse(actions::intake::ResetIntakeRotationPower(m_intake));
 
-  // // Intake PID Buttons
-  frc2::Trigger toggleIntakeStateButton([this]() { return m_test.GetL1Button(); }); 
-  toggleIntakeStateButton.OnTrue(actions::intake::ToggleIntakeState(m_intake));
-  
-
   // frc2::Trigger setIntakeRotationDown([this]() { return m_test.GetSquareButton(); });
   // setIntakeRotationDown.OnTrue(actions::intake::IntakeRetractState(m_intake));
 
@@ -304,16 +300,59 @@ void RobotContainer::ConfigureTestBindings() {
   // frc2::Trigger setTurret243Deg([this]() { return m_test.GetCrossButton(); });
   // setTurret243Deg.OnTrue(actions::shooter::turret::PointTurretMax(m_turret));
 
-  // // Climber
+}
 
-  frc2::Trigger runClimberUp([this]() { return m_test.GetTriangleButton(); });
-  runClimberUp.OnTrue(actions::climber::PutClimberUp(m_climber));
-  runClimberUp.OnFalse(actions::climber::ResetClimber(m_climber));
+void RobotContainer::ConfigureCoDriverBindings() {
+  // Ted controls
 
-  frc2::Trigger runClimberDown([this]() { return m_test.GetCrossButton(); });
-  runClimberDown.OnTrue(actions::climber::PutClimberDown(m_climber));
-  runClimberDown.OnFalse(actions::climber::ResetClimber(m_climber));
+  // functional
+  frc2::Trigger resetPoseButton([this](){ return m_ted.GetTouchpadButton(); });
+  resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive, m_questNav));
 
+  frc2::Trigger runKickerMotorForward([this]() { return m_ted.GetTriangleButton(); });
+  runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
+  runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
+
+  frc2::Trigger slowSwervesButton([this]() { return m_ted.GetR1Button() || m_ted.GetR2Button(); });
+  slowSwervesButton.OnTrue(actions::swerve::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill).ToPtr());
+  slowSwervesButton.OnFalse(actions::swerve::DefaultSwerveSpeed(m_swerveDrive, &m_driveState, &m_bill).ToPtr());
+
+  frc2::Trigger shootFuelButton([this](){ return m_ted.GetR2Button(); });
+  shootFuelButton.OnTrue(actions::robot::AdvancedShoot(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake).ToPtr());
+  shootFuelButton.OnFalse(actions::robot::AdvancedShootEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake));
+
+
+  // uncomment to slow swerves while driving and uncomment the line in 
+  frc2::Trigger shootFuelDumpButton([this](){ return m_ted.GetR1Button(); });
+  shootFuelDumpButton.OnTrue(actions::robot::AdvancedShootSlowSwerves(m_turret, m_flywheel, m_kicker, m_loader, m_articulation, m_intake, m_swerveDrive, &m_driveState, &m_bill).ToPtr());
+  shootFuelDumpButton.OnFalse(actions::robot::AdvancedShootSlowSwervesEnd(m_kicker, m_loader, m_articulation, m_flywheel, m_intake, m_swerveDrive, &m_driveState, &m_bill));
+  
+  frc2::Trigger setAlignStateButton([this]() { return m_ted.GetL2Button();});
+  setAlignStateButton.OnTrue(actions::robot::ShooterStateHoodAndInterpAuto(&m_shooterState));
+  setAlignStateButton.OnFalse(actions::robot::ShooterStateAutomatic(&m_shooterState));
+
+  // frc2::Trigger toggleIntakeStateButton([this]() { return m_ted.GetL1Button(); });
+  // toggleIntakeStateButton.OnTrue(actions::intake::ToggleIntakeState(m_intake));
+
+  frc2::Trigger retractIntakeButton([this]() { return m_ted.GetL1Button(); }); 
+  retractIntakeButton.OnTrue(actions::intake::IntakeRetractState(m_intake).ToPtr());
+
+  frc2::Trigger runTurretLeftButton([this]() { return m_ted.GetCircleButton();}); 
+  runTurretLeftButton.OnTrue(frc2::SequentialCommandGroup(
+    frc2::InstantCommand([this]() {
+      SetShooterState(constants::ShooterState::ManualTurretOnly); 
+      m_turret->DisableReverseSoftLimit(); 
+    }, {m_turret}), 
+    commands::util::SetShooterRotationPower(m_turret, -0.07)
+  ).ToPtr());
+  runTurretLeftButton.OnFalse(frc2::SequentialCommandGroup(
+    commands::util::SetShooterRotationPower(m_turret, 0.0),
+    frc2::InstantCommand([this]() {
+      m_turret->ZeroTurret(); 
+      m_turret->EnableReverseSoftLimit(); 
+      SetShooterState(constants::ShooterState::Automatic); 
+    }, {m_turret})
+  ).ToPtr());  
 }
 
 subsystems::shooter::Turret* RobotContainer::GetShooterSubsystem() {

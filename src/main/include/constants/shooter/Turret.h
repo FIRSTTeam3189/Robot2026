@@ -20,8 +20,8 @@ namespace constants {
             Point45Deg,
             Point135Deg,
             PointNeg56Deg,
-            PointMaxDeg, 
-            Manual 
+            PointMaxDeg,
+            Manual
         };
 
         //Turret Constants

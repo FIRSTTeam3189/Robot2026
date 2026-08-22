@@ -7,7 +7,7 @@
 namespace subsystems::shooter {
 
     Turret::Turret(subsystems::swerve::Drive *swerveDrive)
-      : 
+      :
         m_turretMotor(constants::shooter::turret::kShooterRotationID, "Swerve"),
         m_shooterConfig(),
         m_swerveDrive(swerveDrive),
@@ -187,15 +187,15 @@ namespace subsystems::shooter {
                 break; 
             }
             case (constants::shooter::TurretTarget::Manual): {
-                break; 
+                break;
             }
             default:
                 m_targetRotationAngle = 90.0_deg;
-                break;  
+                break;
         }
         // Rotation will be set periodicially
     }
-    
+
     void Turret::SetTurretAngle(units::degree_t angle) {
         ctre::phoenix6::controls::MotionMagicVoltage request{0_tr};
         m_turretMotor.SetControl(request.WithEnableFOC(true).WithPosition(units::turn_t{angle.value() / 

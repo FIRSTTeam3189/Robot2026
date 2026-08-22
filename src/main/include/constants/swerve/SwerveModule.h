@@ -127,7 +127,7 @@
         constexpr int kBackRightCANcoderID {12};
 
         // Swerve angle offsets -- difference between actual degrees heading and absolute degree values
-        constexpr units::turn_t kFrontLeftOffset {-0.445557}; // TBD
+        constexpr units::turn_t kFrontLeftOffset {0.397217}; // TBD
         constexpr units::turn_t kFrontRightOffset {0.264160};// TBD+
         constexpr units::turn_t kBackLeftOffset {-1.407959}; // TBD
         constexpr units::turn_t kBackRightOffset {0.067627};// TBD

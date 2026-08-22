@@ -43,6 +43,7 @@
 #include "subsystems/shooter/Flywheel.h"
 #include "subsystems/indexer/Loader.h"
 #include "subsystems/climber/Climber.h"
+#include "subsystems/vision/Questnav.h"
 
 
 
@@ -121,6 +122,7 @@ class RobotContainer {
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
   frc::PS5Controller m_bill{constants::controller::kDriverControllerPort};
+  frc::PS5Controller m_ted{constants::controller::kCoDriverControllerPort};
   frc::PS5Controller m_test{constants::controller::kTestControllerPort};
  
 
@@ -135,6 +137,7 @@ class RobotContainer {
 
   subsystems::shooter::Turret *m_turret = new subsystems::shooter::Turret(m_swerveDrive);
   subsystems::shooter::Flywheel *m_flywheel = new subsystems::shooter::Flywheel(m_swerveDrive); 
+  subsystems::vision::Questnav *m_questNav = new subsystems::vision::Questnav(m_poseEstimator);
 
   // Vision
   subsystems::vision::Photon *m_frontCam = new subsystems::vision::Photon(m_poseEstimator, 
@@ -161,6 +164,7 @@ class RobotContainer {
     frc::Rotation2d{constants::vision::kPhotonTurretLeftCameraPitchOffset},
     constants::vision::kPhotonTurretLeftCameraHeight
   );
+  
 
   subsystems::intake::Intake *m_intake = new subsystems::intake::Intake();
   subsystems::climber::Climber *m_climber = new subsystems::climber::Climber();
