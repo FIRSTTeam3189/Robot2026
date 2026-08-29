@@ -6,7 +6,7 @@
 
 namespace subsystems::shooter {
 
-    Turret::Turret(subsystems::swerve::Drive *swerveDrive)
+    Turret::Turret(subsystems::swerve::Drive *swerveDrive, std::function<double()> GetArticulationAngle)
       :
         m_turretMotor(constants::shooter::turret::kShooterRotationID, "Swerve"),
         m_shooterConfig(),
@@ -14,7 +14,8 @@ namespace subsystems::shooter {
         m_state(constants::shooter::TurretTarget::PointStraight),
         m_turretField(),
         m_targetField(),
-        m_velocityField()
+        m_velocityField(),
+        m_getArticulationAngle(GetArticulationAngle)
     {
         ConfigTurret();
         ConfigPID();
@@ -47,6 +48,10 @@ namespace subsystems::shooter {
     
     units::degree_t Turret::GetCurrentTargetAngle() {
         return m_targetRotationAngle;
+    }
+
+    void Turret::TogglePhysicsCompensation() {
+        m_isPhysics = !m_isPhysics;
     }
     
     void Turret::RefreshAllSignals() {
@@ -155,8 +160,8 @@ namespace subsystems::shooter {
             case (constants::shooter::TurretTarget::AlignHub): {
                 frc::Pose2d currentPose = m_swerveDrive->GetEstimatedPose();
                 frc::Pose2d targetPose = util::align::turret::CalculateTargetPose(currentPose);
-    
-                targetPose = util::align::turret::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), GetRobotAngularVelocity(), m_targetField); 
+                
+                targetPose = util::align::turret::UpdateTargetWithVelocity(currentPose, targetPose, GetRobotVelocity(), GetRobotAngularVelocity(), m_targetField, m_isPhysics, m_getArticulationAngle()); 
     
                 m_targetRotationAngle = units::degree_t{util::align::turret::GetTargetAngle(currentPose, targetPose, constants::auto_align::kTurretOffset,
                                                                                     m_turretField, m_velocityField)};

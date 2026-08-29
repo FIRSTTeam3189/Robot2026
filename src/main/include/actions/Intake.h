@@ -27,7 +27,7 @@ namespace actions {
         frc2::CommandPtr IntakeRotationPowerReverse(subsystems::intake::Intake *intake);
         frc2::CommandPtr ResetIntakeRotationPower(subsystems::intake::Intake *intake);
 
-        frc2::InstantCommand IntakeExtendState(subsystems::intake::Intake *intake); 
+        frc2::SequentialCommandGroup IntakeExtendState(subsystems::intake::Intake *intake); 
         frc2::InstantCommand IntakeMidState(subsystems::intake::Intake *intake);
         frc2::InstantCommand IntakeRetractState(subsystems::intake::Intake *intake);
         frc2::InstantCommand IntakeShakeUpState(subsystems::intake::Intake *intake);

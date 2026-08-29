@@ -4,12 +4,17 @@ namespace util::align::turret
 {
 
     frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity, 
-                                         units::angular_velocity::radians_per_second_t angularVelocity, frc::Field2d &velocityField)
+                                         units::angular_velocity::radians_per_second_t angularVelocity, frc::Field2d &velocityField, 
+                                         bool isPhysics, double articulationAngle)
     {
         Vector2d targetVec(targetPose); // Account for velocity
         double robotSpeed = robotVelocity.Length();
 
-        targetVec = targetVec + (robotVelocity * constants::auto_align::kVelocityMultiplier * -1);
+        if (isPhysics) {
+            targetVec = targetVec + (robotVelocity * constants::auto_align::kVelocityMultiplier * -1);
+        } else {
+            targetVec = targetVec + (robotVelocity * FindFuelAirTime(articulationAngle, robotPose) * -1);
+        }
         return targetVec.ToPose2d();
         // For FIELD 2D ONLY
         Vector2d robotVec(robotPose);
@@ -18,6 +23,12 @@ namespace util::align::turret
         frc::SmartDashboard::PutData("Robot Velocities/velocityVec", &velocityField);
 
         return targetPose;
+    }
+
+    double FindFuelAirTime(double articulationAngle, frc::Pose2d robotpose) {
+        double initialAngle = 90.0 - articulationAngle; 
+        return std::sqrt((2.0 / constants::shooter::turret::kGravity) * (GetDistanceToTarget(robotpose).value() * std::tan(initialAngle) - constants::shooter::turret::kHeightDifference)
+    );
     }
 
     // Vector2d GetRotationCompensationVector(frc::Pose2d robotPose, frc::Pose2d targetPose, units::angular_velocity::radians_per_second_t angularVelocity) {

@@ -35,6 +35,10 @@ namespace constants {
             constexpr units::turn_t kTopSoftLimit {18.0_tr};
             constexpr units::turn_t kBottomSoftLimit {-4.27_tr}; 
             constexpr units::turn_t kRotationOffset {0.0_tr};
+            constexpr double kGravity {9.81}; //m/s^2
+            constexpr double kRobotHeight {0.4826}; //meters
+            constexpr double kTargetHeight {1.8288}; //meters
+            constexpr double kHeightDifference {kTargetHeight - kRobotHeight}; //meters
 
             constexpr double kShooterGearRatio {1.0};
 

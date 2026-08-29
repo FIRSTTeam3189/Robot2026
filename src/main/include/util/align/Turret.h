@@ -17,6 +17,8 @@
 #include "constants/shooter/Turret.h"
 #include "constants/AutoAlign.h"
 
+#include "util/align/Hood.h"
+
 #include "util/Vector2d.h"
 
 /*
@@ -34,9 +36,11 @@ namespace util {
     namespace align {
         namespace turret {
             frc::Pose2d UpdateTargetWithVelocity(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d robotVelocity, 
-                                                units::angular_velocity::radians_per_second_t angularVelocity, frc::Field2d &velocityField);
+                                                units::angular_velocity::radians_per_second_t angularVelocity, frc::Field2d &velocityField,
+                                                bool isPhysics, double articulationAngle);
             frc::Pose2d CalculateTargetPose(frc::Pose2d robotPose);
             units::meter_t GetDistanceToTarget(frc::Pose2d robotPose);
+            double FindFuelAirTime(double articulationAngle, frc::Pose2d robotpose);
             double GetTargetAngle(frc::Pose2d robotPose, frc::Pose2d targetPose, Vector2d turretOffset, 
                                 frc::Field2d &turretField, frc::Field2d &targetField); 
         }; 

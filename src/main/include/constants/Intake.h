@@ -68,5 +68,8 @@ namespace constants
         constexpr double kArticulationKP = 0.225;
 
 
+        constexpr units::second_t kRollerDelay {1.0_s}; 
+
+
     };
 };

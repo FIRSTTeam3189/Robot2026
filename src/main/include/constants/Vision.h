@@ -48,12 +48,12 @@ namespace constants {
 
         // Mounting offset from robot center to the Quest headset.
         // TODO: not physically mounted yet -- measure and update once mounted.
-        constexpr units::meter_t kQuestMountXOffset {0.0635_m};
-        constexpr units::meter_t kQuestMountYOffset {0.4064_m};
-        constexpr units::meter_t kQuestMountZOffset {-0.1651_m};
-        constexpr units::degree_t kQuestMountRollOffset {0.0_deg};
+        constexpr units::meter_t kQuestMountXOffset {0.25_m};
+        constexpr units::meter_t kQuestMountYOffset {-0.26_m};
+        constexpr units::meter_t kQuestMountZOffset {0.23_m};
+        constexpr units::degree_t kQuestMountRollOffset {180.0_deg};
         constexpr units::degree_t kQuestMountPitchOffset {0.0_deg};
-        constexpr units::degree_t kQuestMountYawOffset {90.0_deg};
+        constexpr units::degree_t kQuestMountYawOffset {-90.0_deg};
 
         constexpr int kBaudRate {115200};
         constexpr int kBufferSize {1024};

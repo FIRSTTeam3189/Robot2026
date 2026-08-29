@@ -29,7 +29,7 @@ namespace constants {
 
             constexpr double kFlywheelIncrementVelocity {300}; 
             constexpr double kFlywheelDecrementVelocity {-300}; 
-            constexpr double kFlywheelMultiplier {0.8};
+            constexpr double kFlywheelMultiplier {1.0};
 
             constexpr double kFlywheelFerryVelocity {2400}; 
             constexpr double kFlywheelShootVelocity {0}; // fixed state actually

@@ -26,11 +26,14 @@ namespace actions::intake {
         return commands::util::SetIntakeRotationPower(intake, 0.0).ToPtr();
     }
 
-    frc2::InstantCommand IntakeExtendState(subsystems::intake::Intake *intake) {
-        return frc2::InstantCommand([intake]() {
-            intake->SetDesiredRollerPower(constants::intake::kRollerIntakePower); 
+    frc2::SequentialCommandGroup IntakeExtendState(subsystems::intake::Intake *intake) {
+        return frc2::SequentialCommandGroup(frc2::InstantCommand([intake]() {
             intake->SetState(subsystems::intake::State::ExtendIntake);
-        }, {intake}); 
+        }, {intake}),
+        frc2::WaitCommand(constants::intake::kRollerDelay),
+        frc2::InstantCommand([intake]() {
+            intake->SetDesiredRollerPower(constants::intake::kRollerIntakePower);
+        }, {intake})); 
     }
     
     

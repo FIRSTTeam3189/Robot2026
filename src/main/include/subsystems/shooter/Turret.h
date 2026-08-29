@@ -30,14 +30,14 @@
 
 #include <algorithm>
 #include <cmath> 
-
+#include <functional>
 
 
 namespace subsystems {
   namespace shooter {
     class Turret : public frc2::SubsystemBase {
       public:
-        Turret(subsystems::swerve::Drive* swerveDrive);
+        Turret(subsystems::swerve::Drive* swerveDrive, std::function<double()> GetArticulationAngle);
 
         // SysId helpers (return commands that run the SysId routines)
         frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
@@ -46,7 +46,11 @@ namespace subsystems {
         // PUBLIC control methods (commands call these)
         void SetTurretRotationMotorPower(double power);
 
+        void TogglePhysicsCompensation();
+
         void SetRotationBrakeMode(constants::BrakeMode mode);
+
+        double FindFuelAirTime(double shooterAngle);
 
         void OverrideSoftLimits(bool isEnabled);
 
@@ -104,6 +108,8 @@ namespace subsystems {
         units::degree_t m_currentRotationAngle;
 
         double m_targetPower;
+        bool m_isPhysics = true;
+        std::function<double()> m_getArticulationAngle;
       
         ctre::phoenix6::StatusSignal<units::angle::turn_t> m_rotationAngle = m_turretMotor.GetPosition();
         ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> m_rotationVelocity = m_turretMotor.GetVelocity();

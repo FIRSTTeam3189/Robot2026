@@ -100,7 +100,8 @@ namespace constants {
             constexpr double kSlowModeDriveMultiplier {0.35};
             constexpr double kSwerveRotationTolerance {1.0};
 
-            constexpr double kSlowModeSwerveDriveMultiplier {0.142857};
+            // constexpr double kSlowModeSwerveDriveMultiplier {0.142857};
+            constexpr double kSlowModeSwerveDriveMultiplier {0.25067};
             constexpr double kSlowModeSwerveDriveRotMultiplier {0.25};
             
         };

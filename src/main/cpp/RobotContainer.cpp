@@ -309,9 +309,13 @@ void RobotContainer::ConfigureCoDriverBindings() {
   frc2::Trigger resetPoseButton([this](){ return m_ted.GetTouchpadButton(); });
   resetPoseButton.OnTrue(actions::ResetPose(m_swerveDrive, m_questNav));
 
-  frc2::Trigger runKickerMotorForward([this]() { return m_ted.GetTriangleButton(); });
-  runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
-  runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
+  // frc2::Trigger runKickerMotorForward([this]() { return m_ted.GetTriangleButton(); });
+  // runKickerMotorForward.OnTrue(actions::indexer::kicker::RunKickerForward(m_kicker));
+  // runKickerMotorForward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
+
+  frc2::Trigger runKickerMotorBackward([this]() { return m_ted.GetTriangleButton(); });
+  runKickerMotorBackward.OnTrue(actions::indexer::kicker::RunKickerBackward(m_kicker));
+  runKickerMotorBackward.OnFalse(actions::indexer::kicker::ResetKicker(m_kicker));
 
   frc2::Trigger slowSwervesButton([this]() { return m_ted.GetR1Button() || m_ted.GetR2Button(); });
   slowSwervesButton.OnTrue(actions::swerve::SlowDownSwerves(m_swerveDrive, &m_driveState, &m_bill).ToPtr());
@@ -353,6 +357,12 @@ void RobotContainer::ConfigureCoDriverBindings() {
       SetShooterState(constants::ShooterState::Automatic); 
     }, {m_turret})
   ).ToPtr());  
+
+  frc2::Trigger togglePhysicsCompensation([this]() { return m_ted.GetSquareButton(); }); 
+  togglePhysicsCompensation.OnTrue(frc2::InstantCommand([this]() {
+    m_turret->TogglePhysicsCompensation(); 
+  }, {m_turret}).ToPtr());
+
 }
 
 subsystems::shooter::Turret* RobotContainer::GetShooterSubsystem() {
@@ -455,7 +465,7 @@ frc::PS5Controller* RobotContainer::GetBill() {
 // ⣿⣿⣿⣿⣿⣿⡆⠀⠸⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠋⠓⠀⠠⠄⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠴⠟⠉⠀⠀⠀⠀⠀⠀⣀⣼⣿⠟⠁⣾⣿⣧⣼⣏⢿⣯⡀⣽⠃⣾⠁
 // ⣿⣿⣿⣿⣿⣿⣿⡄⠀⢹⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠈⠁⠐⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣤⣼⡿⠋⢀⣾⣇⠈⣿⣏⣻⡟⠉⣿⢋⣿⠛⣷
 
-
+//
 // ! Signs of a legend btw
 // no matter how nice ethan might seem, when you least expect it he will slap you with a piece of chicken and eat you in a bucket
 // ! dont delete it please :<(   (._.)

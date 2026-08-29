@@ -135,7 +135,7 @@ class RobotContainer {
   subsystems::indexer::Kicker *m_kicker = new subsystems::indexer::Kicker(); 
   subsystems::shooter::Hood *m_articulation = new subsystems::shooter::Hood(m_swerveDrive);
 
-  subsystems::shooter::Turret *m_turret = new subsystems::shooter::Turret(m_swerveDrive);
+  subsystems::shooter::Turret *m_turret = new subsystems::shooter::Turret(m_swerveDrive, [this](){return m_articulation->GetTargetAngle().value();});
   subsystems::shooter::Flywheel *m_flywheel = new subsystems::shooter::Flywheel(m_swerveDrive); 
   subsystems::vision::Questnav *m_questNav = new subsystems::vision::Questnav(m_poseEstimator);
 
